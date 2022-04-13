@@ -19,6 +19,7 @@ const Navbar = ({ navbarProps }: iNavbarProps) => {
     <AppBar
       sx={{
         zIndex: theme => theme.zIndex.drawer + 1,
+        boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;',
       }}
     >
       <Toolbar>

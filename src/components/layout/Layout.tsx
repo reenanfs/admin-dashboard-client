@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 
 import Navbar from 'components/navbar/Navbar';
 import Sidebar from 'components/sidebar/Sidebar';
+import AppContainer from 'components/containers/AppContainer';
 
 interface iLayoutProps {
   children: ReactNode;
@@ -33,11 +34,18 @@ const Layout = ({ children }: iLayoutProps) => {
     sidebarWidth,
   };
 
+  const appContainerProps = {
+    sidebarOpen,
+    sidebarWidth,
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <Navbar navbarProps={navbarProps} />
       <Sidebar sidebarProps={sidebarProps} />
-      {children}
+      <AppContainer appContainerProps={appContainerProps}>
+        {children}
+      </AppContainer>
     </Box>
   );
 };
