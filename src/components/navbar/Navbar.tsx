@@ -51,9 +51,15 @@ const Navbar = ({ navbarProps }: iNavbarProps) => {
         >
           <MenuIcon color="inherit" />
         </IconButton>
-        <AssignmentIcon sx={{ ml: 6 }} />
-        <Typography color="primary" variant="h6" component="span" ml={1}>
-          Tasks
+        <AssignmentIcon sx={{ ml: 6, fontSize: 30 }} />
+        <Typography
+          color="primary"
+          variant="h6"
+          component="span"
+          ml={1}
+          sx={{ fontWeight: 'bold' }}
+        >
+          Task
         </Typography>
         <Typography color="default" variant="h6" component="span" ml={1}>
           Manager

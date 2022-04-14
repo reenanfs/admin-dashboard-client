@@ -4,7 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import type {} from '@mui/lab/themeAugmentation';
 
 import Layout from 'components/layout/Layout';
-import Tasks from 'pages/tasks/Tasks';
+import Home from 'pages/home/Home';
 import People from 'pages/people/People';
 import Support from 'pages/support/Support';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -33,7 +33,7 @@ const App = (): JSX.Element => {
       <BrowserRouter>
         <Layout>
           <Routes>
-            <Route path="/" element={<Tasks />} />
+            <Route path="/" element={<Home />} />
             <Route path="/people" element={<People />} />
             <Route path="/support" element={<Support />} />
           </Routes>
