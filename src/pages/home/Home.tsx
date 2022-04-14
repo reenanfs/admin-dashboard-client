@@ -1,5 +1,11 @@
+import Datatable from 'components/tables/Datatable';
+
 const Home = (): JSX.Element => {
-  return <div>Home</div>;
+  return (
+    <>
+      <Datatable />
+    </>
+  );
 };
 
 export default Home;

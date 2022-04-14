@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 import { styled } from '@mui/material/styles';
 
@@ -12,10 +13,7 @@ interface IAppContainerProps {
   children: ReactNode;
 }
 
-const AppContainer = ({
-  appContainerProps,
-  children,
-}: IAppContainerProps) => {
+const AppContainer = ({ appContainerProps, children }: IAppContainerProps) => {
   const { sidebarOpen, sidebarWidth } = appContainerProps;
 
   const StyledContainer = styled(Box, {
@@ -28,7 +26,7 @@ const AppContainer = ({
 
   return (
     <>
-      <StyledContainer open={sidebarOpen}>
+      <StyledContainer sx={{ padding: 5, width: '100%' }} open={sidebarOpen}>
         <Toolbar />
         {children}
       </StyledContainer>
