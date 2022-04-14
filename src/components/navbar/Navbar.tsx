@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import Avatar from '@mui/material/Avatar';
 import MenuItem from '@mui/material/MenuItem';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 interface iNavbarProps {
   navbarProps: {
@@ -48,10 +49,14 @@ const Navbar = ({ navbarProps }: iNavbarProps) => {
         <IconButton
           onClick={sidebarOpen ? handleSidebarClose : handleSidebarOpen}
         >
-          <MenuIcon />
+          <MenuIcon color="inherit" />
         </IconButton>
-        <Typography color="default" variant="h6" component="div" ml={2}>
-          Tasks Manager
+        <AssignmentIcon sx={{ ml: 6 }} />
+        <Typography color="primary" variant="h6" component="span" ml={1}>
+          Tasks
+        </Typography>
+        <Typography color="default" variant="h6" component="span" ml={1}>
+          Manager
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ mr: 2 }}>
