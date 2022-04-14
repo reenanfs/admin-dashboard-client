@@ -1,32 +1,36 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import {
-  ThemeProvider,
-  createTheme,
-} from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import type {} from '@mui/lab/themeAugmentation';
 
 import Layout from 'components/layout/Layout';
-import Dashboard from 'pages/Dashboard';
+import Tasks from 'pages/tasks/Tasks';
+import People from 'pages/people/People';
+import Support from 'pages/support/Support';
 
 const App = (): JSX.Element => {
   const theme = createTheme({
-    palette: {
-      mode: 'light',
-      primary: {
-        main: '#eceff1',
+    palette: {},
+    components: {
+      MuiSvgIcon: {
+        defaultProps: {
+          color: 'primary',
+        },
       },
     },
   });
 
   return (
     <ThemeProvider theme={theme}>
-      <Layout>
-        <BrowserRouter>
+      <BrowserRouter>
+        <Layout>
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<Tasks />} />
+            <Route path="/people" element={<People />} />
+            <Route path="/support" element={<Support />} />
           </Routes>
-        </BrowserRouter>
-      </Layout>
+        </Layout>
+      </BrowserRouter>
     </ThemeProvider>
   );
 };
