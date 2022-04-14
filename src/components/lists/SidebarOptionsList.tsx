@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
+import Link from '@mui/material/Link';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -22,25 +23,25 @@ interface ISidebarOptionsListProps {
 
 const SidebarList = ({ options }: ISidebarOptionsListProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const navigate = useNavigate();
 
   const handleListItemClick = (index: number, url: string): void => {
     setSelectedIndex(index);
-    navigate(url);
   };
 
   return (
     <List component="nav">
       {options.map((option, index) => (
-        <ListItemButton
-          selected={selectedIndex === index}
-          onClick={() => handleListItemClick(index, option.url)}
-          key={option.title}
-          sx={{ pl: 4 }}
-        >
-          <ListItemIcon>{<option.icon />}</ListItemIcon>
-          <ListItemText primary={option.title} />
-        </ListItemButton>
+        <Link to={option.url} component={RouterLink} key={option.title}>
+          <ListItemButton
+            selected={selectedIndex === index}
+            onClick={() => handleListItemClick(index, option.url)}
+            sx={{ pl: 4 }}
+          >
+            <ListItemIcon>{<option.icon />}</ListItemIcon>
+
+            <ListItemText primary={option.title} />
+          </ListItemButton>
+        </Link>
       ))}
     </List>
   );

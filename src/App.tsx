@@ -7,6 +7,7 @@ import Layout from 'components/layout/Layout';
 import Tasks from 'pages/tasks/Tasks';
 import People from 'pages/people/People';
 import Support from 'pages/support/Support';
+import CssBaseline from '@mui/material/CssBaseline';
 
 const App = (): JSX.Element => {
   const theme = createTheme({
@@ -17,11 +18,18 @@ const App = (): JSX.Element => {
           color: 'primary',
         },
       },
+      MuiLink: {
+        defaultProps: {
+          color: 'inherit',
+          underline: 'none',
+        },
+      },
     },
   });
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <BrowserRouter>
         <Layout>
           <Routes>
