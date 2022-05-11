@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 import Link from '@mui/material/Link';
 import List from '@mui/material/List';
@@ -22,11 +22,22 @@ interface ISidebarOptionsListProps {
 }
 
 const SidebarList = ({ options }: ISidebarOptionsListProps) => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
+    undefined
+  );
+  let location = useLocation();
 
-  const handleListItemClick = (index: number, url: string): void => {
+  const handleListItemClick = (index: number): void => {
     setSelectedIndex(index);
   };
+
+  useEffect(() => {
+    options.forEach(({ url }, index) => {
+      if (url === location.pathname) {
+        setSelectedIndex(index);
+      }
+    });
+  }, [location.pathname, options]);
 
   return (
     <List component="nav">
@@ -34,7 +45,7 @@ const SidebarList = ({ options }: ISidebarOptionsListProps) => {
         <Link to={option.url} component={RouterLink} key={option.title}>
           <ListItemButton
             selected={selectedIndex === index}
-            onClick={() => handleListItemClick(index, option.url)}
+            onClick={() => handleListItemClick(index)}
             sx={{ pl: 4 }}
           >
             <ListItemIcon>{<option.icon />}</ListItemIcon>

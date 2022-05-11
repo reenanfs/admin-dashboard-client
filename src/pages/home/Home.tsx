@@ -1,9 +1,15 @@
-import Datatable from 'components/tables/Datatable';
+import CustomDatagrid from 'components/tables/datagrid/DataGrid';
+
+import { HomeGridRowDef, label, columns, rows } from './homeConfiguration';
 
 const Home = (): JSX.Element => {
   return (
     <>
-      <Datatable />
+      <CustomDatagrid<HomeGridRowDef>
+        rows={rows}
+        columns={columns}
+        label={label}
+      />
     </>
   );
 };
