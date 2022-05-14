@@ -29,30 +29,3 @@ export const columns: GridColDef[] = [
     editable: true,
   },
 ];
-
-export const rows: PeopleGridRowDef[] = [
-  {
-    id: 1,
-    name: 'Renan',
-    role: 'Manager',
-    email: 'renan.a@gmail.com',
-  },
-  {
-    id: 2,
-    name: 'Karina',
-    role: 'Director',
-    email: 'karina.b@gmail.com',
-  },
-  {
-    id: 3,
-    name: 'Irineu',
-    role: 'CEO',
-    email: 'irineu.c@gmail.com',
-  },
-  {
-    id: 4,
-    name: 'Olivia',
-    role: 'CFO',
-    email: 'olivia.d@gmail.com',
-  },
-];
