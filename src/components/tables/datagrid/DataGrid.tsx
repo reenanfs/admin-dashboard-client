@@ -1,5 +1,5 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import GridToolbar from './grid-toolbar/GridToolbar';
 
@@ -10,12 +10,15 @@ interface ICustomDatagridProps<T> {
   rows: T[];
   label: string;
   loading: boolean;
+  toolbarComponent?: JSX.Element;
 }
 
-const CustomDatagrid = <T extends unknown>(props: ICustomDatagridProps<T>) => {
+const CustomDatagrid = <T extends unknown>(
+  props: ICustomDatagridProps<T>
+): JSX.Element => {
   const [pageSize, setPageSize] = useState(10);
+  const { columns, rows, label, loading, toolbarComponent } = props;
 
-  const { columns, rows, label, loading } = props;
   return (
     <div style={{ height: 800, width: '100%' }}>
       <DataGrid
@@ -31,7 +34,7 @@ const CustomDatagrid = <T extends unknown>(props: ICustomDatagridProps<T>) => {
           Toolbar: GridToolbar,
         }}
         componentsProps={{
-          toolbar: { label },
+          toolbar: { label, toolbarComponent },
         }}
       />
     </div>

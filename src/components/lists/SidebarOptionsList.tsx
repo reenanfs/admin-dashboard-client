@@ -46,7 +46,7 @@ const SidebarList = ({ options }: ISidebarOptionsListProps) => {
           <ListItemButton
             selected={selectedIndex === index}
             onClick={() => handleListItemClick(index)}
-            sx={{ pl: 4 }}
+            sx={{ pl: 4, p: 2 }}
           >
             <ListItemIcon>{<option.icon />}</ListItemIcon>
 

@@ -1,15 +1,6 @@
 import { GridColDef } from '@mui/x-data-grid';
 
-export const label = 'Manage People';
-
-export interface PeopleGridRowDef {
-  id: number | string;
-  name: string;
-  role: string;
-  email: string;
-}
-
-export const columns: GridColDef[] = [
+export const COLUMNS: GridColDef[] = [
   {
     field: 'name',
     headerName: 'Name',
@@ -29,3 +20,9 @@ export const columns: GridColDef[] = [
     editable: true,
   },
 ];
+
+export const MAIN_TABLE_LABEL = 'Manage People';
+
+export const ADD_DIALOG_TITLE = 'Add New Person';
+
+export const ADD_FORM_ID = 'add-person-form';
