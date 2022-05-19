@@ -5,19 +5,19 @@ export const COLUMNS: GridColDef[] = [
     field: 'name',
     headerName: 'Name',
     flex: 1,
-    editable: true,
+    editable: false,
   },
   {
     field: 'role',
     headerName: 'Role',
     flex: 1,
-    editable: true,
+    editable: false,
   },
   {
     field: 'email',
     headerName: 'Email',
     flex: 1,
-    editable: true,
+    editable: false,
   },
 ];
 

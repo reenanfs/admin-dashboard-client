@@ -1,9 +1,9 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { Box, LinearProgress } from '@mui/material';
 import React, { useState } from 'react';
 
-import GridToolbar from './grid-toolbar/GridToolbar';
-
-import { localizedTextsMap } from './dataGridConfigutation';
+import GridToolbar from './toolbar/GridToolbar';
+import GridPagination from './pagination/GridPagination';
 
 interface ICustomDatagridProps<T> {
   columns: GridColDef[];
@@ -20,24 +20,32 @@ const CustomDatagrid = <T extends unknown>(
   const { columns, rows, label, loading, toolbarComponent } = props;
 
   return (
-    <div style={{ height: 800, width: '100%' }}>
+    <Box
+      component="div"
+      sx={{
+        height: '80vh',
+        width: '100%',
+      }}
+    >
       <DataGrid
         loading={loading}
         rows={rows}
         columns={columns}
         pageSize={pageSize}
-        onPageSizeChange={newPageSize => setPageSize(newPageSize)}
-        rowsPerPageOptions={[5, 10, 20]}
+        hideFooterSelectedRowCount
         checkboxSelection
-        localeText={localizedTextsMap}
+        pagination
         components={{
           Toolbar: GridToolbar,
+          Pagination: GridPagination,
+          LoadingOverlay: LinearProgress,
         }}
         componentsProps={{
           toolbar: { label, toolbarComponent },
+          pagination: { pageSize, setPageSize },
         }}
       />
-    </div>
+    </Box>
   );
 };
 
