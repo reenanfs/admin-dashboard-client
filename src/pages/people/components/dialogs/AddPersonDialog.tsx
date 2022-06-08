@@ -41,13 +41,8 @@ const AddPersonDialog = ({
         },
       },
     });
+    handleClose();
   };
-
-  useEffect(() => {
-    if (!loading) {
-      handleClose();
-    }
-  }, [loading, handleClose]);
 
   useEffect(() => {
     if (error) {

@@ -39,7 +39,7 @@ const Home = (): JSX.Element => {
 
   let rows: HomeGridRowDef[] = [];
 
-  if (!loading) {
+  if (!loading && data) {
     rows = data!.tasks.map(task => {
       let { user, ...taskProps } = task;
 
