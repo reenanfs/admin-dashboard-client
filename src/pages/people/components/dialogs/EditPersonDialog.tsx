@@ -5,25 +5,25 @@ import { SubmitHandler } from 'react-hook-form';
 import StandardDialog from 'components/dialogs/StandardDialog';
 import PersonForm from 'pages/people/components/forms/PersonForm';
 import { PEOPLE_FORM_ID } from 'pages/people/peopleConstants';
-import { CREATE_USER, GET_USERS } from 'pages/people/peopleQueries';
+import { UPDATE_USER, GET_USERS } from 'pages/people/peopleQueries';
 import { IPersonFields, Person } from 'pages/people/peopleTypes';
 
-interface IAddPersonDialogProps {
+interface IEditPersonDialogProps {
   open: boolean;
   title: string;
   handleClose: () => void;
   handleConfirm?: () => void;
 }
 
-const AddPersonDialog = ({
+const EditPersonDialog = ({
   open,
   title,
   handleClose,
-}: IAddPersonDialogProps): JSX.Element => {
-  const [createUser, { loading, error }] = useMutation<
-    { createUser: Person },
+}: IEditPersonDialogProps): JSX.Element => {
+  const [updateUser, { loading, error }] = useMutation<
+    { updateUser: Person },
     { input: IPersonFields }
-  >(CREATE_USER, {
+  >(UPDATE_USER, {
     refetchQueries: [GET_USERS, 'GetUsers'],
   });
 
@@ -32,7 +32,7 @@ const AddPersonDialog = ({
     role,
     email,
   }): Promise<void> => {
-    await createUser({
+    await updateUser({
       variables: {
         input: {
           name,
@@ -62,4 +62,4 @@ const AddPersonDialog = ({
   );
 };
 
-export default AddPersonDialog;
+export default EditPersonDialog;

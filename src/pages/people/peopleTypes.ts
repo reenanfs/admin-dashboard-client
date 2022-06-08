@@ -12,7 +12,7 @@ export interface PeopleGridRowDef {
   email: string;
 }
 
-export interface IAddPersonFields {
+export interface IPersonFields {
   name: string;
   role: string;
   email: string;

@@ -4,14 +4,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { ValidationMessages } from 'constants/validationMessages';
-import { ADD_FORM_ID } from 'pages/people/peopleConstants';
-import { IAddPersonFields } from 'pages/people/peopleTypes';
+import { PEOPLE_FORM_ID } from 'pages/people/peopleConstants';
+import { IPersonFields } from 'pages/people/peopleTypes';
 
-interface IAddPersonFormProps {
-  onSubmit: SubmitHandler<IAddPersonFields>;
+interface IPersonFormProps {
+  onSubmit: SubmitHandler<IPersonFields>;
 }
 
-const addPersonValidationSchema = yup.object({
+const personValidationSchema = yup.object({
   name: yup.string().required(ValidationMessages.REQUIRED),
   role: yup.string().required(ValidationMessages.REQUIRED),
   email: yup
@@ -20,20 +20,20 @@ const addPersonValidationSchema = yup.object({
     .required(ValidationMessages.REQUIRED),
 });
 
-const AddPersonForm = ({ onSubmit }: IAddPersonFormProps): JSX.Element => {
+const PersonForm = ({ onSubmit }: IPersonFormProps): JSX.Element => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IAddPersonFields>({
-    resolver: yupResolver(addPersonValidationSchema),
+  } = useForm<IPersonFields>({
+    resolver: yupResolver(personValidationSchema),
   });
 
   return (
     <Box
       component="form"
       autoComplete="off"
-      id={ADD_FORM_ID}
+      id={PEOPLE_FORM_ID}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Grid container direction="column" rowSpacing={2}>
@@ -69,4 +69,4 @@ const AddPersonForm = ({ onSubmit }: IAddPersonFormProps): JSX.Element => {
   );
 };
 
-export default AddPersonForm;
+export default PersonForm;
