@@ -1,12 +1,10 @@
 import { GridActionsCellItem, GridRowParams } from '@mui/x-data-grid';
-import { Delete, Edit } from '@mui/icons-material';
+import { Delete } from '@mui/icons-material';
+import ActionCellEdit from './ActionCellEdit';
+import { Person } from 'pages/people/peopleTypes';
 
 const Actions = (params: GridRowParams) => [
-  <GridActionsCellItem
-    icon={<Edit />}
-    label="Edit"
-    onClick={() => console.log(params)}
-  />,
+  <ActionCellEdit defaultValues={params.row as Person} />,
   <GridActionsCellItem
     icon={<Delete />}
     label="Delete"

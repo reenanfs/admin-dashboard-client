@@ -37,4 +37,6 @@ export const MAIN_TABLE_LABEL = 'Manage People';
 
 export const ADD_DIALOG_TITLE = 'Add New Person';
 
-export const PEOPLE_FORM_ID = 'add-person-form';
+export const EDIT_DIALOG_TITLE = 'Edit Person';
+
+export const PEOPLE_FORM_ID = 'people-form-id';

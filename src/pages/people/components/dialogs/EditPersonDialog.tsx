@@ -3,14 +3,15 @@ import { useEffect } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
 import StandardDialog from 'components/dialogs/StandardDialog';
-import PersonForm from 'pages/people/components/forms/PersonForm';
+import EditPersonForm from 'pages/people/components/forms/EditPersonForm';
 import { PEOPLE_FORM_ID } from 'pages/people/peopleConstants';
 import { UPDATE_USER, GET_USERS } from 'pages/people/peopleQueries';
-import { IPersonFields, Person } from 'pages/people/peopleTypes';
+import { Person } from 'pages/people/peopleTypes';
 
 interface IEditPersonDialogProps {
   open: boolean;
   title: string;
+  defaultValues: Person;
   handleClose: () => void;
   handleConfirm?: () => void;
 }
@@ -18,16 +19,18 @@ interface IEditPersonDialogProps {
 const EditPersonDialog = ({
   open,
   title,
+  defaultValues,
   handleClose,
 }: IEditPersonDialogProps): JSX.Element => {
   const [updateUser, { loading, error }] = useMutation<
     { updateUser: Person },
-    { input: IPersonFields }
+    { input: Person }
   >(UPDATE_USER, {
     refetchQueries: [GET_USERS, 'GetUsers'],
   });
 
-  const onSubmit: SubmitHandler<IPersonFields> = async ({
+  const onSubmit: SubmitHandler<Person> = async ({
+    id,
     name,
     role,
     email,
@@ -35,6 +38,7 @@ const EditPersonDialog = ({
     await updateUser({
       variables: {
         input: {
+          id,
           name,
           role,
           email,
@@ -54,7 +58,9 @@ const EditPersonDialog = ({
     <StandardDialog
       open={open}
       title={title}
-      content={<PersonForm onSubmit={onSubmit} />}
+      content={
+        <EditPersonForm onSubmit={onSubmit} defaultValues={defaultValues} />
+      }
       contentFormId={PEOPLE_FORM_ID}
       confirmButtonLoading={loading}
       handleClose={handleClose}

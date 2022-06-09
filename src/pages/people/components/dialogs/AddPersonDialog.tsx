@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
 import StandardDialog from 'components/dialogs/StandardDialog';
-import PersonForm from 'pages/people/components/forms/PersonForm';
+import AddPersonForm from 'pages/people/components/forms/AddPersonForm';
 import { PEOPLE_FORM_ID } from 'pages/people/peopleConstants';
 import { CREATE_USER, GET_USERS } from 'pages/people/peopleQueries';
 import { IPersonFields, Person } from 'pages/people/peopleTypes';
@@ -54,7 +54,7 @@ const AddPersonDialog = ({
     <StandardDialog
       open={open}
       title={title}
-      content={<PersonForm onSubmit={onSubmit} />}
+      content={<AddPersonForm onSubmit={onSubmit} />}
       contentFormId={PEOPLE_FORM_ID}
       confirmButtonLoading={loading}
       handleClose={handleClose}
