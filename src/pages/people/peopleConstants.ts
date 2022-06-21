@@ -39,4 +39,14 @@ export const ADD_DIALOG_TITLE = 'Add New Person';
 
 export const EDIT_DIALOG_TITLE = 'Edit Person';
 
+export const DELETE_DIALOG_TITLE = 'Delete Person';
+
+export const DELETE_DIALOG_CONTENT =
+  'Are you sure you want to delete this user?';
+
+export const MDELETE_DIALOG_TITLE = 'Delete People';
+
+export const MDELETE_DIALOG_CONTENT =
+  'Are you sure you want to delete the selected users?';
+
 export const PEOPLE_FORM_ID = 'people-form-id';

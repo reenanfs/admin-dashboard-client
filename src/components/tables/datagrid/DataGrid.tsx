@@ -1,9 +1,22 @@
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridRowId,
+  GridSelectionModel,
+} from '@mui/x-data-grid';
 import { Box, LinearProgress } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import GridToolbar from './toolbar/GridToolbar';
 import GridPagination from './pagination/GridPagination';
+
+interface IMDeleteDialogProps {
+  open: boolean;
+  title: string;
+  ids: GridRowId[];
+  handleClose: () => void;
+  handleConfirm?: () => void;
+}
 
 interface ICustomDatagridProps<T> {
   columns: GridColDef[];
@@ -11,13 +24,27 @@ interface ICustomDatagridProps<T> {
   label: string;
   loading: boolean;
   toolbarComponent?: JSX.Element;
+  MDeleteDialog?: React.ElementType<IMDeleteDialogProps>;
 }
 
 const CustomDatagrid = <T extends unknown>(
   props: ICustomDatagridProps<T>
 ): JSX.Element => {
   const [pageSize, setPageSize] = useState(10);
-  const { columns, rows, label, loading, toolbarComponent } = props;
+  const [gridRowIds, setGridRowIds] = useState<GridRowId[]>([]);
+  const [mDeleteButtonVisible, setMDeleteButtonVisible] = useState(false);
+  const { columns, rows, label, loading, toolbarComponent, MDeleteDialog } =
+    props;
+
+  const showActionButtons = (rowModesModel: GridSelectionModel) => {
+    if (rowModesModel.length !== 0) {
+      setMDeleteButtonVisible(true);
+      setGridRowIds(rowModesModel);
+    } else {
+      setMDeleteButtonVisible(false);
+      setGridRowIds([]);
+    }
+  };
 
   return (
     <Box
@@ -33,7 +60,9 @@ const CustomDatagrid = <T extends unknown>(
         columns={columns}
         pageSize={pageSize}
         hideFooterSelectedRowCount
+        onSelectionModelChange={showActionButtons}
         checkboxSelection
+        disableColumnMenu
         pagination
         components={{
           Toolbar: GridToolbar,
@@ -41,7 +70,14 @@ const CustomDatagrid = <T extends unknown>(
           LoadingOverlay: LinearProgress,
         }}
         componentsProps={{
-          toolbar: { label, toolbarComponent },
+          toolbar: {
+            label,
+            toolbarComponent,
+            mDeleteButtonVisible,
+            gridRowIds,
+            MDeleteDialog,
+            showQuickFilter: true,
+          },
           pagination: { pageSize, setPageSize },
         }}
       />

@@ -1,5 +1,4 @@
 import { useQuery } from '@apollo/client';
-import { Box } from '@mui/material';
 import { useState } from 'react';
 
 import { MAIN_TABLE_LABEL, ADD_DIALOG_TITLE, COLUMNS } from './peopleConstants';
@@ -9,6 +8,7 @@ import CustomDatagrid from 'components/tables/datagrid/DataGrid';
 import AddPersonDialog from './components/dialogs/AddPersonDialog';
 import AddButton from 'components/buttons/AddButton';
 import { Person } from 'pages/people/peopleTypes';
+import DeletePeopleDialog from './components/dialogs/DeletePeopleDialog';
 
 interface IPeopleData {
   users: Person[];
@@ -39,11 +39,8 @@ const People = () => {
         rows={rows}
         columns={COLUMNS}
         label={MAIN_TABLE_LABEL}
-        toolbarComponent={
-          <Box sx={{ mr: 2 }}>
-            <AddButton onClick={handleAddPersonOpen} />
-          </Box>
-        }
+        toolbarComponent={<AddButton onClick={handleAddPersonOpen} />}
+        MDeleteDialog={DeletePeopleDialog}
       />
       <AddPersonDialog
         open={AddPersonOpen}

@@ -26,8 +26,22 @@ export const UPDATE_USER = gql`
   mutation Mutation($input: UpdateUserInput!) {
     updateUser(input: $input) {
       name
-      role
-      email
+    }
+  }
+`;
+
+export const DELETE_USER = gql`
+  mutation Mutation($input: UserWhereUniqueInput!) {
+    deleteUser(input: $input) {
+      id
+    }
+  }
+`;
+
+export const DELETE_USERS = gql`
+  mutation Mutation($input: DeleteUsersInput) {
+    deleteUsers(input: $input) {
+      count
     }
   }
 `;
