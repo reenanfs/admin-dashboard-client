@@ -5,13 +5,14 @@ import { SubmitHandler } from 'react-hook-form';
 import StandardDialog from 'components/dialogs/StandardDialog';
 import EditPersonForm from 'pages/people/components/forms/EditPersonForm';
 import { PEOPLE_FORM_ID } from 'pages/people/peopleConstants';
-import { UPDATE_USER, GET_USERS } from 'pages/people/peopleQueries';
-import { Person } from 'pages/people/peopleTypes';
+import { UPDATE_USER } from 'pages/people/peopleQueries';
+import { IPerson } from 'types/peopleTypes';
+import { GET_USERS } from 'graphql/peopleQueries';
 
 interface IEditPersonDialogProps {
   open: boolean;
   title: string;
-  defaultValues: Person;
+  defaultValues: IPerson;
   handleClose: () => void;
   handleConfirm?: () => void;
 }
@@ -23,13 +24,13 @@ const EditPersonDialog = ({
   handleClose,
 }: IEditPersonDialogProps): JSX.Element => {
   const [updateUser, { loading, error }] = useMutation<
-    { updateUser: Person },
-    { input: Person }
+    { updateUser: IPerson },
+    { input: IPerson }
   >(UPDATE_USER, {
     refetchQueries: [GET_USERS, 'GetUsers'],
   });
 
-  const onSubmit: SubmitHandler<Person> = async ({
+  const onSubmit: SubmitHandler<IPerson> = async ({
     id,
     name,
     role,

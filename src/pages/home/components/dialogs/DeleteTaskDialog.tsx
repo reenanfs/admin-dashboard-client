@@ -3,12 +3,11 @@ import { useMutation } from '@apollo/client';
 import { useEffect } from 'react';
 
 import StandardDialog from 'components/dialogs/StandardDialog';
-import { DELETE_DIALOG_CONTENT } from 'pages/people/peopleConstants';
-import { DELETE_USER } from 'pages/people/peopleQueries';
-import { IPerson } from 'types/peopleTypes';
-import { GET_USERS } from 'graphql/peopleQueries';
+import { DELETE_DIALOG_CONTENT } from 'pages/home/homeConstants';
+import { DELETE_TASK, GET_TASKS } from 'pages/home/homeQueries';
+import { ITask } from 'pages/home/homeTypes';
 
-interface IDeletePersonDialogProps {
+interface IDeleteTaskDialogProps {
   open: boolean;
   title: string;
   id: GridRowId;
@@ -16,21 +15,21 @@ interface IDeletePersonDialogProps {
   handleConfirm?: () => void;
 }
 
-const DeletePersonDialog = ({
+const DeleteTaskDialog = ({
   open,
   title,
   id,
   handleClose,
-}: IDeletePersonDialogProps): JSX.Element => {
-  const [deleteUser, { loading, error }] = useMutation<
-    { deleteUser: IPerson },
+}: IDeleteTaskDialogProps): JSX.Element => {
+  const [deleteTask, { loading, error }] = useMutation<
+    { deleteTask: ITask },
     { input: { id: GridRowId } }
-  >(DELETE_USER, {
-    refetchQueries: [GET_USERS, 'GetUsers'],
+  >(DELETE_TASK, {
+    refetchQueries: [GET_TASKS, 'GetTasks'],
   });
 
   const onSubmit = async (): Promise<void> => {
-    await deleteUser({
+    await deleteTask({
       variables: {
         input: {
           id,
@@ -58,4 +57,4 @@ const DeletePersonDialog = ({
   );
 };
 
-export default DeletePersonDialog;
+export default DeleteTaskDialog;

@@ -44,9 +44,9 @@ export const DELETE_DIALOG_TITLE = 'Delete Person';
 export const DELETE_DIALOG_CONTENT =
   'Are you sure you want to delete this user?';
 
-export const MDELETE_DIALOG_TITLE = 'Delete People';
+export const DELETE_MULTIPLE_DIALOG_TITLE = 'Delete People';
 
-export const MDELETE_DIALOG_CONTENT =
+export const DELETE_MULTIPLE_DIALOG_CONTENT =
   'Are you sure you want to delete the selected users?';
 
 export const PEOPLE_FORM_ID = 'people-form-id';

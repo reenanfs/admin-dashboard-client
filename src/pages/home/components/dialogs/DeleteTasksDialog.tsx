@@ -3,37 +3,36 @@ import { useMutation } from '@apollo/client';
 import { useEffect } from 'react';
 
 import StandardDialog from 'components/dialogs/StandardDialog';
-import { DELETE_DIALOG_CONTENT } from 'pages/people/peopleConstants';
-import { DELETE_USER } from 'pages/people/peopleQueries';
-import { IPerson } from 'types/peopleTypes';
-import { GET_USERS } from 'graphql/peopleQueries';
+import { DELETE_MULTIPLE_DIALOG_CONTENT } from 'pages/home/homeConstants';
+import { DELETE_TASKS, GET_TASKS } from 'pages/home/homeQueries';
+import { ITask } from 'pages/home/homeTypes';
 
-interface IDeletePersonDialogProps {
+interface IDeletePeopleDialogProps {
   open: boolean;
   title: string;
-  id: GridRowId;
+  ids: GridRowId[];
   handleClose: () => void;
   handleConfirm?: () => void;
 }
 
-const DeletePersonDialog = ({
+const DeletePeopleDialog = ({
   open,
   title,
-  id,
+  ids,
   handleClose,
-}: IDeletePersonDialogProps): JSX.Element => {
-  const [deleteUser, { loading, error }] = useMutation<
-    { deleteUser: IPerson },
-    { input: { id: GridRowId } }
-  >(DELETE_USER, {
-    refetchQueries: [GET_USERS, 'GetUsers'],
+}: IDeletePeopleDialogProps): JSX.Element => {
+  const [deleteUsers, { loading, error }] = useMutation<
+    { deleteUsers: ITask[] },
+    { input: { ids: GridRowId[] } }
+  >(DELETE_TASKS, {
+    refetchQueries: [GET_TASKS, 'GetUsers'],
   });
 
   const onSubmit = async (): Promise<void> => {
-    await deleteUser({
+    await deleteUsers({
       variables: {
         input: {
-          id,
+          ids,
         },
       },
     });
@@ -50,7 +49,7 @@ const DeletePersonDialog = ({
     <StandardDialog
       open={open}
       title={title}
-      content={<span>{DELETE_DIALOG_CONTENT}</span>}
+      content={<span>{DELETE_MULTIPLE_DIALOG_CONTENT}</span>}
       confirmButtonLoading={loading}
       handleClose={handleClose}
       handleConfirm={onSubmit}
@@ -58,4 +57,4 @@ const DeletePersonDialog = ({
   );
 };
 
-export default DeletePersonDialog;
+export default DeletePeopleDialog;

@@ -3,10 +3,10 @@ import { Edit } from '@mui/icons-material';
 import { useState } from 'react';
 import EditPersonDialog from 'pages/people/components/dialogs/EditPersonDialog';
 import { EDIT_DIALOG_TITLE } from 'pages/people/peopleConstants';
-import { Person } from 'pages/people/peopleTypes';
+import { IPerson } from 'types/peopleTypes';
 
 interface IActionCellEditProps {
-  defaultValues: Person;
+  defaultValues: IPerson;
 }
 
 const ActionCellEdit = ({

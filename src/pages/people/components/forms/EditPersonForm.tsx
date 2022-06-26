@@ -5,11 +5,12 @@ import * as yup from 'yup';
 
 import { ValidationMessages } from 'constants/validationMessages';
 import { PEOPLE_FORM_ID } from 'pages/people/peopleConstants';
-import { Person, IPersonFields } from 'pages/people/peopleTypes';
+import { IPersonFields } from 'pages/people/peopleTypes';
+import { IPerson } from 'types/peopleTypes';
 
 interface IPersonFormProps {
-  onSubmit: SubmitHandler<Person>;
-  defaultValues: Person;
+  onSubmit: SubmitHandler<IPerson>;
+  defaultValues: IPerson;
 }
 
 const personValidationSchema = yup.object({
@@ -21,7 +22,7 @@ const personValidationSchema = yup.object({
     .required(ValidationMessages.REQUIRED),
 });
 
-const PersonForm = ({
+const EditPersonForm = ({
   onSubmit,
   defaultValues,
 }: IPersonFormProps): JSX.Element => {
@@ -80,4 +81,4 @@ const PersonForm = ({
   );
 };
 
-export default PersonForm;
+export default EditPersonForm;

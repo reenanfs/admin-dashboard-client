@@ -1,5 +1,5 @@
 import { Box, TextField, Grid } from '@mui/material';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
@@ -20,9 +20,9 @@ const personValidationSchema = yup.object({
     .required(ValidationMessages.REQUIRED),
 });
 
-const PersonForm = ({ onSubmit }: IPersonFormProps): JSX.Element => {
+const AddPersonForm = ({ onSubmit }: IPersonFormProps): JSX.Element => {
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<IPersonFields>({
@@ -38,30 +38,48 @@ const PersonForm = ({ onSubmit }: IPersonFormProps): JSX.Element => {
     >
       <Grid container direction="column" rowSpacing={2}>
         <Grid item xs={12}>
-          <TextField
-            label="Name"
-            size="small"
-            {...register('name')}
-            helperText={!!errors.name && errors.name.message}
-            error={!!errors.name}
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Name"
+                size="small"
+                {...field}
+                helperText={!!errors.name && errors.name.message}
+                error={!!errors.name}
+              />
+            )}
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
-            label="Role"
-            size="small"
-            {...register('role')}
-            helperText={!!errors.role && errors.role.message}
-            error={!!errors.role}
+          <Controller
+            name="role"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Role"
+                size="small"
+                {...field}
+                helperText={!!errors.role && errors.role.message}
+                error={!!errors.role}
+              />
+            )}
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
-            label="Email"
-            size="small"
-            {...register('email')}
-            helperText={!!errors.email && errors.email.message}
-            error={!!errors.email}
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Email"
+                size="small"
+                {...field}
+                helperText={!!errors.email && errors.email.message}
+                error={!!errors.email}
+              />
+            )}
           />
         </Grid>
       </Grid>
@@ -69,4 +87,4 @@ const PersonForm = ({ onSubmit }: IPersonFormProps): JSX.Element => {
   );
 };
 
-export default PersonForm;
+export default AddPersonForm;

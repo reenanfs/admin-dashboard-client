@@ -23,25 +23,29 @@ interface ICustomDatagridProps<T> {
   rows: T[];
   label: string;
   loading: boolean;
-  toolbarComponent?: JSX.Element;
-  MDeleteDialog?: React.ElementType<IMDeleteDialogProps>;
+  toolbarComponent?: React.ReactNode;
+  DialogDeleteMultiple?: React.FC<IMDeleteDialogProps>;
 }
 
-const CustomDatagrid = <T extends unknown>(
-  props: ICustomDatagridProps<T>
-): JSX.Element => {
+const CustomDatagrid = <T extends unknown>({
+  columns,
+  rows,
+  label,
+  loading,
+  toolbarComponent,
+  DialogDeleteMultiple,
+}: ICustomDatagridProps<T>): JSX.Element => {
   const [pageSize, setPageSize] = useState(10);
   const [gridRowIds, setGridRowIds] = useState<GridRowId[]>([]);
-  const [mDeleteButtonVisible, setMDeleteButtonVisible] = useState(false);
-  const { columns, rows, label, loading, toolbarComponent, MDeleteDialog } =
-    props;
+  const [buttonDeleteMultipleVisible, setButtonDeleteMultipleVisible] =
+    useState(false);
 
   const showActionButtons = (rowModesModel: GridSelectionModel) => {
     if (rowModesModel.length !== 0) {
-      setMDeleteButtonVisible(true);
+      setButtonDeleteMultipleVisible(true);
       setGridRowIds(rowModesModel);
     } else {
-      setMDeleteButtonVisible(false);
+      setButtonDeleteMultipleVisible(false);
       setGridRowIds([]);
     }
   };
@@ -73,9 +77,9 @@ const CustomDatagrid = <T extends unknown>(
           toolbar: {
             label,
             toolbarComponent,
-            mDeleteButtonVisible,
+            buttonDeleteMultipleVisible,
             gridRowIds,
-            MDeleteDialog,
+            DialogDeleteMultiple,
             showQuickFilter: true,
           },
           pagination: { pageSize, setPageSize },

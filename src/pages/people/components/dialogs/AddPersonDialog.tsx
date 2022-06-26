@@ -5,8 +5,10 @@ import { SubmitHandler } from 'react-hook-form';
 import StandardDialog from 'components/dialogs/StandardDialog';
 import AddPersonForm from 'pages/people/components/forms/AddPersonForm';
 import { PEOPLE_FORM_ID } from 'pages/people/peopleConstants';
-import { CREATE_USER, GET_USERS } from 'pages/people/peopleQueries';
-import { IPersonFields, Person } from 'pages/people/peopleTypes';
+import { CREATE_USER } from 'pages/people/peopleQueries';
+import { IPersonFields } from 'pages/people/peopleTypes';
+import { IPerson } from 'types/peopleTypes';
+import { GET_USERS } from 'graphql/peopleQueries';
 
 interface IAddPersonDialogProps {
   open: boolean;
@@ -21,7 +23,7 @@ const AddPersonDialog = ({
   handleClose,
 }: IAddPersonDialogProps): JSX.Element => {
   const [createUser, { loading, error }] = useMutation<
-    { createUser: Person },
+    { createUser: IPerson },
     { input: IPersonFields }
   >(CREATE_USER, {
     refetchQueries: [GET_USERS, 'GetUsers'],

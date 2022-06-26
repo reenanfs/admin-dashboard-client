@@ -2,17 +2,14 @@ import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 
 import { MAIN_TABLE_LABEL, ADD_DIALOG_TITLE, COLUMNS } from './peopleConstants';
-import { PeopleGridRowDef } from './peopleTypes';
-import { GET_USERS } from './peopleQueries';
+
 import CustomDatagrid from 'components/tables/datagrid/DataGrid';
 import AddPersonDialog from './components/dialogs/AddPersonDialog';
 import AddButton from 'components/buttons/AddButton';
-import { Person } from 'pages/people/peopleTypes';
-import DeletePeopleDialog from './components/dialogs/DeletePeopleDialog';
 
-interface IPeopleData {
-  users: Person[];
-}
+import DeletePeopleDialog from './components/dialogs/DeletePeopleDialog';
+import { IPeopleData, IPerson } from 'types/peopleTypes';
+import { GET_USERS } from 'graphql/peopleQueries';
 
 const People = () => {
   const [AddPersonOpen, setAddPersonOpen] = useState(false);
@@ -26,7 +23,7 @@ const People = () => {
     setAddPersonOpen(false);
   };
 
-  let rows: PeopleGridRowDef[] = [];
+  let rows: IPerson[] = [];
 
   if (!loading && data) {
     rows = data.users;
@@ -34,13 +31,13 @@ const People = () => {
 
   return (
     <>
-      <CustomDatagrid<PeopleGridRowDef>
+      <CustomDatagrid<IPerson>
         loading={loading}
         rows={rows}
         columns={COLUMNS}
         label={MAIN_TABLE_LABEL}
         toolbarComponent={<AddButton onClick={handleAddPersonOpen} />}
-        MDeleteDialog={DeletePeopleDialog}
+        DialogDeleteMultiple={DeletePeopleDialog}
       />
       <AddPersonDialog
         open={AddPersonOpen}

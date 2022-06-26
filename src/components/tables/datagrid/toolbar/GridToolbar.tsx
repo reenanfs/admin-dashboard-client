@@ -5,12 +5,10 @@ import {
   GridToolbarQuickFilter,
 } from '@mui/x-data-grid';
 import DeleteButton from 'components/buttons/DeleteButton';
-import { MDELETE_DIALOG_TITLE } from 'pages/people/peopleConstants';
 import { useState } from 'react';
 
-interface IMDeleteDialogProps {
+interface IDeleteMultipleDialogProps {
   open: boolean;
-  title: string;
   ids: GridRowId[];
   handleClose: () => void;
   handleConfirm?: () => void;
@@ -18,27 +16,28 @@ interface IMDeleteDialogProps {
 
 interface IGridToolbarProps {
   label: string;
-  toolbarComponent: JSX.Element;
-  mDeleteButtonVisible: boolean;
+  toolbarComponent: React.ReactNode;
+  buttonDeleteMultipleVisible: boolean;
   gridRowIds: GridRowId[];
-  MDeleteDialog: React.ElementType<IMDeleteDialogProps>;
+  DialogDeleteMultiple: React.FC<IDeleteMultipleDialogProps>;
 }
 
 const GridToolbar = ({
   label,
   toolbarComponent,
-  mDeleteButtonVisible,
+  buttonDeleteMultipleVisible,
   gridRowIds,
-  MDeleteDialog,
+  DialogDeleteMultiple,
 }: IGridToolbarProps): JSX.Element => {
-  const [mDeleteDialogOpen, setMDeleteDialognOpen] = useState(false);
+  const [deleteMultipleDialogOpen, setDeleteMultipleDialognOpen] =
+    useState(false);
 
-  const handleMDeleteDialogOpen = (): void => {
-    setMDeleteDialognOpen(true);
+  const handleMultipleDeleteDialogOpen = (): void => {
+    setDeleteMultipleDialognOpen(true);
   };
 
-  const handleMDeleteDialogClose = (): void => {
-    setMDeleteDialognOpen(false);
+  const handleMultipleDeleteDialogClose = (): void => {
+    setDeleteMultipleDialognOpen(false);
   };
 
   return (
@@ -60,13 +59,17 @@ const GridToolbar = ({
       <Box sx={{ mr: 2 }}>
         <Box
           component="span"
-          sx={{ visibility: mDeleteButtonVisible ? 'visible' : 'hidden' }}
+          sx={{
+            visibility: buttonDeleteMultipleVisible ? 'visible' : 'hidden',
+          }}
         >
-          <DeleteButton sx={{ mr: 1 }} onClick={handleMDeleteDialogOpen} />
-          <MDeleteDialog
-            open={mDeleteDialogOpen}
-            title={MDELETE_DIALOG_TITLE}
-            handleClose={handleMDeleteDialogClose}
+          <DeleteButton
+            sx={{ mr: 1 }}
+            onClick={handleMultipleDeleteDialogOpen}
+          />
+          <DialogDeleteMultiple
+            open={deleteMultipleDialogOpen}
+            handleClose={handleMultipleDeleteDialogClose}
             ids={gridRowIds}
           />
         </Box>
