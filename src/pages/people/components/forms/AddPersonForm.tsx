@@ -27,6 +27,11 @@ const AddPersonForm = ({ onSubmit }: IPersonFormProps): JSX.Element => {
     formState: { errors },
   } = useForm<IPersonFields>({
     resolver: yupResolver(personValidationSchema),
+    defaultValues: {
+      name: '',
+      role: '',
+      email: '',
+    },
   });
 
   return (

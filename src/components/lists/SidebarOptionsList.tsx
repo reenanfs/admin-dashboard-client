@@ -40,13 +40,13 @@ const SidebarList = ({ options }: ISidebarOptionsListProps) => {
   }, [location.pathname, options]);
 
   return (
-    <List component="nav">
+    <List component="nav" sx={{ p: 0 }}>
       {options.map((option, index) => (
         <Link to={option.url} component={RouterLink} key={option.title}>
           <ListItemButton
             selected={selectedIndex === index}
             onClick={() => handleListItemClick(index)}
-            sx={{ pl: 4, p: 2 }}
+            sx={{ p: 2 }}
           >
             <ListItemIcon>{<option.icon />}</ListItemIcon>
 

@@ -9,32 +9,65 @@ import { useState } from 'react';
 
 import GridToolbar from './toolbar/GridToolbar';
 import GridPagination from './pagination/GridPagination';
+import DeleteMultipleItemsDialog from 'components/dialogs/DeleteMultipleItemsDialog';
+import DeleteItemDialog from 'components/dialogs/DeleteItemDialog';
+import { DocumentNode } from '@apollo/client';
+import EditItemDialog from 'components/dialogs/EditItemDialog';
+import { SubmitHandler } from 'react-hook-form';
+import { ValidAppEntities } from 'types/appTypes';
 
-interface IMDeleteDialogProps {
-  open: boolean;
-  title: string;
-  ids: GridRowId[];
-  handleClose: () => void;
-  handleConfirm?: () => void;
+interface FormProps<T> {
+  onSubmit: SubmitHandler<T>;
+  defaultValues: T;
 }
 
-interface ICustomDatagridProps<T> {
+interface IDialogProps<T> {
+  mutation: DocumentNode;
+  title: string;
+  content: string;
+  Form: React.FC<FormProps<T>>;
+}
+
+interface IDialogRefetchProps {
+  refetchQuery: DocumentNode;
+  refetchQueryName: string;
+}
+
+interface ICustomDatagridProps<T, S> {
   columns: GridColDef[];
-  rows: T[];
+  rows: S[];
   label: string;
   loading: boolean;
   toolbarComponent?: React.ReactNode;
-  DialogDeleteMultiple?: React.FC<IMDeleteDialogProps>;
+  deleteMultipleItemsDialogProps: Omit<IDialogProps<T>, 'Form'>;
+  deleteItemDialogProps: Omit<IDialogProps<T>, 'Form'>;
+  editItemDialogProps: Omit<IDialogProps<T>, 'content'>;
+  dialogRefetchProps: IDialogRefetchProps;
 }
 
-const CustomDatagrid = <T extends unknown>({
+const CustomDatagrid = <T extends ValidAppEntities, S = void>({
   columns,
   rows,
   label,
   loading,
   toolbarComponent,
-  DialogDeleteMultiple,
-}: ICustomDatagridProps<T>): JSX.Element => {
+  deleteMultipleItemsDialogProps: {
+    title: deleteMultipleItemsDialogTitle,
+    content: deleteMultipleItemsDialogContent,
+    mutation: deleteMultipleItemsMutation,
+  },
+  deleteItemDialogProps: {
+    title: deleteItemDialogTitle,
+    content: deleteItemDialogContent,
+    mutation: deleteItemMutation,
+  },
+  editItemDialogProps: {
+    title: editItemDialogTitle,
+    Form: EditItemForm,
+    mutation: editItemMutation,
+  },
+  dialogRefetchProps: { refetchQuery, refetchQueryName },
+}: ICustomDatagridProps<T, S>): JSX.Element => {
   const [pageSize, setPageSize] = useState(10);
   const [gridRowIds, setGridRowIds] = useState<GridRowId[]>([]);
   const [buttonDeleteMultipleVisible, setButtonDeleteMultipleVisible] =
@@ -78,12 +111,31 @@ const CustomDatagrid = <T extends unknown>({
             label,
             toolbarComponent,
             buttonDeleteMultipleVisible,
-            gridRowIds,
-            DialogDeleteMultiple,
-            showQuickFilter: true,
           },
           pagination: { pageSize, setPageSize },
         }}
+      />
+      <DeleteMultipleItemsDialog<T>
+        ids={gridRowIds}
+        title={deleteMultipleItemsDialogTitle}
+        content={deleteMultipleItemsDialogContent}
+        mutation={deleteMultipleItemsMutation}
+        refetchQuery={refetchQuery}
+        refetchQueryName={refetchQueryName}
+      />
+      <DeleteItemDialog
+        title={deleteItemDialogTitle}
+        content={deleteItemDialogContent}
+        mutation={deleteItemMutation}
+        refetchQuery={refetchQuery}
+        refetchQueryName={refetchQueryName}
+      />
+      <EditItemDialog
+        title={editItemDialogTitle}
+        Form={EditItemForm}
+        mutation={editItemMutation}
+        refetchQuery={refetchQuery}
+        refetchQueryName={refetchQueryName}
       />
     </Box>
   );

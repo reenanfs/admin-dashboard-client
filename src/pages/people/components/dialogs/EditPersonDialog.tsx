@@ -30,19 +30,11 @@ const EditPersonDialog = ({
     refetchQueries: [GET_USERS, 'GetUsers'],
   });
 
-  const onSubmit: SubmitHandler<IPerson> = async ({
-    id,
-    name,
-    role,
-    email,
-  }): Promise<void> => {
+  const onSubmit: SubmitHandler<IPerson> = async (props): Promise<void> => {
     await updateUser({
       variables: {
         input: {
-          id,
-          name,
-          role,
-          email,
+          ...props,
         },
       },
     });

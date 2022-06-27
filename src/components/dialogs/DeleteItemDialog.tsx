@@ -1,36 +1,38 @@
 import { GridRowId } from '@mui/x-data-grid';
-import { useMutation } from '@apollo/client';
+import { DocumentNode, useMutation } from '@apollo/client';
 import { useEffect } from 'react';
 
 import StandardDialog from 'components/dialogs/StandardDialog';
-import { DELETE_DIALOG_CONTENT } from 'pages/people/peopleConstants';
-import { DELETE_USER } from 'pages/people/peopleQueries';
-import { IPerson } from 'types/peopleTypes';
-import { GET_USERS } from 'graphql/peopleQueries';
+import { useDialogs } from 'hooks/useDialogs';
 
 interface IDeletePersonDialogProps {
-  open: boolean;
   title: string;
-  id: GridRowId;
-  handleClose: () => void;
-  handleConfirm?: () => void;
+  content: string;
+  mutation: DocumentNode;
+  refetchQuery: DocumentNode;
+  refetchQueryName: string;
 }
 
-const DeletePersonDialog = ({
-  open,
+const DeleteItemDialog = <T extends unknown>({
   title,
-  id,
-  handleClose,
+  content,
+  mutation,
+  refetchQuery,
+  refetchQueryName,
 }: IDeletePersonDialogProps): JSX.Element => {
-  const [deleteUser, { loading, error }] = useMutation<
-    { deleteUser: IPerson },
+  const {
+    deleteItemDialog: { id, isOpen, handleClose },
+  } = useDialogs();
+
+  const [deleteItem, { loading, error }] = useMutation<
+    { deleteItem: T },
     { input: { id: GridRowId } }
-  >(DELETE_USER, {
-    refetchQueries: [GET_USERS, 'GetUsers'],
+  >(mutation, {
+    refetchQueries: [refetchQuery, refetchQueryName],
   });
 
   const onSubmit = async (): Promise<void> => {
-    await deleteUser({
+    await deleteItem({
       variables: {
         input: {
           id,
@@ -48,9 +50,9 @@ const DeletePersonDialog = ({
 
   return (
     <StandardDialog
-      open={open}
+      open={isOpen}
       title={title}
-      content={<span>{DELETE_DIALOG_CONTENT}</span>}
+      content={<span>{content}</span>}
       confirmButtonLoading={loading}
       handleClose={handleClose}
       handleConfirm={onSubmit}
@@ -58,4 +60,4 @@ const DeletePersonDialog = ({
   );
 };
 
-export default DeletePersonDialog;
+export default DeleteItemDialog;

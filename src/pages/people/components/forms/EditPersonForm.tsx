@@ -7,6 +7,7 @@ import { ValidationMessages } from 'constants/validationMessages';
 import { PEOPLE_FORM_ID } from 'pages/people/peopleConstants';
 import { IPersonFields } from 'pages/people/peopleTypes';
 import { IPerson } from 'types/peopleTypes';
+import { EDIT_FORM_ID } from 'constants/componentConstants';
 
 interface IPersonFormProps {
   onSubmit: SubmitHandler<IPerson>;
@@ -45,7 +46,7 @@ const EditPersonForm = ({
     <Box
       component="form"
       autoComplete="off"
-      id={PEOPLE_FORM_ID}
+      id={EDIT_FORM_ID}
       onSubmit={handleSubmit(data => onSubmit({ id, ...data }))}
     >
       <Grid container direction="column" rowSpacing={2}>

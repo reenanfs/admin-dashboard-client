@@ -1,11 +1,11 @@
 import { GridRowParams } from '@mui/x-data-grid';
-import ActionCellEdit from './ActionCellEdit';
-import ActionCellDelete from './ActionCellDelete';
 import { IPerson } from 'types/peopleTypes';
+import ActionDeleteCell from 'components/tables/datagrid/cell/ActionDeleteCell';
+import ActionEditCell from 'components/tables/datagrid/cell/ActionEditCell';
 
 const Actions = (params: GridRowParams) => [
-  <ActionCellEdit defaultValues={params.row as IPerson} />,
-  <ActionCellDelete id={params.id} />,
+  <ActionEditCell defaultValues={params.row as IPerson} />,
+  <ActionDeleteCell id={params.id} />,
 ];
 
 export default Actions;

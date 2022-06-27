@@ -1,20 +1,29 @@
 import { useQuery } from '@apollo/client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { MAIN_TABLE_LABEL, ADD_DIALOG_TITLE, COLUMNS } from './homeConstants';
-import { GET_TASKS } from './homeQueries';
+import {
+  MAIN_TABLE_LABEL,
+  ADD_DIALOG_TITLE,
+  COLUMNS,
+  DELETE_MULTIPLE_DIALOG_TITLE,
+  DELETE_MULTIPLE_DIALOG_CONTENT,
+  DELETE_DIALOG_TITLE,
+  DELETE_DIALOG_CONTENT,
+} from './homeConstants';
+import { DELETE_TASK, DELETE_TASKS, GET_TASKS } from './homeQueries';
 import CustomDatagrid from 'components/tables/datagrid/DataGrid';
 import AddTaskDialog from './components/dialogs/AddTaskDialog';
 import AddButton from 'components/buttons/AddButton';
 import { ITask, ITaskRows } from 'pages/home/homeTypes';
-import DeleteTasksDialog from './components/dialogs/DeleteTasksDialog';
+import EditPersonForm from 'pages/people/components/forms/EditPersonForm';
+import EditTaskForm from './components/forms/EditTaskForm';
 
 interface ITasksData {
   tasks: ITask[];
 }
 
 const Home = () => {
-  const [AddTaskOpen, setAddTaskOpen] = useState(false);
+  const [addTaskOpen, setAddTaskOpen] = useState(false);
   const { loading, data } = useQuery<ITasksData>(GET_TASKS);
 
   const handleAddTaskOpen = (): void => {
@@ -38,16 +47,34 @@ const Home = () => {
 
   return (
     <>
-      <CustomDatagrid<ITaskRows>
+      <CustomDatagrid<ITask, ITaskRows>
         loading={loading}
         rows={rows}
         columns={COLUMNS}
         label={MAIN_TABLE_LABEL}
         toolbarComponent={<AddButton onClick={handleAddTaskOpen} />}
-        DialogDeleteMultiple={DeleteTasksDialog}
+        deleteMultipleItemsDialogProps={{
+          title: DELETE_MULTIPLE_DIALOG_TITLE,
+          content: DELETE_MULTIPLE_DIALOG_CONTENT,
+          mutation: DELETE_TASKS,
+        }}
+        deleteItemDialogProps={{
+          title: DELETE_DIALOG_TITLE,
+          content: DELETE_DIALOG_CONTENT,
+          mutation: DELETE_TASK,
+        }}
+        dialogRefetchProps={{
+          refetchQuery: GET_TASKS,
+          refetchQueryName: 'GetTasks',
+        }}
+        editItemDialogProps={{
+          title: DELETE_DIALOG_TITLE,
+          Form: EditTaskForm,
+          mutation: DELETE_TASK,
+        }}
       />
       <AddTaskDialog
-        open={AddTaskOpen}
+        open={addTaskOpen}
         title={ADD_DIALOG_TITLE}
         handleClose={handleAddTaskClose}
       />

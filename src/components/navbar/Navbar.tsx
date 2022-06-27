@@ -83,7 +83,7 @@ const Navbar = ({ navbarProps }: iNavbarProps) => {
             </Avatar>
           </IconButton>
           <Menu
-            sx={{ mt: '40px', ml: '21px' }}
+            sx={{ mt: 5, ml: 3 }}
             anchorEl={avatarAnchorEl}
             anchorOrigin={{
               vertical: 'top',

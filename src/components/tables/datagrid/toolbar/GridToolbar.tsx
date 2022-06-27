@@ -1,44 +1,24 @@
 import { Box, Typography } from '@mui/material';
-import {
-  GridToolbarContainer,
-  GridRowId,
-  GridToolbarQuickFilter,
-} from '@mui/x-data-grid';
+import { GridToolbarContainer, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import DeleteButton from 'components/buttons/DeleteButton';
-import { useState } from 'react';
-
-interface IDeleteMultipleDialogProps {
-  open: boolean;
-  ids: GridRowId[];
-  handleClose: () => void;
-  handleConfirm?: () => void;
-}
+import { useDialogs } from 'hooks/useDialogs';
 
 interface IGridToolbarProps {
   label: string;
   toolbarComponent: React.ReactNode;
   buttonDeleteMultipleVisible: boolean;
-  gridRowIds: GridRowId[];
-  DialogDeleteMultiple: React.FC<IDeleteMultipleDialogProps>;
 }
 
 const GridToolbar = ({
   label,
   toolbarComponent,
   buttonDeleteMultipleVisible,
-  gridRowIds,
-  DialogDeleteMultiple,
 }: IGridToolbarProps): JSX.Element => {
-  const [deleteMultipleDialogOpen, setDeleteMultipleDialognOpen] =
-    useState(false);
-
-  const handleMultipleDeleteDialogOpen = (): void => {
-    setDeleteMultipleDialognOpen(true);
-  };
-
-  const handleMultipleDeleteDialogClose = (): void => {
-    setDeleteMultipleDialognOpen(false);
-  };
+  const {
+    deleteMultipleItemsDialog: {
+      handleOpen: handleDeleteMultipleItemsDialogOpen,
+    },
+  } = useDialogs();
 
   return (
     <GridToolbarContainer>
@@ -65,12 +45,7 @@ const GridToolbar = ({
         >
           <DeleteButton
             sx={{ mr: 1 }}
-            onClick={handleMultipleDeleteDialogOpen}
-          />
-          <DialogDeleteMultiple
-            open={deleteMultipleDialogOpen}
-            handleClose={handleMultipleDeleteDialogClose}
-            ids={gridRowIds}
+            onClick={handleDeleteMultipleItemsDialogOpen}
           />
         </Box>
         {toolbarComponent}
