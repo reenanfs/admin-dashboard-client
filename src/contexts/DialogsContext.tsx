@@ -25,12 +25,18 @@ interface IEditItemDialogParams<T extends ValidAppEntities>
 
 export interface IDialogsContextProps<T extends ValidAppEntities> {
   deleteMultipleItemsDialog: IDialogParams;
+  addItemDialog: IDialogParams;
   deleteItemDialog: IDeleteItemDialogParams;
   editItemDialog: IEditItemDialogParams<T>;
 }
 
 const initialValues: IDialogsContextProps<ValidAppEntities> = {
   deleteMultipleItemsDialog: {
+    isOpen: false,
+    handleOpen: () => {},
+    handleClose: () => {},
+  },
+  addItemDialog: {
     isOpen: false,
     handleOpen: () => {},
     handleClose: () => {},
@@ -54,15 +60,19 @@ export const DialogsContext =
   createContext<IDialogsContextProps<ValidAppEntities>>(initialValues);
 
 export const DialogsProvider = ({ children }: IDialogsProviderProps) => {
-  const [isDeleteMultipleItemsOpen, setDeleteMultipleItems] = useState(
+  const [isDeleteMultipleItemsOpen, setIsDeleteMultipleItemsOpen] = useState(
     initialValues.deleteMultipleItemsDialog.isOpen
   );
 
-  const [isDeleteItemsOpen, setDeleteItemOpen] = useState(
+  const [isAddItemOpen, setIsAddItemOpen] = useState(
+    initialValues.addItemDialog.isOpen
+  );
+
+  const [isDeleteItemsOpen, setIsDeleteItemOpen] = useState(
     initialValues.deleteItemDialog.isOpen
   );
 
-  const [isEditItemsOpen, setEditItemOpen] = useState(
+  const [isEditItemOpen, setIsEditItemOpen] = useState(
     initialValues.editItemDialog.isOpen
   );
 
@@ -71,27 +81,35 @@ export const DialogsProvider = ({ children }: IDialogsProviderProps) => {
   const [defaultValues, setDefaultValues] = useState<ValidAppEntities>();
 
   const handleDeleteMultipleItemsOpen = () => {
-    setDeleteMultipleItems(true);
+    setIsDeleteMultipleItemsOpen(true);
   };
 
   const handleDeleteMultipleItemsClose = () => {
-    setDeleteMultipleItems(false);
+    setIsDeleteMultipleItemsOpen(false);
+  };
+
+  const handleAddItemOpen = () => {
+    setIsAddItemOpen(true);
+  };
+
+  const handleAddItemClose = () => {
+    setIsAddItemOpen(false);
   };
 
   const handleDeleteItemOpen = () => {
-    setDeleteItemOpen(true);
+    setIsDeleteItemOpen(true);
   };
 
   const handleDeleteItemClose = () => {
-    setDeleteItemOpen(false);
+    setIsDeleteItemOpen(false);
   };
 
   const handleEditItemOpen = () => {
-    setEditItemOpen(true);
+    setIsEditItemOpen(true);
   };
 
   const handleEditItemClose = () => {
-    setEditItemOpen(false);
+    setIsEditItemOpen(false);
   };
 
   return (
@@ -102,6 +120,11 @@ export const DialogsProvider = ({ children }: IDialogsProviderProps) => {
           handleOpen: handleDeleteMultipleItemsOpen,
           handleClose: handleDeleteMultipleItemsClose,
         },
+        addItemDialog: {
+          isOpen: isAddItemOpen,
+          handleOpen: handleAddItemOpen,
+          handleClose: handleAddItemClose,
+        },
         deleteItemDialog: {
           isOpen: isDeleteItemsOpen,
           handleOpen: handleDeleteItemOpen,
@@ -110,7 +133,7 @@ export const DialogsProvider = ({ children }: IDialogsProviderProps) => {
           setId,
         },
         editItemDialog: {
-          isOpen: isEditItemsOpen,
+          isOpen: isEditItemOpen,
           handleOpen: handleEditItemOpen,
           handleClose: handleEditItemClose,
           defaultValues,

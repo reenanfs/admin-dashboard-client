@@ -4,11 +4,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { ValidationMessages } from 'constants/validationMessages';
-import { PEOPLE_FORM_ID } from 'pages/people/peopleConstants';
-import { IPersonFields } from 'pages/people/peopleTypes';
+import { ADD_FORM_ID } from 'constants/componentConstants';
+import { IPersonCreationFields } from 'types/peopleTypes';
 
 interface IPersonFormProps {
-  onSubmit: SubmitHandler<IPersonFields>;
+  onSubmit: SubmitHandler<IPersonCreationFields>;
 }
 
 const personValidationSchema = yup.object({
@@ -25,7 +25,7 @@ const AddPersonForm = ({ onSubmit }: IPersonFormProps): JSX.Element => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<IPersonFields>({
+  } = useForm<IPersonCreationFields>({
     resolver: yupResolver(personValidationSchema),
     defaultValues: {
       name: '',
@@ -38,7 +38,7 @@ const AddPersonForm = ({ onSubmit }: IPersonFormProps): JSX.Element => {
     <Box
       component="form"
       autoComplete="off"
-      id={PEOPLE_FORM_ID}
+      id={ADD_FORM_ID}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Grid container direction="column" rowSpacing={2}>

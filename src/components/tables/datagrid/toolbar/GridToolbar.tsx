@@ -1,23 +1,23 @@
 import { Box, Typography } from '@mui/material';
 import { GridToolbarContainer, GridToolbarQuickFilter } from '@mui/x-data-grid';
+import AddButton from 'components/buttons/AddButton';
 import DeleteButton from 'components/buttons/DeleteButton';
 import { useDialogs } from 'hooks/useDialogs';
 
 interface IGridToolbarProps {
   label: string;
-  toolbarComponent: React.ReactNode;
   buttonDeleteMultipleVisible: boolean;
 }
 
 const GridToolbar = ({
   label,
-  toolbarComponent,
   buttonDeleteMultipleVisible,
 }: IGridToolbarProps): JSX.Element => {
   const {
     deleteMultipleItemsDialog: {
       handleOpen: handleDeleteMultipleItemsDialogOpen,
     },
+    addItemDialog: { handleOpen: handleAddItemOpen },
   } = useDialogs();
 
   return (
@@ -48,7 +48,7 @@ const GridToolbar = ({
             onClick={handleDeleteMultipleItemsDialogOpen}
           />
         </Box>
-        {toolbarComponent}
+        <AddButton onClick={handleAddItemOpen} />
       </Box>
     </GridToolbarContainer>
   );

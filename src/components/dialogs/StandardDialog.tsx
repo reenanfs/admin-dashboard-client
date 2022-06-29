@@ -13,7 +13,7 @@ import { DraggablePaper } from 'components/papers/DraggablePaper';
 interface IStandardDialogProps {
   open: boolean;
   title: string;
-  content: JSX.Element;
+  content: React.ReactNode;
   contentFormId?: string;
   confirmButtonLoading: boolean;
   handleClose: () => void;

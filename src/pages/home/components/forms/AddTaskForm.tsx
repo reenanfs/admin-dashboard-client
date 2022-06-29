@@ -9,14 +9,14 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { MenuItem } from '@mui/material';
 
 import { ValidationMessages } from 'constants/validationMessages';
-import { TASKS_FORM_ID } from 'pages/home/homeConstants';
-import { ITaskFields } from 'pages/home/homeTypes';
 import { useQuery } from '@apollo/client';
 import { IPeopleData } from 'types/peopleTypes';
 import { GET_USERS } from 'graphql/peopleQueries';
+import { ADD_FORM_ID } from 'constants/componentConstants';
+import { ITaskCreationFields } from 'types/homeTypes.ts';
 
 interface ITaskFormProps {
-  onSubmit: SubmitHandler<ITaskFields>;
+  onSubmit: SubmitHandler<ITaskCreationFields>;
 }
 
 const taskValidationSchema = yup.object({
@@ -32,7 +32,7 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<ITaskFields>({
+  } = useForm<ITaskCreationFields>({
     resolver: yupResolver(taskValidationSchema),
     defaultValues: {
       taskName: '',
@@ -61,7 +61,7 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
     <Box
       component="form"
       autoComplete="off"
-      id={TASKS_FORM_ID}
+      id={ADD_FORM_ID}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Grid container rowSpacing={2} spacing={2}>

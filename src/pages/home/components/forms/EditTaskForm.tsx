@@ -1,16 +1,11 @@
-import { Box, TextField, Grid } from '@mui/material';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { ValidationMessages } from 'constants/validationMessages';
-import { PEOPLE_FORM_ID } from 'pages/people/peopleConstants';
-import { IPersonFields } from 'pages/people/peopleTypes';
-import { IPerson } from 'types/peopleTypes';
-import { EDIT_FORM_ID } from 'constants/componentConstants';
 import { ITask } from 'pages/home/homeTypes';
 
-interface IPersonFormProps {
+interface ITaskFormProps {
   onSubmit: SubmitHandler<ITask>;
   defaultValues: ITask;
 }
@@ -27,21 +22,17 @@ const personValidationSchema = yup.object({
 const EditPersonForm = ({
   onSubmit,
   defaultValues,
-}: IPersonFormProps): JSX.Element => {
-  const { id, taskName, description } = defaultValues;
+}: ITaskFormProps): JSX.Element => {
+  const { taskName } = defaultValues;
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ITask>({
+  const { formState } = useForm<ITask>({
     resolver: yupResolver(personValidationSchema),
     defaultValues: {
       taskName,
     },
   });
-
-  return <div></div>;
+  console.log(!!formState);
+  return <span></span>;
 };
 
 export default EditPersonForm;

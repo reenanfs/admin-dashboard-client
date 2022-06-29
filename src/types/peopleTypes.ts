@@ -8,3 +8,9 @@ export interface IPerson {
 export interface IPeopleData {
   users: IPerson[];
 }
+
+export interface IPersonCreationFields {
+  name: string;
+  role: string;
+  email: string;
+}

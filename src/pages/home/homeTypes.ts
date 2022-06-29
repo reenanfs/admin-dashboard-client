@@ -21,11 +21,3 @@ export interface ITaskRows {
   person: string;
   dueDate: Date;
 }
-
-export interface ITaskFields {
-  taskName: string;
-  description?: string;
-  userId: string;
-  startDate?: Date;
-  dueDate?: Date;
-}
