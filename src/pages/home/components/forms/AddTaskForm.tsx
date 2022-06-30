@@ -1,12 +1,10 @@
-import { Box, TextField, Grid } from '@mui/material';
+import { Box, TextField, Grid, MenuItem } from '@mui/material';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-
-import { MenuItem } from '@mui/material';
 
 import { ValidationMessages } from 'constants/validationMessages';
 import { useQuery } from '@apollo/client';

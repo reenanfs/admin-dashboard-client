@@ -31,13 +31,10 @@ const Home = () => {
   const { loading, data } = useQuery<ITasksData>(GET_TASKS);
 
   let rows: ITaskRows[] = [];
-
   if (!loading && data) {
-    rows = data.tasks.map(({ id, taskName, user: { name }, dueDate }) => ({
-      id,
-      taskName,
-      person: name,
-      dueDate,
+    rows = data.tasks.map(task => ({
+      ...task,
+      person: task.user && task.user.name,
     }));
   }
 

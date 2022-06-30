@@ -10,3 +10,11 @@ export const GET_USERS = gql`
     }
   }
 `;
+
+export const GET_USER = gql`
+  query GetUser($input: UserWhereUniqueInput!) {
+    user(input: $input) {
+      id
+    }
+  }
+`;

@@ -7,12 +7,14 @@ export const GET_TASKS = gql`
       taskName
       description
       user {
+        id
         name
         email
       }
       startDate
       dueDate
       completionDate
+      completed
     }
   }
 `;
@@ -27,8 +29,8 @@ export const CREATE_TASK = gql`
 
 export const UPDATE_TASK = gql`
   mutation Mutation($input: UpdateTaskInput!) {
-    updateUser(input: $input) {
-      taskName
+    updateTask(input: $input) {
+      id
     }
   }
 `;

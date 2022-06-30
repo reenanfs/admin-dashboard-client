@@ -7,17 +7,17 @@ interface ITaskPersonFields {
 export interface ITask {
   id: string;
   taskName: string;
-  description: string;
-  user: ITaskPersonFields;
-  startDate: Date;
-  dueDate: Date;
-  completionDate: Date;
-  completed: boolean;
+  description?: string;
+  user?: ITaskPersonFields;
+  startDate?: Date;
+  dueDate?: Date;
+  completionDate?: Date;
+  completed?: boolean;
 }
 
 export interface ITaskRows {
   id: string;
   taskName: string;
-  person: string;
-  dueDate: Date;
+  person?: string;
+  dueDate?: Date;
 }
