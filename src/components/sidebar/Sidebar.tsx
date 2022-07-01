@@ -5,7 +5,7 @@ import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import PersonIcon from '@mui/icons-material/Person';
 import HomeIcon from '@mui/icons-material/Home';
 
-import SidebarList from 'components/lists/SidebarOptionsList';
+import SidebarOptionsList from 'components/lists/SidebarOptionsList';
 
 interface ISidebarProps {
   sidebarProps: { sidebarOpen: boolean; sidebarWidth: number };
@@ -34,7 +34,7 @@ const Sidebar = ({ sidebarProps }: ISidebarProps) => {
     >
       <Toolbar />
       <Box>
-        <SidebarList options={sidebarOptions} />
+        <SidebarOptionsList options={sidebarOptions} />
       </Box>
     </Drawer>
   );

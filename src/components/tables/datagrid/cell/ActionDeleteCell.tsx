@@ -2,11 +2,11 @@ import { GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
 import { Delete } from '@mui/icons-material';
 import { useDialogs } from 'hooks/useDialogs';
 
-interface ActionCellDeleteProps {
+interface IActionCellDeleteProps {
   id: GridRowId;
 }
 
-const ActionDeleteCell = ({ id }: ActionCellDeleteProps): JSX.Element => {
+const ActionDeleteCell = ({ id }: IActionCellDeleteProps): JSX.Element => {
   const {
     deleteItemDialog: { handleOpen, setId },
   } = useDialogs();

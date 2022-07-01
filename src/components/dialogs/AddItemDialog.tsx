@@ -7,13 +7,13 @@ import { ValidAppEntitiesCreationFields } from 'types/appTypes';
 import { useDialogs } from 'hooks/useDialogs';
 import { ADD_FORM_ID } from 'constants/componentConstants';
 
-interface FormProps<T> {
+interface IFormProps<T> {
   onSubmit: SubmitHandler<T>;
 }
 
 interface IAddITemDialogProps<T> {
   title: string;
-  Form: React.FC<FormProps<T>>;
+  Form: React.FC<IFormProps<T>>;
   mutation: DocumentNode;
   refetchQuery: DocumentNode;
   refetchQueryName: string;

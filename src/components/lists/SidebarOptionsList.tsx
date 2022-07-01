@@ -9,7 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 import { SvgIconTypeMap } from '@mui/material/SvgIcon';
 
-interface SidebarOption {
+interface ISidebarOption {
   title: string;
   icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & {
     muiName: string;
@@ -18,10 +18,10 @@ interface SidebarOption {
 }
 
 interface ISidebarOptionsListProps {
-  options: SidebarOption[];
+  options: ISidebarOption[];
 }
 
-const SidebarList = ({ options }: ISidebarOptionsListProps) => {
+const SidebarOptionsList = ({ options }: ISidebarOptionsListProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
     undefined
   );
@@ -58,4 +58,4 @@ const SidebarList = ({ options }: ISidebarOptionsListProps) => {
   );
 };
 
-export default SidebarList;
+export default SidebarOptionsList;

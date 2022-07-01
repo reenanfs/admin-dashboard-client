@@ -13,7 +13,7 @@ import Avatar from '@mui/material/Avatar';
 import MenuItem from '@mui/material/MenuItem';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 
-interface iNavbarProps {
+interface INavbarProps {
   navbarProps: {
     sidebarOpen: boolean;
     handleSidebarOpen: () => void;
@@ -23,7 +23,7 @@ interface iNavbarProps {
 
 const settings = ['Logout'];
 
-const Navbar = ({ navbarProps }: iNavbarProps) => {
+const Navbar = ({ navbarProps }: INavbarProps) => {
   const { sidebarOpen, handleSidebarOpen, handleSidebarClose } = navbarProps;
   const [avatarAnchorEl, setAvatarAnchorEl] = useState<null | HTMLElement>(
     null
@@ -69,10 +69,10 @@ const Navbar = ({ navbarProps }: iNavbarProps) => {
           <IconButton
             size="large"
             sx={{
-              marginRight: 3,
+              mr: 1,
             }}
           >
-            <Badge badgeContent={17} color="error">
+            <Badge color="error">
               <NotificationsIcon />
             </Badge>
           </IconButton>

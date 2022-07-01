@@ -7,14 +7,14 @@ import { EDIT_FORM_ID } from 'constants/componentConstants';
 import { useDialogs } from 'hooks/useDialogs';
 import { ValidAppEntities } from 'types/appTypes';
 
-interface FormProps<T> {
+interface IFormProps<T> {
   onSubmit: SubmitHandler<T>;
   defaultValues: T;
 }
 
 interface IEditItemDialogProps<T> {
   title: string;
-  Form: React.FC<FormProps<T>>;
+  Form: React.FC<IFormProps<T>>;
   mutation: DocumentNode;
   refetchQuery: DocumentNode;
   refetchQueryName: string;

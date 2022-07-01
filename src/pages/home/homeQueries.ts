@@ -20,7 +20,7 @@ export const GET_TASKS = gql`
 `;
 
 export const CREATE_TASK = gql`
-  mutation Mutation($input: CreateTaskInput!) {
+  mutation CreateTask($input: CreateTaskInput!) {
     createTask(input: $input) {
       id
     }
@@ -28,7 +28,7 @@ export const CREATE_TASK = gql`
 `;
 
 export const UPDATE_TASK = gql`
-  mutation Mutation($input: UpdateTaskInput!) {
+  mutation UpdateTask($input: UpdateTaskInput!) {
     updateTask(input: $input) {
       id
     }
@@ -36,7 +36,7 @@ export const UPDATE_TASK = gql`
 `;
 
 export const DELETE_TASK = gql`
-  mutation Mutation($input: TaskWhereUniqueInput!) {
+  mutation DeleteTask($input: TaskWhereUniqueInput!) {
     deleteTask(input: $input) {
       id
     }
@@ -44,7 +44,7 @@ export const DELETE_TASK = gql`
 `;
 
 export const DELETE_TASKS = gql`
-  mutation Mutation($input: DeleteTasksInput) {
+  mutation DeleteTasks($input: DeleteTasksInput) {
     deleteTasks(input: $input) {
       count
     }

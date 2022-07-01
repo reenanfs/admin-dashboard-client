@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_USER = gql`
-  mutation Mutation($input: CreateUserInput!) {
+  mutation CreateUser($input: CreateUserInput!) {
     createUser(input: $input) {
       id
     }
@@ -9,7 +9,7 @@ export const CREATE_USER = gql`
 `;
 
 export const UPDATE_USER = gql`
-  mutation Mutation($input: UpdateUserInput!) {
+  mutation UpdateUser($input: UpdateUserInput!) {
     updateUser(input: $input) {
       id
     }
@@ -17,7 +17,7 @@ export const UPDATE_USER = gql`
 `;
 
 export const DELETE_USER = gql`
-  mutation Mutation($input: UserWhereUniqueInput!) {
+  mutation DeleteUser($input: UserWhereUniqueInput!) {
     deleteUser(input: $input) {
       id
     }
@@ -25,7 +25,7 @@ export const DELETE_USER = gql`
 `;
 
 export const DELETE_USERS = gql`
-  mutation Mutation($input: DeleteUsersInput) {
+  mutation DeleteUsers($input: DeleteUsersInput) {
     deleteUsers(input: $input) {
       count
     }

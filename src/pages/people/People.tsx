@@ -10,9 +10,7 @@ import {
   EDIT_DIALOG_TITLE,
   ADD_DIALOG_TITLE,
 } from './peopleConstants';
-
 import CustomDatagrid from 'components/tables/datagrid/DataGrid';
-
 import { IPeopleData, IPerson, IPersonCreationFields } from 'types/peopleTypes';
 import { GET_USERS } from 'graphql/peopleQueries';
 import {
