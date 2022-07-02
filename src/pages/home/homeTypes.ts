@@ -9,9 +9,9 @@ export interface ITask {
   taskName: string;
   description?: string;
   user?: ITaskPersonFields;
-  startDate?: Date;
-  dueDate?: Date;
-  completionDate?: Date;
+  startDate?: Date | null;
+  dueDate?: Date | null;
+  completionDate?: Date | null;
   completed?: boolean;
 }
 
@@ -19,5 +19,5 @@ export interface ITaskRows {
   id: string;
   taskName: string;
   person?: string;
-  dueDate?: Date;
+  dueDate?: Date | null;
 }

@@ -24,6 +24,20 @@ const App = (): JSX.Element => {
           underline: 'none',
         },
       },
+      MuiInputBase: {
+        styleOverrides: {
+          input: {
+            '&.Mui-disabled': {
+              cursor: 'not-allowed',
+            },
+          },
+          root: {
+            '&.Mui-disabled': {
+              cursor: 'not-allowed !important',
+            },
+          },
+        },
+      },
     },
   });
 

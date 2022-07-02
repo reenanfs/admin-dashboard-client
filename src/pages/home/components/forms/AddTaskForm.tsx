@@ -1,10 +1,11 @@
-import { Box, TextField, Grid, MenuItem } from '@mui/material';
+import { Box, TextField, Grid, MenuItem, Checkbox } from '@mui/material';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { useState } from 'react';
 
 import { ValidationMessages } from 'constants/validationMessages';
 import { useQuery } from '@apollo/client';
@@ -26,6 +27,11 @@ const taskValidationSchema = yup.object({
 });
 
 const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
+  const [dateCheckboxesDisabled, setDateCheckboxesDisabled] = useState({
+    startDateCheckbox: true,
+    dueDateCheckbox: false,
+  });
+
   const {
     control,
     handleSubmit,
@@ -36,7 +42,7 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
       taskName: '',
       description: '',
       userId: '',
-      startDate: new Date(),
+      startDate: null,
       dueDate: new Date(),
     },
   });
@@ -55,12 +61,28 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
     return <MenuItem value="" key=""></MenuItem>;
   };
 
+  const handleCheckboxesChange = ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    setDateCheckboxesDisabled(state => ({
+      ...state,
+      [target.name]: !target.checked,
+    }));
+  };
+
   return (
     <Box
       component="form"
       autoComplete="off"
       id={ADD_FORM_ID}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(data => {
+        if (dateCheckboxesDisabled.startDateCheckbox) {
+          data.startDate = null;
+        } else if (dateCheckboxesDisabled.dueDateCheckbox) {
+          data.dueDate = null;
+        }
+        return onSubmit(data);
+      })}
     >
       <Grid container rowSpacing={2} spacing={2}>
         <Grid item xs={6}>
@@ -80,6 +102,11 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
           />
         </Grid>
         <Grid item xs={6}>
+          <Checkbox
+            name="startDateCheckbox"
+            checked={!dateCheckboxesDisabled.startDateCheckbox}
+            onChange={handleCheckboxesChange}
+          />
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Controller
               name="startDate"
@@ -88,8 +115,12 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
                 <DateTimePicker
                   label="Start Date"
                   minDateTime={new Date()}
+                  disabled={dateCheckboxesDisabled.startDateCheckbox}
                   renderInput={props => (
                     <TextField
+                      sx={{
+                        width: 225,
+                      }}
                       size="small"
                       {...props}
                       helperText={
@@ -124,6 +155,11 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
           />
         </Grid>
         <Grid item xs={6}>
+          <Checkbox
+            name="dueDateCheckbox"
+            checked={!dateCheckboxesDisabled.dueDateCheckbox}
+            onChange={handleCheckboxesChange}
+          />
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Controller
               name="dueDate"
@@ -131,9 +167,11 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
               render={({ field: { onChange, value } }) => (
                 <DateTimePicker
                   label="Due Date"
+                  disabled={dateCheckboxesDisabled.dueDateCheckbox}
                   minDateTime={new Date()}
                   renderInput={props => (
                     <TextField
+                      sx={{ width: 225 }}
                       size="small"
                       {...props}
                       helperText={!!errors.dueDate && errors.dueDate.message}
