@@ -12,9 +12,9 @@ interface ISidebarProps {
 }
 
 const sidebarOptions = [
-  { title: 'Home', icon: HomeIcon, url: '/' },
-  { title: 'People', icon: PersonIcon, url: '/people' },
-  { title: 'Support', icon: ContactSupportIcon, url: '/support' },
+  { title: 'Home', icon: <HomeIcon />, url: '/' },
+  { title: 'People', icon: <PersonIcon />, url: '/people' },
+  { title: 'Support', icon: <ContactSupportIcon />, url: '/support' },
 ];
 
 const Sidebar = ({ sidebarProps }: ISidebarProps) => {

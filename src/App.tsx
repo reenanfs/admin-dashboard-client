@@ -11,11 +11,19 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 const App = (): JSX.Element => {
   const theme = createTheme({
-    palette: {},
     components: {
-      MuiSvgIcon: {
-        defaultProps: {
-          color: 'primary',
+      MuiListItemIcon: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            color: theme.palette.primary.main,
+          }),
+        },
+      },
+      MuiIconButton: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            color: theme.palette.primary.main,
+          }),
         },
       },
       MuiLink: {

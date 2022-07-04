@@ -1,27 +1,29 @@
 import { GridRowId } from '@mui/x-data-grid';
-import { DocumentNode, useMutation } from '@apollo/client';
+import { ApolloQueryResult, DocumentNode, useMutation } from '@apollo/client';
 import { useEffect } from 'react';
 
 import StandardDialog from 'components/dialogs/StandardDialog';
 import { useDialogs } from 'hooks/useDialogs';
+import { ValidAppEntities, ValidAppEntitiesData } from 'types/appTypes';
 
-interface IDeleteMultipleItemsDialogProps {
+interface IDeleteMultipleItemsDialogProps<S> {
   ids: GridRowId[];
   title: string;
   content: string;
   mutation: DocumentNode;
-  refetchQuery: DocumentNode;
-  refetchQueryName: string;
+  refetchFunction: () => Promise<ApolloQueryResult<S>>;
 }
 
-const DeleteMultipleItemsDialog = <T extends unknown>({
+const DeleteMultipleItemsDialog = <
+  T extends ValidAppEntities,
+  S extends ValidAppEntitiesData
+>({
   ids,
   title,
   content,
   mutation,
-  refetchQuery,
-  refetchQueryName,
-}: IDeleteMultipleItemsDialogProps): JSX.Element => {
+  refetchFunction,
+}: IDeleteMultipleItemsDialogProps<S>): JSX.Element => {
   const {
     deleteMultipleItemsDialog: { isOpen, handleClose },
   } = useDialogs();
@@ -29,9 +31,7 @@ const DeleteMultipleItemsDialog = <T extends unknown>({
   const [deleteItems, { loading, error }] = useMutation<
     { deleteItems: T[] },
     { input: { ids: GridRowId[] } }
-  >(mutation, {
-    refetchQueries: [refetchQuery, refetchQueryName],
-  });
+  >(mutation);
 
   const onSubmit = async (): Promise<void> => {
     await deleteItems({
@@ -41,6 +41,7 @@ const DeleteMultipleItemsDialog = <T extends unknown>({
         },
       },
     });
+    refetchFunction();
     handleClose();
   };
 

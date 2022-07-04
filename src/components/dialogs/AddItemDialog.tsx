@@ -1,9 +1,12 @@
-import { DocumentNode, useMutation } from '@apollo/client';
+import { ApolloQueryResult, DocumentNode, useMutation } from '@apollo/client';
 import { useEffect } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
 import StandardDialog from 'components/dialogs/StandardDialog';
-import { ValidAppEntitiesCreationFields } from 'types/appTypes';
+import {
+  ValidAppEntitiesCreationFields,
+  ValidAppEntitiesData,
+} from 'types/appTypes';
 import { useDialogs } from 'hooks/useDialogs';
 import { ADD_FORM_ID } from 'constants/componentConstants';
 
@@ -11,21 +14,22 @@ interface IFormProps<T> {
   onSubmit: SubmitHandler<T>;
 }
 
-interface IAddITemDialogProps<T> {
+interface IAddITemDialogProps<T, S> {
   title: string;
   Form: React.FC<IFormProps<T>>;
   mutation: DocumentNode;
-  refetchQuery: DocumentNode;
-  refetchQueryName: string;
+  refetchFunction: () => Promise<ApolloQueryResult<S>>;
 }
 
-const AddPersonDialog = <T extends ValidAppEntitiesCreationFields>({
+const AddPersonDialog = <
+  T extends ValidAppEntitiesCreationFields,
+  S extends ValidAppEntitiesData
+>({
   title,
   Form,
   mutation,
-  refetchQuery,
-  refetchQueryName,
-}: IAddITemDialogProps<T>): JSX.Element => {
+  refetchFunction,
+}: IAddITemDialogProps<T, S>): JSX.Element => {
   const {
     addItemDialog: { isOpen, handleClose },
   } = useDialogs();
@@ -33,9 +37,7 @@ const AddPersonDialog = <T extends ValidAppEntitiesCreationFields>({
   const [createItem, { loading, error }] = useMutation<
     { createItem: T },
     { input: ValidAppEntitiesCreationFields }
-  >(mutation, {
-    refetchQueries: [refetchQuery, refetchQueryName],
-  });
+  >(mutation);
 
   const onSubmit: SubmitHandler<ValidAppEntitiesCreationFields> = async (
     props
@@ -47,6 +49,7 @@ const AddPersonDialog = <T extends ValidAppEntitiesCreationFields>({
         },
       },
     });
+    refetchFunction();
     handleClose();
   };
 

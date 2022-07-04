@@ -1,5 +1,6 @@
 import { GridColumns } from '@mui/x-data-grid';
 import Actions from './components/tables/datagrid/cell/Actions';
+import StatusCell from './components/tables/datagrid/cell/StatusCell';
 
 export const COLUMNS: GridColumns = [
   {
@@ -23,6 +24,13 @@ export const COLUMNS: GridColumns = [
     flex: 1,
     editable: false,
     valueGetter: ({ value }) => value && new Date(value),
+  },
+  {
+    field: 'completed',
+    headerName: 'Status',
+    flex: 1,
+    editable: false,
+    renderCell: StatusCell,
   },
   {
     field: 'actions',

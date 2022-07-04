@@ -18,17 +18,25 @@ import {
   UPDATE_TASK,
 } from './homeQueries';
 import CustomDatagrid from 'components/tables/datagrid/DataGrid';
-import { ITask, ITaskRows } from 'pages/home/homeTypes';
 import EditTaskForm from './components/forms/EditTaskForm';
-import { ITaskCreationFields } from 'types/homeTypes.ts';
+import {
+  ITaskCreationFields,
+  ITasksData,
+  ITask,
+  ITaskRows,
+} from 'types/homeTypes.ts';
 import AddTaskForm from './components/forms/AddTaskForm';
 
-interface ITasksData {
-  tasks: ITask[];
-}
-
 const Home = () => {
-  const { loading, data } = useQuery<ITasksData>(GET_TASKS);
+  const { loading, data, refetch } = useQuery<ITasksData>(GET_TASKS, {
+    variables: {
+      input: {
+        orderBy: {
+          dueDate: 'asc',
+        },
+      },
+    },
+  });
 
   let rows: ITaskRows[] = [];
   if (!loading && data) {
@@ -39,7 +47,7 @@ const Home = () => {
   }
 
   return (
-    <CustomDatagrid<ITask, ITaskCreationFields, ITaskRows>
+    <CustomDatagrid<ITask, ITaskCreationFields, ITaskRows, ITasksData>
       loading={loading}
       rows={rows}
       columns={COLUMNS}
@@ -64,10 +72,7 @@ const Home = () => {
         AddItemForm: AddTaskForm,
         mutation: CREATE_TASK,
       }}
-      dialogRefetchProps={{
-        refetchQuery: GET_TASKS,
-        refetchQueryName: 'GetTasks',
-      }}
+      refetchFunction={refetch}
     />
   );
 };

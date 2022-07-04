@@ -35,7 +35,7 @@ const GridToolbar = ({
       >
         {label}
       </Typography>
-      <GridToolbarQuickFilter sx={{ mr: 10 }} />
+      <GridToolbarQuickFilter sx={{ mr: 10 }} se color="primary" />
       <Box sx={{ mr: 2 }}>
         <Box
           component="span"

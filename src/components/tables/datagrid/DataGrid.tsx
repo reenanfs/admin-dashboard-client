@@ -11,17 +11,19 @@ import GridToolbar from './toolbar/GridToolbar';
 import GridPagination from './pagination/GridPagination';
 import DeleteMultipleItemsDialog from 'components/dialogs/DeleteMultipleItemsDialog';
 import DeleteItemDialog from 'components/dialogs/DeleteItemDialog';
-import { DocumentNode } from '@apollo/client';
+import { ApolloQueryResult, DocumentNode } from '@apollo/client';
 import EditItemDialog from 'components/dialogs/EditItemDialog';
 import { SubmitHandler } from 'react-hook-form';
 import {
   ValidAppEntities,
   ValidAppEntitiesCreationFields,
+  ValidAppEntitiesData,
+  ValidGridRows,
 } from 'types/appTypes';
 import AddItemDialog from 'components/dialogs/AddItemDialog';
 
-interface IBaseFormProps<T> {
-  onSubmit: SubmitHandler<T>;
+interface IBaseFormProps<S> {
+  onSubmit: SubmitHandler<S>;
 }
 
 interface IEditFormProps<T> extends IBaseFormProps<T> {
@@ -34,20 +36,15 @@ interface IDialogProps {
   mutation: DocumentNode;
 }
 
-interface IAddDialogProps<T> extends IDialogProps {
-  AddItemForm: React.FC<IBaseFormProps<T>>;
+interface IAddDialogProps<S> extends IDialogProps {
+  AddItemForm: React.FC<IBaseFormProps<S>>;
 }
 
 interface IEditDialogProps<T> extends IDialogProps {
   EditItemForm: React.FC<IEditFormProps<T>>;
 }
 
-interface IDialogRefetchProps {
-  refetchQuery: DocumentNode;
-  refetchQueryName: string;
-}
-
-interface ICustomDatagridProps<T, S, U> {
+interface ICustomDatagridProps<T, S, U, V> {
   columns: GridColDef[];
   rows: U[];
   label: string;
@@ -56,13 +53,14 @@ interface ICustomDatagridProps<T, S, U> {
   deleteItemDialogProps: IDialogProps;
   editItemDialogProps: Omit<IEditDialogProps<T>, 'content'>;
   addItemDialogProps: Omit<IAddDialogProps<S>, 'content'>;
-  dialogRefetchProps: IDialogRefetchProps;
+  refetchFunction: () => Promise<ApolloQueryResult<V>>;
 }
 
 const CustomDatagrid = <
   T extends ValidAppEntities,
   S extends ValidAppEntitiesCreationFields,
-  U = void
+  U extends ValidGridRows,
+  V extends ValidAppEntitiesData
 >({
   columns,
   rows,
@@ -88,8 +86,8 @@ const CustomDatagrid = <
     mutation: addItemMutation,
     AddItemForm,
   },
-  dialogRefetchProps: { refetchQuery, refetchQueryName },
-}: ICustomDatagridProps<T, S, U>): JSX.Element => {
+  refetchFunction,
+}: ICustomDatagridProps<T, S, U, V>): JSX.Element => {
   const [pageSize, setPageSize] = useState(10);
   const [gridRowIds, setGridRowIds] = useState<GridRowId[]>([]);
   const [buttonDeleteMultipleVisible, setButtonDeleteMultipleVisible] =
@@ -136,34 +134,30 @@ const CustomDatagrid = <
           pagination: { pageSize, setPageSize },
         }}
       />
-      <DeleteMultipleItemsDialog<T>
+      <DeleteMultipleItemsDialog<T, V>
         ids={gridRowIds}
         title={deleteMultipleItemsDialogTitle}
         content={deleteMultipleItemsDialogContent}
         mutation={deleteMultipleItemsMutation}
-        refetchQuery={refetchQuery}
-        refetchQueryName={refetchQueryName}
+        refetchFunction={refetchFunction}
       />
       <DeleteItemDialog
         title={deleteItemDialogTitle}
         content={deleteItemDialogContent}
         mutation={deleteItemMutation}
-        refetchQuery={refetchQuery}
-        refetchQueryName={refetchQueryName}
+        refetchFunction={refetchFunction}
       />
       <EditItemDialog
         title={editItemDialogTitle}
         Form={EditItemForm}
         mutation={editItemMutation}
-        refetchQuery={refetchQuery}
-        refetchQueryName={refetchQueryName}
+        refetchFunction={refetchFunction}
       />
-      <AddItemDialog
+      <AddItemDialog<S, V>
         title={addItemDialogTitle}
         Form={AddItemForm}
         mutation={addItemMutation}
-        refetchQuery={refetchQuery}
-        refetchQueryName={refetchQueryName}
+        refetchFunction={refetchFunction}
       />
     </Box>
   );

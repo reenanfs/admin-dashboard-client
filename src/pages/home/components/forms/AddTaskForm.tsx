@@ -24,16 +24,23 @@ const taskValidationSchema = yup.object({
   userId: yup.string().required(ValidationMessages.REQUIRED),
   startDate: yup.date().nullable().typeError(ValidationMessages.DATE),
   dueDate: yup.date().nullable().typeError(ValidationMessages.DATE),
+  completed: yup.boolean().nullable().typeError(ValidationMessages.BOOLEAN),
 });
 
 const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
-  const [dateCheckboxesDisabled, setDateCheckboxesDisabled] = useState({
-    startDateCheckbox: true,
-    dueDateCheckbox: false,
-  });
+  const [startDateCheckboxDisabled, setStartDateCheckboxDisabled] =
+    useState(true);
+  const [dueDateCheckboxDisabled, setDueDateCheckboxDisabled] = useState(false);
+
+  const [startDateTemp, setStartDateTemp] = useState<Date | null | undefined>(
+    null
+  );
+  const [dueDateTemp, setDueDateTemp] = useState<Date | null | undefined>(null);
 
   const {
     control,
+    getValues,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<ITaskCreationFields>({
@@ -44,6 +51,7 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
       userId: '',
       startDate: null,
       dueDate: new Date(),
+      completed: false,
     },
   });
 
@@ -61,13 +69,28 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
     return <MenuItem value="" key=""></MenuItem>;
   };
 
-  const handleCheckboxesChange = ({
+  const handleStartDateCheckboxChange = ({
     target,
   }: React.ChangeEvent<HTMLInputElement>) => {
-    setDateCheckboxesDisabled(state => ({
-      ...state,
-      [target.name]: !target.checked,
-    }));
+    setStartDateCheckboxDisabled(!target.checked);
+    if (!target.checked) {
+      setStartDateTemp(getValues('startDate'));
+      setValue('startDate', null);
+    } else {
+      setValue('startDate', startDateTemp);
+    }
+  };
+
+  const handleDueDateCheckboxChange = ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    setDueDateCheckboxDisabled(!target.checked);
+    if (!target.checked) {
+      setDueDateTemp(getValues('dueDate'));
+      setValue('dueDate', null);
+    } else {
+      setValue('dueDate', dueDateTemp);
+    }
   };
 
   return (
@@ -75,16 +98,9 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
       component="form"
       autoComplete="off"
       id={ADD_FORM_ID}
-      onSubmit={handleSubmit(data => {
-        if (dateCheckboxesDisabled.startDateCheckbox) {
-          data.startDate = null;
-        } else if (dateCheckboxesDisabled.dueDateCheckbox) {
-          data.dueDate = null;
-        }
-        return onSubmit(data);
-      })}
+      onSubmit={handleSubmit(onSubmit)}
     >
-      <Grid container rowSpacing={2} spacing={2}>
+      <Grid container rowSpacing={2} spacing={2} width={570}>
         <Grid item xs={6}>
           <Controller
             name="taskName"
@@ -104,8 +120,8 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
         <Grid item xs={6}>
           <Checkbox
             name="startDateCheckbox"
-            checked={!dateCheckboxesDisabled.startDateCheckbox}
-            onChange={handleCheckboxesChange}
+            checked={!startDateCheckboxDisabled}
+            onChange={handleStartDateCheckboxChange}
           />
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Controller
@@ -114,8 +130,8 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
               render={({ field: { onChange, value } }) => (
                 <DateTimePicker
                   label="Start Date"
+                  disabled={startDateCheckboxDisabled}
                   minDateTime={new Date()}
-                  disabled={dateCheckboxesDisabled.startDateCheckbox}
                   renderInput={props => (
                     <TextField
                       sx={{
@@ -157,8 +173,8 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
         <Grid item xs={6}>
           <Checkbox
             name="dueDateCheckbox"
-            checked={!dateCheckboxesDisabled.dueDateCheckbox}
-            onChange={handleCheckboxesChange}
+            checked={!dueDateCheckboxDisabled}
+            onChange={handleDueDateCheckboxChange}
           />
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Controller
@@ -167,7 +183,7 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
               render={({ field: { onChange, value } }) => (
                 <DateTimePicker
                   label="Due Date"
-                  disabled={dateCheckboxesDisabled.dueDateCheckbox}
+                  disabled={dueDateCheckboxDisabled}
                   minDateTime={new Date()}
                   renderInput={props => (
                     <TextField

@@ -32,6 +32,7 @@ const StandardDialog = ({
   return (
     <Dialog
       open={open}
+      maxWidth={false}
       onClose={handleClose}
       PaperComponent={DraggablePaper}
       aria-labelledby="draggable-dialog-title"
@@ -48,7 +49,7 @@ const StandardDialog = ({
       </DialogTitle>
 
       <DialogContent dividers>
-        <Typography component="div">{content}</Typography>
+        <Box component="div">{content}</Box>
       </DialogContent>
 
       <DialogActions sx={{ justifyContent: 'space-between' }}>

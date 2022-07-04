@@ -51,7 +51,7 @@ const Navbar = ({ navbarProps }: INavbarProps) => {
         >
           <MenuIcon color="inherit" />
         </IconButton>
-        <AssignmentIcon sx={{ ml: 6, fontSize: 30 }} />
+        <AssignmentIcon color="primary" sx={{ ml: 6, fontSize: 30 }} />
         <Typography
           color="primary"
           variant="h6"

@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_TASKS = gql`
-  query GetTasks {
-    tasks {
+  query GetTasks($input: GetTasksInput) {
+    tasks(input: $input) {
       id
       taskName
       description

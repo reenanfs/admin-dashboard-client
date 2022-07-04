@@ -1,25 +1,27 @@
 import { GridRowId } from '@mui/x-data-grid';
-import { DocumentNode, useMutation } from '@apollo/client';
+import { ApolloQueryResult, DocumentNode, useMutation } from '@apollo/client';
 import { useEffect } from 'react';
 
 import StandardDialog from 'components/dialogs/StandardDialog';
 import { useDialogs } from 'hooks/useDialogs';
+import { ValidAppEntities, ValidAppEntitiesData } from 'types/appTypes';
 
-interface IDeletePersonDialogProps {
+interface IDeletePersonDialogProps<S> {
   title: string;
   content: string;
   mutation: DocumentNode;
-  refetchQuery: DocumentNode;
-  refetchQueryName: string;
+  refetchFunction: () => Promise<ApolloQueryResult<S>>;
 }
 
-const DeleteItemDialog = <T extends unknown>({
+const DeleteItemDialog = <
+  T extends ValidAppEntities,
+  S extends ValidAppEntitiesData
+>({
   title,
   content,
   mutation,
-  refetchQuery,
-  refetchQueryName,
-}: IDeletePersonDialogProps): JSX.Element => {
+  refetchFunction,
+}: IDeletePersonDialogProps<S>): JSX.Element => {
   const {
     deleteItemDialog: { id, isOpen, handleClose },
   } = useDialogs();
@@ -27,9 +29,7 @@ const DeleteItemDialog = <T extends unknown>({
   const [deleteItem, { loading, error }] = useMutation<
     { deleteItem: T },
     { input: { id: GridRowId } }
-  >(mutation, {
-    refetchQueries: [refetchQuery, refetchQueryName],
-  });
+  >(mutation);
 
   const onSubmit = async (): Promise<void> => {
     await deleteItem({
@@ -39,6 +39,7 @@ const DeleteItemDialog = <T extends unknown>({
         },
       },
     });
+    refetchFunction();
     handleClose();
   };
 

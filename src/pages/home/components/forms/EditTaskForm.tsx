@@ -1,4 +1,14 @@
-import { Box, TextField, Grid, MenuItem } from '@mui/material';
+import {
+  Box,
+  TextField,
+  Grid,
+  MenuItem,
+  Checkbox,
+  FormControl,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
+} from '@mui/material';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -8,9 +18,8 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 import { ValidationMessages } from 'constants/validationMessages';
 import { EDIT_FORM_ID } from 'constants/componentConstants';
-import { ITask } from 'pages/home/homeTypes';
-import { ITaskUpdateFields } from 'types/homeTypes.ts';
-import { useEffect } from 'react';
+import { ITask, ITaskUpdateFields } from 'types/homeTypes.ts';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { IPeopleData } from 'types/peopleTypes';
 import { GET_USERS } from 'graphql/peopleQueries';
@@ -43,8 +52,18 @@ const EditTaskForm = ({
     completed,
   },
 }: ITaskFormProps): JSX.Element => {
+  const [startDateCheckboxDisabled, setStartDateCheckboxDisabled] =
+    useState(true);
+  const [dueDateCheckboxDisabled, setDueDateCheckboxDisabled] = useState(true);
+
+  const [startDateTemp, setStartDateTemp] = useState<Date | null | undefined>(
+    null
+  );
+  const [dueDateTemp, setDueDateTemp] = useState<Date | null | undefined>(null);
+
   const {
     setValue,
+    getValues,
     control,
     handleSubmit,
     formState: { errors },
@@ -69,6 +88,16 @@ const EditTaskForm = ({
     }
   }, [user, loading, setValue]);
 
+  useEffect(() => {
+    if (startDate) {
+      setStartDateCheckboxDisabled(false);
+    }
+
+    if (dueDate) {
+      setDueDateCheckboxDisabled(false);
+    }
+  }, [startDate, dueDate]);
+
   const renderSelectOptions = (): JSX.Element[] | JSX.Element => {
     if (!loading && data) {
       return data.users.map(user => (
@@ -81,6 +110,31 @@ const EditTaskForm = ({
     return <MenuItem value="" key=""></MenuItem>;
   };
 
+  const handleStartDateCheckboxChange = ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(startDateCheckboxDisabled);
+    setStartDateCheckboxDisabled(!target.checked);
+    if (!target.checked) {
+      setStartDateTemp(getValues('startDate'));
+      setValue('startDate', null);
+    } else {
+      setValue('startDate', startDateTemp);
+    }
+  };
+
+  const handleDueDateCheckboxChange = ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    setDueDateCheckboxDisabled(!target.checked);
+    if (!target.checked) {
+      setDueDateTemp(getValues('dueDate'));
+      setValue('dueDate', null);
+    } else {
+      setValue('dueDate', dueDateTemp);
+    }
+  };
+
   return (
     <Box
       component="form"
@@ -88,7 +142,7 @@ const EditTaskForm = ({
       id={EDIT_FORM_ID}
       onSubmit={handleSubmit(data => onSubmit({ id, ...data }))}
     >
-      <Grid container rowSpacing={2} spacing={2}>
+      <Grid container rowSpacing={2} spacing={2} width={620}>
         <Grid item xs={6}>
           <Controller
             name="taskName"
@@ -106,30 +160,41 @@ const EditTaskForm = ({
           />
         </Grid>
         <Grid item xs={6}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Controller
-              name="startDate"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <DateTimePicker
-                  label="Start Date"
-                  minDateTime={new Date()}
-                  renderInput={props => (
-                    <TextField
-                      size="small"
-                      {...props}
-                      helperText={
-                        !!errors.startDate && errors.startDate.message
-                      }
-                      error={!!errors.startDate}
-                    />
-                  )}
-                  value={value}
-                  onChange={onChange}
-                />
-              )}
+          <Box justifyContent="right" display="flex">
+            <Checkbox
+              name="startDateCheckbox"
+              checked={!startDateCheckboxDisabled}
+              onChange={handleStartDateCheckboxChange}
             />
-          </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <Controller
+                name="startDate"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <DateTimePicker
+                    label="Start Date"
+                    disabled={startDateCheckboxDisabled}
+                    minDateTime={new Date()}
+                    renderInput={props => (
+                      <TextField
+                        sx={{
+                          width: 225,
+                        }}
+                        size="small"
+                        {...props}
+                        helperText={
+                          !!errors.startDate && errors.startDate.message
+                        }
+                        error={!!errors.startDate}
+                      />
+                    )}
+                    value={value}
+                    onChange={onChange}
+                  />
+                )}
+              />
+            </LocalizationProvider>
+          </Box>
         </Grid>
         <Grid item xs={6}>
           <Controller
@@ -150,28 +215,39 @@ const EditTaskForm = ({
           />
         </Grid>
         <Grid item xs={6}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Controller
-              name="dueDate"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <DateTimePicker
-                  label="Due Date"
-                  minDateTime={new Date()}
-                  renderInput={props => (
-                    <TextField
-                      size="small"
-                      {...props}
-                      helperText={!!errors.dueDate && errors.dueDate.message}
-                      error={!!errors.dueDate}
-                    />
-                  )}
-                  value={value}
-                  onChange={onChange}
-                />
-              )}
+          <Box justifyContent="right" display="flex">
+            <Checkbox
+              name="dueDateCheckbox"
+              checked={!dueDateCheckboxDisabled}
+              onChange={handleDueDateCheckboxChange}
             />
-          </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <Controller
+                name="dueDate"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <DateTimePicker
+                    label="Due Date"
+                    disabled={dueDateCheckboxDisabled}
+                    minDateTime={new Date()}
+                    renderInput={props => (
+                      <TextField
+                        sx={{
+                          width: 225,
+                        }}
+                        size="small"
+                        {...props}
+                        helperText={!!errors.dueDate && errors.dueDate.message}
+                        error={!!errors.dueDate}
+                      />
+                    )}
+                    value={value}
+                    onChange={onChange}
+                  />
+                )}
+              />
+            </LocalizationProvider>
+          </Box>
         </Grid>
         <Grid item xs={6}>
           <Controller
@@ -191,6 +267,35 @@ const EditTaskForm = ({
               </TextField>
             )}
           />
+        </Grid>
+        <Grid item xs={6}>
+          <Box justifyContent="right" display="flex">
+            <Controller
+              name="completed"
+              control={control}
+              render={({ field }) => (
+                <FormControl>
+                  <RadioGroup sx={{ ml: 1 }} row {...field}>
+                    <FormControlLabel
+                      value={true}
+                      control={
+                        <Radio color="success" sx={{ color: 'success.main' }} />
+                      }
+                      label="Completed"
+                    />
+                    <FormControlLabel
+                      sx={{ mr: 0 }}
+                      value={false}
+                      control={
+                        <Radio color="warning" sx={{ color: 'warning.main' }} />
+                      }
+                      label="Not Completed"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              )}
+            />
+          </Box>
         </Grid>
       </Grid>
     </Box>

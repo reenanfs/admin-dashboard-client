@@ -23,7 +23,7 @@ import EditPersonForm from './components/forms/EditPersonForm';
 import AddPersonForm from './components/forms/AddPersonForm';
 
 const People = () => {
-  const { loading, data } = useQuery<IPeopleData>(GET_USERS);
+  const { loading, data, refetch } = useQuery<IPeopleData>(GET_USERS);
 
   let rows: IPerson[] = [];
 
@@ -32,7 +32,7 @@ const People = () => {
   }
 
   return (
-    <CustomDatagrid<IPerson, IPersonCreationFields, IPerson>
+    <CustomDatagrid<IPerson, IPersonCreationFields, IPerson, IPeopleData>
       loading={loading}
       rows={rows}
       columns={COLUMNS}
@@ -57,10 +57,7 @@ const People = () => {
         AddItemForm: AddPersonForm,
         mutation: CREATE_USER,
       }}
-      dialogRefetchProps={{
-        refetchQuery: GET_USERS,
-        refetchQueryName: 'GetUsers',
-      }}
+      refetchFunction={refetch}
     />
   );
 };

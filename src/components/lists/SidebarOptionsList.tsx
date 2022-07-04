@@ -11,9 +11,7 @@ import { SvgIconTypeMap } from '@mui/material/SvgIcon';
 
 interface ISidebarOption {
   title: string;
-  icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & {
-    muiName: string;
-  };
+  icon: React.ReactNode;
   url: string;
 }
 
@@ -48,7 +46,7 @@ const SidebarOptionsList = ({ options }: ISidebarOptionsListProps) => {
             onClick={() => handleListItemClick(index)}
             sx={{ p: 2 }}
           >
-            <ListItemIcon>{<option.icon />}</ListItemIcon>
+            <ListItemIcon>{option.icon}</ListItemIcon>
 
             <ListItemText primary={option.title} />
           </ListItemButton>
