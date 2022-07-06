@@ -9,7 +9,7 @@ import {
   Radio,
   FormControlLabel,
 } from '@mui/material';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -80,6 +80,11 @@ const EditTaskForm = ({
     },
   });
 
+  const completedWatch = useWatch({
+    name: 'completed',
+    control,
+  });
+
   const { loading, data } = useQuery<IPeopleData>(GET_USERS);
 
   useEffect(() => {
@@ -98,6 +103,23 @@ const EditTaskForm = ({
     }
   }, [startDate, dueDate]);
 
+  useEffect(() => {
+    let completedWatchBool: boolean | undefined;
+
+    if (typeof completedWatch === 'string') {
+      let completedWatchStr: string = completedWatch;
+      completedWatchBool = completedWatchStr.toLowerCase() === 'true';
+    } else {
+      completedWatchBool = completedWatch;
+    }
+
+    if (completedWatchBool) {
+      setValue('completionDate', new Date());
+    } else {
+      setValue('completionDate', null);
+    }
+  }, [completedWatch, setValue]);
+
   const renderSelectOptions = (): JSX.Element[] | JSX.Element => {
     if (!loading && data) {
       return data.users.map(user => (
@@ -113,7 +135,6 @@ const EditTaskForm = ({
   const handleStartDateCheckboxChange = ({
     target,
   }: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(startDateCheckboxDisabled);
     setStartDateCheckboxDisabled(!target.checked);
     if (!target.checked) {
       setStartDateTemp(getValues('startDate'));
