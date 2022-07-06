@@ -23,11 +23,20 @@ import EditPersonForm from './components/forms/EditPersonForm';
 import AddPersonForm from './components/forms/AddPersonForm';
 
 const People = () => {
-  const { loading, data, refetch } = useQuery<IPeopleData>(GET_USERS);
+  const { loading, data, refetch } = useQuery<IPeopleData>(GET_USERS, {
+    variables: {
+      input: {
+        orderBy: {
+          updatedAt: 'desc',
+        },
+      },
+    },
+  });
 
   let rows: IPerson[] = [];
 
   if (!loading && data) {
+    console.log(data.users);
     rows = data.users;
   }
 

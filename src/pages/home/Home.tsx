@@ -32,7 +32,7 @@ const Home = () => {
     variables: {
       input: {
         orderBy: {
-          dueDate: 'asc',
+          updatedAt: 'desc',
         },
       },
     },
