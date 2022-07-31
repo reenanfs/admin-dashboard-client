@@ -37,17 +37,13 @@ const GridToolbar = ({
       </Typography>
       <GridToolbarQuickFilter sx={{ mr: 10 }} color="primary" />
       <Box sx={{ mr: 2 }}>
-        <Box
-          component="span"
+        <DeleteButton
           sx={{
+            mr: 1,
             visibility: buttonDeleteMultipleVisible ? 'visible' : 'hidden',
           }}
-        >
-          <DeleteButton
-            sx={{ mr: 1 }}
-            onClick={handleDeleteMultipleItemsDialogOpen}
-          />
-        </Box>
+          onClick={handleDeleteMultipleItemsDialogOpen}
+        />
         <AddButton onClick={handleAddItemOpen} />
       </Box>
     </GridToolbarContainer>
