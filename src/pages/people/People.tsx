@@ -36,7 +36,6 @@ const People = () => {
   let rows: IPerson[] = [];
 
   if (!loading && data) {
-    console.log(data.users);
     rows = data.users;
   }
 
