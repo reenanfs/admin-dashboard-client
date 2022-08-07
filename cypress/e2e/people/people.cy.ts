@@ -36,46 +36,43 @@ context('Tests', () => {
         req.reply({ fixture: 'deleteUsers.json' });
       }
     });
+
+    cy.visit('/people');
   });
 
   describe('People Page', () => {
     it('successfully loads', () => {
-      cy.visit('/people');
       cy.get('#datagrid-label-main').should('have.text', 'Manage People');
     });
 
     describe('Add Dialog', () => {
       it('should close dialog when clicking on cancel', () => {
-        cy.visit('/people');
         cy.get('#datagrid-button-add').click();
         cy.get('#draggable-dialog-title').should('be.visible');
         cy.get('.MuiButton-textError').contains('Cancel').click();
         cy.get('#draggable-dialog-title').should('not.exist');
       });
       it('should not add person with missing fields', () => {
-        cy.visit('/people');
         cy.get('#datagrid-button-add').click();
         cy.get('#draggable-dialog-title').should('be.visible');
         cy.get('[form="add-form-id"]').click();
         cy.get('.MuiFormHelperText-root').should('have.length', 3);
       });
       it('should not add person when email is in incorrect format', () => {
-        cy.visit('/people');
         cy.get('#datagrid-button-add').click();
         cy.get('#draggable-dialog-title').should('be.visible');
-        cy.get('[name="name"').type('User12');
-        cy.get('[name="role"').type('Role12');
-        cy.get('[name="email"').type('email12');
+        cy.get('[name="name"]').type('User12');
+        cy.get('[name="role"]').type('Role12');
+        cy.get('[name="email"]').type('email12');
         cy.get('[form="add-form-id"]').click();
         cy.get('.MuiFormHelperText-root').should('have.length', 1);
       });
       it('should add person when input is correct', () => {
-        cy.visit('/people');
         cy.get('#datagrid-button-add').click();
         cy.get('#draggable-dialog-title').should('be.visible');
-        cy.get('[name="name"').type('User12');
-        cy.get('[name="role"').type('Role12');
-        cy.get('[name="email"').type('email12@email.com');
+        cy.get('[name="name"]').type('User12');
+        cy.get('[name="role"]').type('Role12');
+        cy.get('[name="email"]').type('email12@email.com');
         cy.get('[form="add-form-id"]').click();
         cy.wait('@gqlCreateUserMutation')
           .its('request.body.variables.input')
@@ -91,7 +88,6 @@ context('Tests', () => {
 
     describe('Edit Dialog', () => {
       it('should close dialog when clicking on cancel', () => {
-        cy.visit('/people');
         cy.get('[aria-label="Edit"]').first().click();
         cy.get('#draggable-dialog-title').should('be.visible');
 
@@ -101,45 +97,41 @@ context('Tests', () => {
       });
 
       it('should load previous values', () => {
-        cy.visit('/people');
         cy.get('[aria-label="Edit"]').first().click();
         cy.get('#draggable-dialog-title').should('be.visible');
 
-        cy.get('[name="name"').should('have.value', 'User1');
-        cy.get('[name="role"').should('have.value', 'Role1');
-        cy.get('[name="email"').should('have.value', 'email1@email.com');
+        cy.get('[name="name"]').should('have.value', 'User1');
+        cy.get('[name="role"]').should('have.value', 'Role1');
+        cy.get('[name="email"]').should('have.value', 'email1@email.com');
       });
 
       it('should not edit person if you leave missing fields', () => {
-        cy.visit('/people');
         cy.get('[aria-label="Edit"]').first().click();
         cy.get('#draggable-dialog-title').should('be.visible');
 
-        cy.get('[name="name"').clear();
-        cy.get('[name="role"').clear();
-        cy.get('[name="email"').clear();
+        cy.get('[name="name"]').clear();
+        cy.get('[name="role"]').clear();
+        cy.get('[name="email"]').clear();
 
         cy.get('[form="edit-form-id"]').click();
         cy.get('.MuiFormHelperText-root').should('have.length', 3);
       });
 
       it('should not edit person if you input wrong email', () => {
-        cy.visit('/people');
         cy.get('[aria-label="Edit"]').first().click();
         cy.get('#draggable-dialog-title').should('be.visible');
 
-        cy.get('[name="email"').clear().type('newemail');
+        cy.get('[name="email"]').clear().type('newemail');
 
         cy.get('[form="edit-form-id"]').click();
         cy.get('.MuiFormHelperText-root').should('have.length', 1);
       });
 
       it('should edit person when input is correct', () => {
-        cy.visit('/people');
         cy.get('[aria-label="Edit"]').first().click();
         cy.get('#draggable-dialog-title').should('be.visible');
 
-        cy.get('[name="email"').clear().type('email12@email.com');
+        cy.get('[name="email"]').clear().type('email12@email.com');
 
         cy.get('[form="edit-form-id"]').click();
 
@@ -158,7 +150,6 @@ context('Tests', () => {
 
     describe('Delete Dialog', () => {
       it('should close dialog when clicking on cancel', () => {
-        cy.visit('/people');
         cy.get('[aria-label="Delete"]').first().click();
         cy.get('#draggable-dialog-title').should('be.visible');
 
@@ -168,7 +159,6 @@ context('Tests', () => {
       });
 
       it('should delete person when clicking on Confirm', () => {
-        cy.visit('/people');
         cy.get('[aria-label="Delete"]').first().click();
         cy.get('#draggable-dialog-title').should('be.visible');
 
@@ -186,7 +176,6 @@ context('Tests', () => {
 
     describe('Delete Multiple Dialog', () => {
       it('should close dialog when clicking on cancel', () => {
-        cy.visit('/people');
         cy.get('[aria-label="Delete"]').first().should('be.visible');
         cy.get('[aria-label="Select all rows"]').click();
         cy.get('#datagrid-button-delete').click();
@@ -198,8 +187,7 @@ context('Tests', () => {
         cy.get('#draggable-dialog-title').should('not.exist');
       });
 
-      it('should delete deveral people when clicking on Confirm', () => {
-        cy.visit('/people');
+      it('should delete several people when clicking on Confirm', () => {
         cy.get('[aria-label="Delete"]').first().should('be.visible');
         cy.get('[aria-label="Select all rows"]').click();
         cy.get('#datagrid-button-delete').click();

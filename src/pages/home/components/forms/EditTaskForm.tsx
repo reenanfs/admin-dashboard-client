@@ -201,6 +201,7 @@ const EditTaskForm = ({
                         sx={{
                           width: 225,
                         }}
+                        id="startDate"
                         size="small"
                         {...props}
                         helperText={
@@ -253,6 +254,7 @@ const EditTaskForm = ({
                     minDateTime={new Date()}
                     renderInput={props => (
                       <TextField
+                        id="dueDate"
                         sx={{
                           width: 225,
                         }}
