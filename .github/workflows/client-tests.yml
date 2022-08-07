@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: install dependencies
+      - name: Install dependencies
         run: npm i
 
       - name: Run integration tests
