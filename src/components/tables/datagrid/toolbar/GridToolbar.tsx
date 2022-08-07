@@ -23,6 +23,7 @@ const GridToolbar = ({
   return (
     <GridToolbarContainer>
       <Typography
+        id="datagrid-label-main"
         variant="h6"
         component="div"
         sx={{
@@ -43,8 +44,9 @@ const GridToolbar = ({
             visibility: buttonDeleteMultipleVisible ? 'visible' : 'hidden',
           }}
           onClick={handleDeleteMultipleItemsDialogOpen}
+          id="datagrid-button-delete"
         />
-        <AddButton onClick={handleAddItemOpen} />
+        <AddButton onClick={handleAddItemOpen} id="datagrid-button-add" />
       </Box>
     </GridToolbarContainer>
   );

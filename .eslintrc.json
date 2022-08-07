@@ -1,6 +1,9 @@
 {
   "extends": ["react-app", "react-app/jest", "prettier"],
-  "rules": {},
+  "rules": {
+    "no-undef": "off",
+    "no-unused-expressions": "off"
+  },
   "overrides": [
     {
       "files": ["**/*.ts", "**/*.tsx"],

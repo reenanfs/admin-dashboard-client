@@ -7,6 +7,7 @@ interface IMarkCompletedButton extends ButtonProps {
 }
 
 const MarkCompletedButton = ({
+  id,
   onClick,
 }: IMarkCompletedButton): JSX.Element => {
   return (
@@ -19,6 +20,7 @@ const MarkCompletedButton = ({
       }}
       startIcon={<DoneOutlineIcon color="success" />}
       onClick={onClick}
+      id={id}
     >
       Mark as Completed
     </Button>
