@@ -55,7 +55,9 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
     },
   });
 
-  const { loading, data } = useQuery<IPeopleData>(GET_USERS);
+  const { loading, data } = useQuery<IPeopleData>(GET_USERS, {
+    fetchPolicy: 'cache-and-network',
+  });
 
   const renderSelectOptions = (): JSX.Element[] | JSX.Element => {
     if (!loading && data) {

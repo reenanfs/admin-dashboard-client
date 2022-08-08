@@ -36,6 +36,7 @@ const Home = () => {
         },
       },
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   let rows: ITaskRows[] = [];
