@@ -47,6 +47,7 @@ const Navbar = ({ navbarProps }: INavbarProps) => {
     >
       <Toolbar>
         <IconButton
+          id="menuButton"
           onClick={sidebarOpen ? handleSidebarClose : handleSidebarOpen}
         >
           <MenuIcon color="inherit" />
@@ -78,7 +79,7 @@ const Navbar = ({ navbarProps }: INavbarProps) => {
           </IconButton>
 
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar alt="" src="">
+            <Avatar id="avatar" alt="" src="">
               R
             </Avatar>
           </IconButton>

@@ -137,6 +137,7 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
                       sx={{
                         width: 225,
                       }}
+                      id="startDate"
                       size="small"
                       {...props}
                       helperText={
@@ -189,6 +190,7 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
                     <TextField
                       sx={{ width: 225 }}
                       size="small"
+                      id="dueDate"
                       {...props}
                       helperText={!!errors.dueDate && errors.dueDate.message}
                       error={!!errors.dueDate}
@@ -209,6 +211,7 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
               <TextField
                 label="Person"
                 size="small"
+                id="person"
                 select
                 fullWidth
                 {...field}
