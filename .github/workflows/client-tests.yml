@@ -19,7 +19,7 @@ jobs:
       - name: Run E2E tests
         uses: cypress-io/github-action@v4
         with:
-          browser: chrome
+          browser: firefox
           build: npm run build
           start: npm start
           wait-on: 'http://localhost:3000'
