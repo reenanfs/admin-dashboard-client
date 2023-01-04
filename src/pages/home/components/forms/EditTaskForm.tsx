@@ -85,7 +85,9 @@ const EditTaskForm = ({
     control,
   });
 
-  const { loading, data } = useQuery<IPeopleData>(GET_USERS);
+  const { loading, data } = useQuery<IPeopleData>(GET_USERS, {
+    fetchPolicy: 'cache-and-network',
+  });
 
   useEffect(() => {
     if (!loading && user) {
