@@ -4,7 +4,7 @@ export const GET_TASKS = gql`
   query GetTasks($input: GetTasksInput) {
     tasks(input: $input) {
       id
-      taskName
+      name
       description
       user {
         id

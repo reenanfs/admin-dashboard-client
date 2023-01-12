@@ -27,7 +27,7 @@ import {
 } from 'types/homeTypes.ts';
 import AddTaskForm from './components/forms/AddTaskForm';
 
-const Home = () => {
+const Home = (): JSX.Element => {
   const { loading, data, refetch } = useQuery<ITasksData>(GET_TASKS, {
     variables: {
       input: {

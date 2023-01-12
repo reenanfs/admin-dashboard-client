@@ -1,10 +1,12 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
 
 import Navbar from 'components/navbar/Navbar';
 import Sidebar from 'components/sidebar/Sidebar';
 import AppContainer from 'components/containers/AppContainer';
+import { useLocation } from 'react-router-dom';
+import { routesPaths } from 'constants/routes';
 
 interface iLayoutProps {
   children: ReactNode;
@@ -14,6 +16,9 @@ const sidebarWidth = 240;
 
 const Layout = ({ children }: iLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [siteNavigationVisible, setSiteNavigationVisible] = useState(true);
+
+  let location = useLocation();
 
   const handleSidebarOpen = () => {
     setSidebarOpen(true);
@@ -39,10 +44,27 @@ const Layout = ({ children }: iLayoutProps) => {
     sidebarWidth,
   };
 
+  useEffect(() => {
+    if (location.pathname === routesPaths.LOGIN) {
+      setSiteNavigationVisible(false);
+    }
+  }, [location.pathname]);
+
+  const renderSiteNavigation = (): JSX.Element => {
+    if (siteNavigationVisible) {
+      return (
+        <>
+          <Navbar navbarProps={navbarProps} />
+          <Sidebar sidebarProps={sidebarProps} />
+        </>
+      );
+    }
+    return <></>;
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
-      <Navbar navbarProps={navbarProps} />
-      <Sidebar sidebarProps={sidebarProps} />
+      {renderSiteNavigation()}
       <AppContainer appContainerProps={appContainerProps}>
         {children}
       </AppContainer>

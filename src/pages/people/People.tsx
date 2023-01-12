@@ -22,7 +22,7 @@ import {
 import EditPersonForm from './components/forms/EditPersonForm';
 import AddPersonForm from './components/forms/AddPersonForm';
 
-const People = () => {
+const People = (): JSX.Element => {
   const { loading, data, refetch } = useQuery<IPeopleData>(GET_USERS, {
     variables: {
       input: {
