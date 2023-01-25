@@ -6,7 +6,7 @@ import type {} from '@mui/lab/themeAugmentation';
 import Layout from 'components/layout/Layout';
 import Home from 'pages/home/Home';
 import People from 'pages/people/People';
-import Support from 'pages/support/Support';
+import NotFound from 'pages/not-found/NotFound';
 import CssBaseline from '@mui/material/CssBaseline';
 import { routesPaths } from 'constants/routes';
 import Login from 'pages/auth/login/Login';
@@ -60,7 +60,7 @@ const App = (): JSX.Element => {
             <Route path={routesPaths.HOME} element={<Home />} />
             <Route path={routesPaths.LOGIN} element={<Login />} />
             <Route path={routesPaths.PEOPLE} element={<People />} />
-            <Route path={routesPaths.SUPPORT} element={<Support />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
       </BrowserRouter>

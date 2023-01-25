@@ -13,7 +13,7 @@ import DeleteMultipleItemsDialog from 'components/dialogs/DeleteMultipleItemsDia
 import DeleteItemDialog from 'components/dialogs/DeleteItemDialog';
 import { ApolloQueryResult, DocumentNode } from '@apollo/client';
 import EditItemDialog from 'components/dialogs/EditItemDialog';
-import { SubmitHandler } from 'react-hook-form';
+import { SubmitHandler, FieldValues } from 'react-hook-form';
 import {
   ValidAppEntities,
   ValidAppEntitiesCreationFields,
@@ -22,11 +22,11 @@ import {
 } from 'types/appTypes';
 import AddItemDialog from 'components/dialogs/AddItemDialog';
 
-interface IBaseFormProps<S> {
+interface IBaseFormProps<S extends FieldValues> {
   onSubmit: SubmitHandler<S>;
 }
 
-interface IEditFormProps<T> extends IBaseFormProps<T> {
+interface IEditFormProps<T extends FieldValues> extends IBaseFormProps<T> {
   defaultValues: T;
 }
 
@@ -36,15 +36,20 @@ interface IDialogProps {
   mutation: DocumentNode;
 }
 
-interface IAddDialogProps<S> extends IDialogProps {
+interface IAddDialogProps<S extends FieldValues> extends IDialogProps {
   AddItemForm: React.FC<IBaseFormProps<S>>;
 }
 
-interface IEditDialogProps<T> extends IDialogProps {
+interface IEditDialogProps<T extends FieldValues> extends IDialogProps {
   EditItemForm: React.FC<IEditFormProps<T>>;
 }
 
-interface ICustomDatagridProps<T, S, U, V> {
+interface ICustomDatagridProps<
+  T extends FieldValues,
+  S extends FieldValues,
+  U,
+  V
+> {
   columns: GridColDef[];
   rows: U[];
   label: string;
