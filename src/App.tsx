@@ -6,7 +6,7 @@ import type {} from '@mui/lab/themeAugmentation';
 import Layout from 'components/layout/Layout';
 import Home from 'pages/home/Home';
 import People from 'pages/people/People';
-import NotFound from 'pages/not-found/NotFound';
+import NotFound from 'pages/status/not-found/NotFound';
 import CssBaseline from '@mui/material/CssBaseline';
 import { routesPaths } from 'constants/routes';
 import Login from 'pages/auth/login/Login';
