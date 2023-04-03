@@ -8,8 +8,9 @@ import Home from 'pages/home/Home';
 import People from 'pages/people/People';
 import NotFound from 'pages/status/not-found/NotFound';
 import CssBaseline from '@mui/material/CssBaseline';
-import { routesPaths } from 'constants/routes';
+import { routesPaths } from 'constants/routesConstants';
 import Login from 'pages/auth/login/Login';
+import PrivateRoute from 'auth/PrivateRoute';
 
 const App = (): JSX.Element => {
   const theme = createTheme({
@@ -57,9 +58,23 @@ const App = (): JSX.Element => {
       <BrowserRouter>
         <Layout>
           <Routes>
-            <Route path={routesPaths.HOME} element={<Home />} />
+            <Route
+              path={routesPaths.HOME}
+              element={
+                <PrivateRoute>
+                  <Home />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path={routesPaths.PEOPLE}
+              element={
+                <PrivateRoute>
+                  <People />
+                </PrivateRoute>
+              }
+            />
             <Route path={routesPaths.LOGIN} element={<Login />} />
-            <Route path={routesPaths.PEOPLE} element={<People />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

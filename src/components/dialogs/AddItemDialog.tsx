@@ -9,12 +9,13 @@ import {
 } from 'types/appTypes';
 import { useDialogs } from 'hooks/useDialogs';
 import { ADD_FORM_ID } from 'constants/componentConstants';
+import { FieldValues } from 'react-hook-form';
 
-interface IFormProps<T> {
+interface IFormProps<T extends FieldValues> {
   onSubmit: SubmitHandler<T>;
 }
 
-interface IAddITemDialogProps<T, S> {
+interface IAddITemDialogProps<T extends FieldValues, S> {
   title: string;
   Form: React.FC<IFormProps<T>>;
   mutation: DocumentNode;

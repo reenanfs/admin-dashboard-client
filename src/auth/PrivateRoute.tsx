@@ -1,17 +1,19 @@
-import { ReactNode } from 'react';
-import { Navigate, Route } from 'react-router-dom';
+import { routesPaths } from 'constants/routesConstants';
+import { Navigate } from 'react-router-dom';
 
-interface Children {
-  children: ReactNode;
+import { useAuth } from 'hooks/useAuth';
+
+interface IPrivateRouteProps {
+  children: React.ReactNode;
 }
-// export const getAccessToken = () => Cookies.get('access_token');
-// export const getRefreshToken = () => Cookies.get('refresh_token');
-// export const isAuthenticated = () => !!getAccessToken();
 
-const PrivateRoute = ({ children }: Children) => {
-  const token = localStorage.getItem('auth');
-
-  return <>{token ? children : <Navigate to="/login" replace={true} />}</>;
+const PrivateRoute = ({ children }: IPrivateRouteProps) => {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? (
+    <>{children}</>
+  ) : (
+    <Navigate to={routesPaths.LOGIN} replace />
+  );
 };
 
 export default PrivateRoute;

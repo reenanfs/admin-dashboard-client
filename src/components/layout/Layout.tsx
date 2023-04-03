@@ -6,7 +6,7 @@ import Navbar from 'components/navbar/Navbar';
 import Sidebar from 'components/sidebar/Sidebar';
 import AppContainer from 'components/containers/AppContainer';
 import { useLocation } from 'react-router-dom';
-import { routesPaths } from 'constants/routes';
+import { routesPaths } from 'constants/routesConstants';
 
 interface iLayoutProps {
   children: ReactNode;

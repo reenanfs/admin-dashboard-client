@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from '@mui/material';
-import { routesPaths } from 'constants/routes';
+import { routesPaths } from 'constants/routesConstants';
 import { useNavigate } from 'react-router-dom';
 
 const NotFound = (): JSX.Element => {
