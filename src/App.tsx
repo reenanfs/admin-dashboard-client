@@ -11,6 +11,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { routesPaths } from 'constants/routesConstants';
 import Login from 'pages/auth/login/Login';
 import PrivateRoute from 'auth/PrivateRoute';
+import Signup from 'pages/auth/signup/Signup';
 
 const App = (): JSX.Element => {
   const theme = createTheme({
@@ -75,6 +76,7 @@ const App = (): JSX.Element => {
               }
             />
             <Route path={routesPaths.LOGIN} element={<Login />} />
+            <Route path={routesPaths.REGISTER} element={<Signup />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

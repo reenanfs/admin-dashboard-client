@@ -9,64 +9,73 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
 import { ValidationMessages } from 'constants/validationMessages';
-import { LOCAL_SIGNIN } from './loginQueries';
+import { LOCAL_SIGNUP } from './signupQueries';
 import { ApolloError, useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'hooks/useAuth';
-import { ILoginFields } from '../authTypes';
+import { IAuthResponse, ISignupFields } from '../authTypes';
 
-interface IlocalSignInResponse {
-  access_token: string;
-  refresh_token: string;
-}
-
-const loginValidationSchema = yup.object({
+const signupValidationSchema = yup.object({
+  name: yup.string().required(ValidationMessages.REQUIRED),
   email: yup
     .string()
     .email(ValidationMessages.EMAIL)
     .required(ValidationMessages.REQUIRED),
-  password: yup.string().required(ValidationMessages.REQUIRED),
+  password: yup
+    .string()
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+      ValidationMessages.PASSWORD
+    )
+    .required(ValidationMessages.REQUIRED),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], ValidationMessages.PASSWORD_MATCH)
+    .required(ValidationMessages.REQUIRED),
 });
 
-const Login = (): JSX.Element => {
+const Signup = (): JSX.Element => {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<ILoginFields>({
-    resolver: yupResolver(loginValidationSchema),
+  } = useForm<ISignupFields & { confirmPassword: string }>({
+    resolver: yupResolver(signupValidationSchema),
     defaultValues: {
+      name: '',
       email: '',
       password: '',
+      confirmPassword: '',
     },
   });
 
   const [authErrorMessage, setAuthErrorMessage] = useState<string>('');
+
   const { login } = useAuth();
 
-  const [localSignin, { data, loading }] = useMutation<
-    { localSignin: IlocalSignInResponse },
-    { input: ILoginFields }
-  >(LOCAL_SIGNIN);
+  const [localSignup, { data, loading }] = useMutation<
+    { localSignup: IAuthResponse },
+    { input: ISignupFields }
+  >(LOCAL_SIGNUP);
 
   useEffect(() => {
     if (data) {
       const {
-        localSignin: { access_token, refresh_token },
+        localSignup: { access_token, refresh_token },
       } = data;
 
       login(access_token, refresh_token);
     }
   }, [loading, data, login]);
 
-  const onSubmit: SubmitHandler<ILoginFields> = async data => {
-    const { email, password } = data;
+  const onSubmit: SubmitHandler<ISignupFields> = async data => {
+    const { name, email, password } = data;
     try {
-      await localSignin({
+      await localSignup({
         variables: {
           input: {
+            name,
             email,
             password,
           },
@@ -103,8 +112,27 @@ const Login = (): JSX.Element => {
           }}
         >
           <Typography component="h1" variant="h2" sx={{ mt: 2 }}>
-            Login
+            Sign Up
           </Typography>
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Name"
+                size="small"
+                fullWidth
+                margin="normal"
+                {...field}
+                helperText={
+                  !!errors.name && errors.name.message
+                    ? errors.name.message
+                    : authErrorMessage
+                }
+                error={!!errors.name || !!authErrorMessage}
+              />
+            )}
+          />
           <Controller
             name="email"
             control={control}
@@ -140,7 +168,27 @@ const Login = (): JSX.Element => {
                     ? errors.password.message
                     : authErrorMessage
                 }
-                error={!!errors.email || !!authErrorMessage}
+                error={!!errors.password || !!authErrorMessage}
+              />
+            )}
+          />
+          <Controller
+            name="confirmPassword"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Confirm Password"
+                type="password"
+                size="small"
+                fullWidth
+                margin="normal"
+                {...field}
+                helperText={
+                  !!errors.confirmPassword && errors.confirmPassword.message
+                    ? errors.confirmPassword.message
+                    : authErrorMessage
+                }
+                error={!!errors.confirmPassword || !!authErrorMessage}
               />
             )}
           />
@@ -150,15 +198,12 @@ const Login = (): JSX.Element => {
             fullWidth
             sx={{ mt: 2, mb: 3 }}
           >
-            Login
+            Sign up
           </Button>
-          <Typography variant="subtitle1" sx={{ mb: 2 }}>
-            Doesn't have an account? <Link to="/register">Create one now!</Link>
-          </Typography>
         </Box>
       </Paper>
     </Container>
   );
 };
 
-export default Login;
+export default Signup;

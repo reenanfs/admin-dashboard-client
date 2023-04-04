@@ -12,6 +12,7 @@ import Menu from '@mui/material/Menu';
 import Avatar from '@mui/material/Avatar';
 import MenuItem from '@mui/material/MenuItem';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { useAuth } from 'hooks/useAuth';
 
 interface INavbarProps {
   navbarProps: {
@@ -21,9 +22,8 @@ interface INavbarProps {
   };
 }
 
-const settings = ['Logout'];
-
 const Navbar = ({ navbarProps }: INavbarProps) => {
+  const { logout } = useAuth();
   const { sidebarOpen, handleSidebarOpen, handleSidebarClose } = navbarProps;
   const [avatarAnchorEl, setAvatarAnchorEl] = useState<null | HTMLElement>(
     null
@@ -36,6 +36,16 @@ const Navbar = ({ navbarProps }: INavbarProps) => {
   const handleCloseUserMenu = () => {
     setAvatarAnchorEl(null);
   };
+
+  const menuItems = [
+    {
+      text: 'Logout',
+      onClick: () => {
+        logout();
+        handleCloseUserMenu();
+      },
+    },
+  ];
 
   return (
     <AppBar
@@ -98,9 +108,9 @@ const Navbar = ({ navbarProps }: INavbarProps) => {
             open={Boolean(avatarAnchorEl)}
             onClose={handleCloseUserMenu}
           >
-            {settings.map(setting => (
-              <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                <Typography>{setting}</Typography>
+            {menuItems.map(menuItem => (
+              <MenuItem key={menuItem.text} onClick={menuItem.onClick}>
+                <Typography>{menuItem.text}</Typography>
               </MenuItem>
             ))}
           </Menu>

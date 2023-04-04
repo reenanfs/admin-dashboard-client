@@ -3,10 +3,8 @@ export enum ValidationMessages {
   EMAIL = 'This field needs to be a valid email.',
   DATE = 'This field should contain a valid date.',
   BOOLEAN = 'This field should contain a boolean',
-  PASSWORD_LENGTH = 'Password must have at least 12 characters.',
-  PASSWORD_UPPERCASE = 'Password must contain at least one uppercase letter.',
-  PASSWORD_LOWERCASE = 'Password must contain at least one lowercase letter.',
-  PASSWORD_DIGIT = 'Password must contain at least one digit',
+  PASSWORD = 'The password must have at least 8 characters. It also must includes at least: 1 uppercase letter, 1 lowercase letter and 1 digit.',
+  PASSWORD_MATCH = 'Passwords are not matching.',
   SERVER_INVALID_CREDENTIALS = 'The credentials you inserted are invalid.',
   SERVER_INTERNAL_ERROR = 'The server is facing an internal issue at the moment.',
 }

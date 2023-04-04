@@ -45,13 +45,23 @@ const Layout = ({ children }: iLayoutProps) => {
   };
 
   useEffect(() => {
-    if (
-      location.pathname !== routesPaths.LOGIN &&
-      Object.values(routesPaths).includes(location.pathname as routesPaths)
-    ) {
-      setSiteNavigationVisible(true);
-    } else {
+    const RoutesWhereNavigationHidden: string[] = [
+      routesPaths.LOGIN,
+      routesPaths.REGISTER,
+    ];
+
+    const isPathOnHiddenList = RoutesWhereNavigationHidden.includes(
+      location.pathname
+    );
+
+    const IsPathUnmapped = Object.values(routesPaths).includes(
+      location.pathname as routesPaths
+    );
+
+    if (isPathOnHiddenList || !IsPathUnmapped) {
       setSiteNavigationVisible(false);
+    } else {
+      setSiteNavigationVisible(true);
     }
   }, [location.pathname]);
 
