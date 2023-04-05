@@ -9,7 +9,7 @@ import NotFound from 'pages/status/not-found/NotFound';
 import CssBaseline from '@mui/material/CssBaseline';
 import { routesPaths } from 'constants/routesConstants';
 import Login from 'pages/auth/login/Login';
-import PrivateRoute from 'auth/PrivateRoute';
+import PrivateRoute from 'components/routes/PrivateRoute';
 import Signup from 'pages/auth/signup/Signup';
 import Tasks from 'pages/tasks/Tasks';
 import Settings from 'pages/settings/Settings';

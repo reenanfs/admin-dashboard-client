@@ -6,6 +6,7 @@ export const LOCAL_SIGNIN = gql`
       access_token
       refresh_token
       credential {
+        id
         email
         user {
           id

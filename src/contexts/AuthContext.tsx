@@ -1,21 +1,15 @@
-import { useState, useEffect, ReactNode, createContext } from 'react';
-import Cookies from 'js-cookie';
-import {
-  ACCESS_TOKEN_COOKIE,
-  REFRESH_TOKEN_COOKIE,
-} from 'constants/authConstants';
+import { useState, ReactNode, createContext } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { routesPaths } from 'constants/routesConstants';
-import { GET_TOKENS } from 'graphql/authQueries';
-import { useLazyQuery } from '@apollo/client';
-import LoadingPage from 'pages/status/loading/Loading';
 
-interface getTokensResponse {
-  getTokens: {
-    access_token: string;
-    refresh_token: string;
-  };
-}
+import {
+  ICredential,
+  ICurrentUser,
+  ILocalLocalSignoutInput,
+} from 'types/authTypes';
+import { useCurrentUser } from 'hooks/useCurrentUser';
+import { useMutation } from '@apollo/client';
+import { LOCAL_SIGNOUT } from 'graphql/authQueries';
 
 interface IAuthProviderProps {
   children: ReactNode;
@@ -24,87 +18,113 @@ interface IAuthProviderProps {
 export interface AuthContextProps {
   accessToken: string | null;
   refreshToken: string | null;
+  whoAmIFetched: boolean;
+  setwhoAmIFetched: (dataFetched: boolean) => void;
   handleLogin: (
     newAccessToken: string,
     newRefreshToken: string,
+    credential: ICredential,
     navigate: NavigateFunction
   ) => void;
-  handleLogout: (navigate: NavigateFunction) => void;
+  handleLogout: (credentialId: string, navigate: NavigateFunction) => void;
   isAuthenticated: () => boolean;
+  setAuth: (
+    accessToken: string,
+    refreshToken: string,
+    credential: ICredential
+  ) => void;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
   accessToken: null,
   refreshToken: null,
+  whoAmIFetched: false,
+  setwhoAmIFetched: () => {},
   handleLogin: () => {},
   handleLogout: () => {},
   isAuthenticated: () => false,
+  setAuth: () => {},
 });
 
 export const AuthProvider = ({ children }: IAuthProviderProps): JSX.Element => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [whoAmIFetched, setwhoAmIFetched] = useState<boolean>(false);
 
-  // obtain tokens on mount
-  const [getTokens] = useLazyQuery<getTokensResponse>(GET_TOKENS, {
-    fetchPolicy: 'network-only',
-    onCompleted: data => {
-      if (data) {
-        const {
-          getTokens: { access_token, refresh_token },
-        } = data;
-        setAccessToken(access_token);
-        setRefreshToken(refresh_token);
-      }
-      setLoading(false);
-    },
-    onError: () => setLoading(false),
-  });
+  const { setUser } = useCurrentUser();
 
-  useEffect(() => {
-    console.log('called');
-    getTokens();
-  }, []);
+  const credentialToUser = (credential: ICredential): ICurrentUser => {
+    const user = credential.user;
+    const currentUser = {
+      ...user,
+      email: credential.email,
+      credentialId: credential.id,
+    };
 
-  //update tokens
+    return currentUser;
+  };
+
+  const setAuth = (
+    accessToken: string,
+    refreshToken: string,
+    credential: ICredential
+  ): void => {
+    setAccessToken(accessToken);
+    setRefreshToken(refreshToken);
+
+    setUser(credentialToUser(credential));
+  };
+
   const handleLogin = (
     newAccessToken: string,
     newRefreshToken: string,
+    credential: ICredential,
     navigate: NavigateFunction
   ) => {
-    setAccessToken(newAccessToken);
-    setRefreshToken(newRefreshToken);
+    setAuth(newAccessToken, newRefreshToken, credential);
 
     navigate(routesPaths.HOME);
   };
 
-  const handleLogout = (navigate: NavigateFunction) => {
-    Cookies.remove(ACCESS_TOKEN_COOKIE);
-    Cookies.remove(REFRESH_TOKEN_COOKIE);
+  // logic related to signing out a user
+  const [localSignout] = useMutation<
+    { localSignout: ILocalLocalSignoutInput },
+    { input: ILocalLocalSignoutInput }
+  >(LOCAL_SIGNOUT);
+
+  const handleLogout = async (
+    credentialId: string,
+    navigate: NavigateFunction
+  ) => {
+    await localSignout({
+      variables: {
+        input: {
+          id: credentialId,
+        },
+      },
+    });
 
     setAccessToken(null);
     setRefreshToken(null);
 
-    navigate(routesPaths.HOME);
+    navigate(routesPaths.LOGIN);
   };
 
   const isAuthenticated = (): boolean => {
     return !!accessToken;
   };
 
-  if (loading) {
-    return <LoadingPage />;
-  }
-
   return (
     <AuthContext.Provider
       value={{
-        isAuthenticated,
         accessToken,
         refreshToken,
+        whoAmIFetched,
+        setwhoAmIFetched,
+        isAuthenticated,
         handleLogin,
         handleLogout,
+        setAuth,
       }}
     >
       {children}

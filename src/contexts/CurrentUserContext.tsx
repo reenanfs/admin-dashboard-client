@@ -5,17 +5,10 @@ import {
   SetStateAction,
   ReactNode,
 } from 'react';
+import { ICurrentUser } from 'types/authTypes';
 
 interface ICurrentUserProviderProps {
   children: ReactNode;
-}
-
-export interface ICurrentUser {
-  id: string;
-  name: string;
-  photoUrl: string;
-  email: string;
-  isAdmin: boolean;
 }
 
 interface ICurrentUserContext {

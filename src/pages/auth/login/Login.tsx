@@ -15,22 +15,12 @@ import { LOCAL_SIGNIN } from './loginQueries';
 import { ApolloError, useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'hooks/useAuth';
-import { ILoginFields } from '../authTypes';
 import { useCurrentUser } from 'hooks/useCurrentUser';
-import { ICurrentUser } from 'contexts/CurrentUserContext';
+import { IAuthResponse } from 'types/authTypes';
 
-interface IlocalSignInResponse {
-  access_token: string;
-  refresh_token: string;
-  credential: {
-    email: string;
-    user: {
-      id: string;
-      name: string;
-      photoUrl: string;
-      isAdmin: boolean;
-    };
-  };
+export interface ILoginFields {
+  email: string;
+  password: string;
 }
 
 const loginValidationSchema = yup.object({
@@ -55,12 +45,11 @@ const Login = (): JSX.Element => {
   });
 
   const { handleLogin } = useAuth();
-  const { setUser } = useCurrentUser();
 
   const [authErrorMessage, setAuthErrorMessage] = useState<string>('');
 
   const [localSignin, { data, loading }] = useMutation<
-    { localSignin: IlocalSignInResponse },
+    { localSignin: IAuthResponse },
     { input: ILoginFields }
   >(LOCAL_SIGNIN);
 
@@ -73,15 +62,8 @@ const Login = (): JSX.Element => {
       localSignin: { access_token, refresh_token, credential },
     } = data;
 
-    const user = credential.user;
-    const currentUser: ICurrentUser = {
-      ...user,
-      email: credential.email,
-    };
-
-    setUser(currentUser);
-    handleLogin(access_token, refresh_token);
-  }, [loading, data, handleLogin, setUser]);
+    handleLogin(access_token, refresh_token, credential);
+  }, [loading, data, handleLogin]);
 
   const onSubmit: SubmitHandler<ILoginFields> = async data => {
     const { email, password } = data;

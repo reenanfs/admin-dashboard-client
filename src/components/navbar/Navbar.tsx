@@ -43,7 +43,7 @@ const Navbar = ({ navbarProps }: INavbarProps) => {
     {
       text: 'Logout',
       onClick: () => {
-        handleLogout();
+        handleLogout(user?.credentialId!);
         handleCloseUserMenu();
       },
     },

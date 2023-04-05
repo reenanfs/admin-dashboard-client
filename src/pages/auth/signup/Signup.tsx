@@ -14,7 +14,13 @@ import { LOCAL_SIGNUP } from './signupQueries';
 import { ApolloError, useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'hooks/useAuth';
-import { IAuthResponse, ISignupFields } from '../authTypes';
+import { IAuthResponse } from 'types/authTypes';
+
+export interface ISignupFields {
+  name: string;
+  email: string;
+  password: string;
+}
 
 const signupValidationSchema = yup.object({
   name: yup.string().required(ValidationMessages.REQUIRED),
@@ -63,10 +69,10 @@ const Signup = (): JSX.Element => {
   useEffect(() => {
     if (data) {
       const {
-        localSignup: { access_token, refresh_token },
+        localSignup: { access_token, refresh_token, credential },
       } = data;
 
-      handleLogin(access_token, refresh_token);
+      handleLogin(access_token, refresh_token, credential);
     }
   }, [loading, data, handleLogin]);
 

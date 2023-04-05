@@ -5,6 +5,16 @@ export const LOCAL_SIGNUP = gql`
     localSignup(input: $input) {
       access_token
       refresh_token
+      credential {
+        id
+        email
+        user {
+          id
+          name
+          photoUrl
+          isAdmin
+        }
+      }
     }
   }
 `;
