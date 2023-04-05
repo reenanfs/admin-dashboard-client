@@ -1,7 +1,7 @@
 import { useLazyQuery } from '@apollo/client';
 import { IAuthResponse } from 'types/authTypes';
 import { useAuth } from './useAuth';
-import { WHO_AM_I } from 'graphql/authQueries';
+import { WHO_AM_I } from 'graphql/queries/authQueries';
 import { useEffect, useState } from 'react';
 
 export const useWhoAmI = (): boolean => {

@@ -14,6 +14,8 @@ import MenuItem from '@mui/material/MenuItem';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { useAuth } from 'hooks/useAuth';
 import { useCurrentUser } from 'hooks/useCurrentUser';
+import { useNavigate } from 'react-router-dom';
+import { routesPaths } from 'constants/routesConstants';
 
 interface INavbarProps {
   navbarProps: {
@@ -25,6 +27,7 @@ interface INavbarProps {
 
 const Navbar = ({ navbarProps }: INavbarProps) => {
   const { handleLogout } = useAuth();
+  const navigate = useNavigate();
   const { user } = useCurrentUser();
   const { sidebarOpen, handleSidebarOpen, handleSidebarClose } = navbarProps;
   const [avatarAnchorEl, setAvatarAnchorEl] = useState<null | HTMLElement>(
@@ -40,6 +43,13 @@ const Navbar = ({ navbarProps }: INavbarProps) => {
   };
 
   const menuItems = [
+    {
+      text: 'Settings',
+      onClick: () => {
+        navigate(routesPaths.SETTINGS);
+        handleCloseUserMenu();
+      },
+    },
     {
       text: 'Logout',
       onClick: () => {

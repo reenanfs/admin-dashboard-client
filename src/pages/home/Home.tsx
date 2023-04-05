@@ -2,12 +2,15 @@ import NoProjectBox from '../../components/box/NoProjectBox';
 import PageWrapperPaper from 'components/papers/PageWrapperPaper';
 
 import { AccountCircle, Assignment, Group } from '@mui/icons-material';
-import { Grid, Paper, Typography } from '@mui/material';
+import { Box, Grid, Paper, Typography } from '@mui/material';
 import GenericContainedAddButton from 'components/buttons/GenericContainedAddButton';
 import LoadingPage from 'pages/status/loading/Loading';
-import { GET_PROJECTS } from 'graphql/projectsQueries';
+import { GET_PROJECTS } from 'graphql/queries/projectsQueries';
 import { ProjectsData } from 'types/projectTypes';
 import { useQuery } from '@apollo/client';
+import Dashboard from './components/Dashboard';
+import { VictoryChart, VictoryLabel, VictoryPie } from 'victory';
+import { useCurrentUser } from 'hooks/useCurrentUser';
 
 interface Task {
   name: string;
@@ -53,12 +56,10 @@ const users: User[] = [
 ];
 
 const HomePage = (): JSX.Element => {
-  const completedTasks = tasks.filter(task => task.completed);
-  const incompleteTasks = tasks.filter(task => !task.completed);
-  const numUsers = users.length;
-
+  const totalUsersCurrentProject = users.length;
+  const { user } = useCurrentUser();
   const { data, loading } = useQuery<ProjectsData>(GET_PROJECTS);
-
+  console.log(data?.projects?.length);
   const IsThereNoProjects = () => !data?.projects?.length;
 
   if (loading) {
@@ -72,59 +73,73 @@ const HomePage = (): JSX.Element => {
           <NoProjectBox />
         </>
       ) : (
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={4}>
-            <Paper sx={{ height: 120, p: 2 }}>
-              <Grid container alignItems="center">
-                <Grid item xs={3}>
-                  <Assignment fontSize="large" />
+        <>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6} md={4}>
+              <Paper sx={{ height: 120, p: 2 }}>
+                <Grid container alignItems="center">
+                  <Grid item xs={3}>
+                    <Assignment fontSize="large" />
+                  </Grid>
+                  <Grid item xs={9}>
+                    <Typography variant="h5" component="h2">
+                      {tasks.length}
+                    </Typography>
+                    <Typography color="textSecondary">Tasks</Typography>
+                  </Grid>
                 </Grid>
-                <Grid item xs={9}>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <Paper sx={{ height: 120, p: 2 }}>
+                <Grid container alignItems="center">
+                  <Grid item xs={3}>
+                    <Group fontSize="large" />
+                  </Grid>
+                  <Grid item xs={9}>
+                    <Typography variant="h5" component="h2">
+                      {totalUsersCurrentProject}
+                    </Typography>
+                    <Typography color="textSecondary">Users</Typography>
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Paper sx={{ height: 120, p: 2 }}>
+                <Grid container alignItems="center">
+                  <Grid item xs={3}>
+                    <AccountCircle fontSize="large" />
+                  </Grid>
+                  <Grid item xs={9}>
+                    <Typography variant="h5" component="h2">
+                      {user?.name}
+                    </Typography>
+                    <Typography color="textSecondary">Logged in as</Typography>
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper
+                sx={{
+                  height: 400,
+                  p: 2,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  textAlign: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Grid>
                   <Typography variant="h5" component="h2">
-                    {tasks.length}
+                    Under Construction...
                   </Typography>
-                  <Typography color="textSecondary">Tasks</Typography>
                 </Grid>
-              </Grid>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Paper sx={{ height: 120, p: 2 }}>
-              <Grid container alignItems="center">
-                <Grid item xs={3}>
-                  <Group fontSize="large" />
-                </Grid>
-                <Grid item xs={9}>
-                  <Typography variant="h5" component="h2">
-                    {numUsers}
-                  </Typography>
-                  <Typography color="textSecondary">Users</Typography>
-                </Grid>
-              </Grid>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Paper sx={{ height: 120, p: 2 }}>
-              <Grid container alignItems="center">
-                <Grid item xs={3}>
-                  <AccountCircle fontSize="large" />
-                </Grid>
-                <Grid item xs={9}>
-                  <Typography variant="h5" component="h2">
-                    John Doe
-                  </Typography>
-                  <Typography color="textSecondary">Logged in as</Typography>
-                </Grid>
-              </Grid>
-            </Paper>
-          </Grid>
-
-          <Grid container spacing={3} justifyContent="center">
-            <Grid item xs={12} md={3}>
-              <GenericContainedAddButton text="Add Project" />
+              </Paper>
             </Grid>
           </Grid>
-        </Grid>
+        </>
       )}
     </PageWrapperPaper>
   );

@@ -12,7 +12,7 @@ import {
 } from './peopleConstants';
 import CustomDatagrid from 'components/tables/datagrid/DataGrid';
 import { IPeopleData, IPerson, IPersonCreationFields } from 'types/peopleTypes';
-import { GET_USERS } from 'graphql/peopleQueries';
+import { GET_USERS } from 'graphql/queries/peopleQueries';
 import {
   CREATE_USER,
   DELETE_USER,

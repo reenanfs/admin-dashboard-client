@@ -22,7 +22,7 @@ import { ITask, ITaskUpdateFields } from 'types/tasksTypes.ts';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { IPeopleData } from 'types/peopleTypes';
-import { GET_USERS } from 'graphql/peopleQueries';
+import { GET_USERS } from 'graphql/queries/peopleQueries';
 
 interface ITaskFormProps {
   onSubmit: SubmitHandler<ITask>;

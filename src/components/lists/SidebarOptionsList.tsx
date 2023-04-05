@@ -18,9 +18,7 @@ interface ISidebarOptionsListProps {
 }
 
 const SidebarOptionsList = ({ options }: ISidebarOptionsListProps) => {
-  const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
-    undefined
-  );
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   let location = useLocation();
 
   const handleListItemClick = (index: number): void => {
@@ -28,11 +26,15 @@ const SidebarOptionsList = ({ options }: ISidebarOptionsListProps) => {
   };
 
   useEffect(() => {
+    let sidebarIndex: number | null = null;
+
     options.forEach(({ url }, index) => {
       if (url === location.pathname) {
-        setSelectedIndex(index);
+        sidebarIndex = index;
       }
     });
+
+    setSelectedIndex(sidebarIndex);
   }, [location.pathname, options]);
 
   return (

@@ -11,7 +11,7 @@ import People from '../People';
 import { MAIN_TABLE_LABEL } from '../peopleConstants';
 import { IMockData } from 'types/testTypes';
 import { peopleData } from 'tests/mockData';
-import { GET_USERS } from 'graphql/peopleQueries';
+import { GET_USERS } from 'graphql/queries/peopleQueries';
 import { IPeopleData } from 'types/peopleTypes';
 
 const mocks: IMockData<IPeopleData>[] = [

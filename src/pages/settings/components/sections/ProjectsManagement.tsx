@@ -4,7 +4,7 @@ import { Button, TextField } from '@mui/material';
 import { CreateProjectData, ProjectsData } from 'types/projectTypes';
 import { CREATE_PROJECT } from 'pages/settings/settingsQueries';
 import { useCurrentUser } from 'hooks/useCurrentUser';
-import { GET_PROJECTS } from 'graphql/projectsQueries';
+import { GET_PROJECTS } from 'graphql/queries/projectsQueries';
 
 const ProjectManagement = (): JSX.Element => {
   const { user } = useCurrentUser();

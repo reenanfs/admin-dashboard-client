@@ -9,7 +9,7 @@ import {
 } from 'types/authTypes';
 import { useCurrentUser } from 'hooks/useCurrentUser';
 import { useMutation } from '@apollo/client';
-import { LOCAL_SIGNOUT } from 'graphql/authQueries';
+import { LOCAL_SIGNOUT } from 'graphql/queries/authQueries';
 
 interface IAuthProviderProps {
   children: ReactNode;

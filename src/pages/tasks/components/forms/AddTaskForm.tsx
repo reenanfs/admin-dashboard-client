@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { ValidationMessages } from 'constants/validationMessages';
 import { useQuery } from '@apollo/client';
 import { IPeopleData } from 'types/peopleTypes';
-import { GET_USERS } from 'graphql/peopleQueries';
+import { GET_USERS } from 'graphql/queries/peopleQueries';
 import { ADD_FORM_ID } from 'constants/componentConstants';
 import { ITaskCreationFields } from 'types/tasksTypes.ts';
 
