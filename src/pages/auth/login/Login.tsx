@@ -16,10 +16,21 @@ import { ApolloError, useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'hooks/useAuth';
 import { ILoginFields } from '../authTypes';
+import { useCurrentUser } from 'hooks/useCurrentUser';
+import { ICurrentUser } from 'contexts/CurrentUserContext';
 
 interface IlocalSignInResponse {
   access_token: string;
   refresh_token: string;
+  credential: {
+    email: string;
+    user: {
+      id: string;
+      name: string;
+      photoUrl: string;
+      isAdmin: boolean;
+    };
+  };
 }
 
 const loginValidationSchema = yup.object({
@@ -43,8 +54,10 @@ const Login = (): JSX.Element => {
     },
   });
 
+  const { handleLogin } = useAuth();
+  const { setUser } = useCurrentUser();
+
   const [authErrorMessage, setAuthErrorMessage] = useState<string>('');
-  const { login } = useAuth();
 
   const [localSignin, { data, loading }] = useMutation<
     { localSignin: IlocalSignInResponse },
@@ -52,14 +65,23 @@ const Login = (): JSX.Element => {
   >(LOCAL_SIGNIN);
 
   useEffect(() => {
-    if (data) {
-      const {
-        localSignin: { access_token, refresh_token },
-      } = data;
-
-      login(access_token, refresh_token);
+    if (!data?.localSignin) {
+      return;
     }
-  }, [loading, data, login]);
+
+    const {
+      localSignin: { access_token, refresh_token, credential },
+    } = data;
+
+    const user = credential.user;
+    const currentUser: ICurrentUser = {
+      ...user,
+      email: credential.email,
+    };
+
+    setUser(currentUser);
+    handleLogin(access_token, refresh_token);
+  }, [loading, data, handleLogin, setUser]);
 
   const onSubmit: SubmitHandler<ILoginFields> = async data => {
     const { email, password } = data;
@@ -72,18 +94,34 @@ const Login = (): JSX.Element => {
           },
         },
       });
-    } catch (serverError: unknown) {
-      if (serverError instanceof ApolloError) {
-        const { extensions } = serverError.graphQLErrors[0];
-        const statusCode = (extensions as { response: { statusCode: number } })
-          .response.statusCode;
-        if (statusCode === 401) {
-          setAuthErrorMessage(ValidationMessages.SERVER_INVALID_CREDENTIALS);
-        } else if (statusCode === 500) {
-          setAuthErrorMessage(ValidationMessages.SERVER_INTERNAL_ERROR);
+    } catch (error: unknown) {
+      if (error instanceof ApolloError) {
+        let statusCode: number;
+        let serverErrorMessage: string = '';
+
+        if (error.graphQLErrors.length) {
+          const { extensions } = error.graphQLErrors[0];
+          statusCode = (extensions as { response: { statusCode: number } })
+            .response.statusCode;
+
+          serverErrorMessage = (extensions as { response: { message: string } })
+            .response.message;
+        } else {
+          statusCode = 400;
+        }
+
+        switch (statusCode) {
+          case 401:
+            setAuthErrorMessage(ValidationMessages.SERVER_INVALID_CREDENTIALS);
+            break;
+          case 400:
+            setAuthErrorMessage(ValidationMessages.SERVER_BAD_REQUEST);
+            break;
+          default:
+            setAuthErrorMessage(serverErrorMessage);
         }
       } else {
-        console.log('Unknown error');
+        setAuthErrorMessage('Unknown error');
       }
     }
   };
@@ -115,11 +153,7 @@ const Login = (): JSX.Element => {
                 fullWidth
                 margin="normal"
                 {...field}
-                helperText={
-                  !!errors.email && errors.email.message
-                    ? errors.email.message
-                    : authErrorMessage
-                }
+                helperText={!!errors.email && errors.email.message}
                 error={!!errors.email || !!authErrorMessage}
               />
             )}
@@ -135,11 +169,7 @@ const Login = (): JSX.Element => {
                 fullWidth
                 margin="normal"
                 {...field}
-                helperText={
-                  !!errors.password && errors.password.message
-                    ? errors.password.message
-                    : authErrorMessage
-                }
+                helperText={!!errors.password && errors.password.message}
                 error={!!errors.email || !!authErrorMessage}
               />
             )}
@@ -152,6 +182,21 @@ const Login = (): JSX.Element => {
           >
             Login
           </Button>
+          {!!authErrorMessage && (
+            <Paper
+              sx={{
+                backgroundColor: '#f8d7da',
+                color: '#721c24',
+                padding: '10px',
+                border: '1px solid #f5c6cb',
+                width: '100%',
+                mb: 2,
+                textAlign: 'center',
+              }}
+            >
+              {authErrorMessage}
+            </Paper>
+          )}
           <Typography variant="subtitle1" sx={{ mb: 2 }}>
             Doesn't have an account? <Link to="/register">Create one now!</Link>
           </Typography>

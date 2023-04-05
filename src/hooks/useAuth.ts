@@ -6,17 +6,17 @@ export const useAuth = () => {
   const authStore = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const login = (newAccessToken: string, newRefreshToken: string) => {
-    authStore.login(newAccessToken, newRefreshToken, navigate);
+  const handleLogin = (newAccessToken: string, newRefreshToken: string) => {
+    authStore.handleLogin(newAccessToken, newRefreshToken, navigate);
   };
 
-  const logout = () => {
-    authStore.logout(navigate);
+  const handleLogout = () => {
+    authStore.handleLogout(navigate);
   };
 
   return {
     ...authStore,
-    login,
-    logout,
+    handleLogin,
+    handleLogout,
   };
 };

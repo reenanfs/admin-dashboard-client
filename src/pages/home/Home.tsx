@@ -1,81 +1,133 @@
+import NoProjectBox from '../../components/box/NoProjectBox';
+import PageWrapperPaper from 'components/papers/PageWrapperPaper';
+
+import { AccountCircle, Assignment, Group } from '@mui/icons-material';
+import { Grid, Paper, Typography } from '@mui/material';
+import GenericContainedAddButton from 'components/buttons/GenericContainedAddButton';
+import LoadingPage from 'pages/status/loading/Loading';
+import { GET_PROJECTS } from 'graphql/projectsQueries';
+import { ProjectsData } from 'types/projectTypes';
 import { useQuery } from '@apollo/client';
 
-import {
-  MAIN_TABLE_LABEL,
-  COLUMNS,
-  DELETE_MULTIPLE_DIALOG_TITLE,
-  DELETE_MULTIPLE_DIALOG_CONTENT,
-  DELETE_DIALOG_TITLE,
-  DELETE_DIALOG_CONTENT,
-  EDIT_DIALOG_TITLE,
-  ADD_DIALOG_TITLE,
-} from './homeConstants';
-import {
-  CREATE_TASK,
-  DELETE_TASK,
-  DELETE_TASKS,
-  GET_TASKS,
-  UPDATE_TASK,
-} from './homeQueries';
-import CustomDatagrid from 'components/tables/datagrid/DataGrid';
-import EditTaskForm from './components/forms/EditTaskForm';
-import {
-  ITaskCreationFields,
-  ITasksData,
-  ITask,
-  ITaskRows,
-} from 'types/homeTypes.ts';
-import AddTaskForm from './components/forms/AddTaskForm';
+interface Task {
+  name: string;
+  startDate: string;
+  dueDate: string;
+  completionDate: string;
+  completed: boolean;
+}
 
-const Home = (): JSX.Element => {
-  const { loading, data, refetch } = useQuery<ITasksData>(GET_TASKS, {
-    variables: {
-      input: {
-        orderBy: {
-          updatedAt: 'desc',
-        },
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-  });
+interface User {
+  name: string;
+  email: string;
+}
 
-  let rows: ITaskRows[] = [];
-  if (!loading && data) {
-    rows = data.tasks.map(task => ({
-      ...task,
-      person: task.user && task.user.name,
-    }));
+const tasks: Task[] = [
+  {
+    name: 'Complete project',
+    startDate: '2023-04-01 10:00:00',
+    dueDate: '2023-04-05 17:00:00',
+    completionDate: '',
+    completed: false,
+  },
+  {
+    name: 'Send email',
+    startDate: '2023-04-02 09:30:00',
+    dueDate: '2023-04-03 12:00:00',
+    completionDate: '',
+    completed: true,
+  },
+  {
+    name: 'Review code',
+    startDate: '2023-04-03 14:00:00',
+    dueDate: '2023-04-04 18:00:00',
+    completionDate: '',
+    completed: false,
+  },
+];
+
+const users: User[] = [
+  { name: 'John Doe', email: 'john.doe@example.com' },
+  { name: 'Jane Smith', email: 'jane.smith@example.com' },
+  { name: 'Bob Johnson', email: 'bob.johnson@example.com' },
+];
+
+const HomePage = (): JSX.Element => {
+  const completedTasks = tasks.filter(task => task.completed);
+  const incompleteTasks = tasks.filter(task => !task.completed);
+  const numUsers = users.length;
+
+  const { data, loading } = useQuery<ProjectsData>(GET_PROJECTS);
+
+  const IsThereNoProjects = () => !data?.projects?.length;
+
+  if (loading) {
+    return <LoadingPage />;
   }
 
   return (
-    <CustomDatagrid<ITask, ITaskCreationFields, ITaskRows, ITasksData>
-      loading={loading}
-      rows={rows}
-      columns={COLUMNS}
-      label={MAIN_TABLE_LABEL}
-      deleteMultipleItemsDialogProps={{
-        title: DELETE_MULTIPLE_DIALOG_TITLE,
-        content: DELETE_MULTIPLE_DIALOG_CONTENT,
-        mutation: DELETE_TASKS,
-      }}
-      deleteItemDialogProps={{
-        title: DELETE_DIALOG_TITLE,
-        content: DELETE_DIALOG_CONTENT,
-        mutation: DELETE_TASK,
-      }}
-      editItemDialogProps={{
-        title: EDIT_DIALOG_TITLE,
-        EditItemForm: EditTaskForm,
-        mutation: UPDATE_TASK,
-      }}
-      addItemDialogProps={{
-        title: ADD_DIALOG_TITLE,
-        AddItemForm: AddTaskForm,
-        mutation: CREATE_TASK,
-      }}
-      refetchFunction={refetch}
-    />
+    <PageWrapperPaper>
+      {IsThereNoProjects() ? (
+        <>
+          <NoProjectBox />
+        </>
+      ) : (
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6} md={4}>
+            <Paper sx={{ height: 120, p: 2 }}>
+              <Grid container alignItems="center">
+                <Grid item xs={3}>
+                  <Assignment fontSize="large" />
+                </Grid>
+                <Grid item xs={9}>
+                  <Typography variant="h5" component="h2">
+                    {tasks.length}
+                  </Typography>
+                  <Typography color="textSecondary">Tasks</Typography>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <Paper sx={{ height: 120, p: 2 }}>
+              <Grid container alignItems="center">
+                <Grid item xs={3}>
+                  <Group fontSize="large" />
+                </Grid>
+                <Grid item xs={9}>
+                  <Typography variant="h5" component="h2">
+                    {numUsers}
+                  </Typography>
+                  <Typography color="textSecondary">Users</Typography>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Paper sx={{ height: 120, p: 2 }}>
+              <Grid container alignItems="center">
+                <Grid item xs={3}>
+                  <AccountCircle fontSize="large" />
+                </Grid>
+                <Grid item xs={9}>
+                  <Typography variant="h5" component="h2">
+                    John Doe
+                  </Typography>
+                  <Typography color="textSecondary">Logged in as</Typography>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Grid>
+
+          <Grid container spacing={3} justifyContent="center">
+            <Grid item xs={12} md={3}>
+              <GenericContainedAddButton text="Add Project" />
+            </Grid>
+          </Grid>
+        </Grid>
+      )}
+    </PageWrapperPaper>
   );
 };
 
-export default Home;
+export default HomePage;

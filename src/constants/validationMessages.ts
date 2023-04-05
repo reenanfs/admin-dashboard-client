@@ -7,4 +7,6 @@ export enum ValidationMessages {
   PASSWORD_MATCH = 'Passwords are not matching.',
   SERVER_INVALID_CREDENTIALS = 'The credentials you inserted are invalid.',
   SERVER_INTERNAL_ERROR = 'The server is facing an internal issue at the moment.',
+  SERVER_BAD_REQUEST = 'A bad request has been sent to the server.',
+  SERVER_EMAIL_IN_USE = 'The email is already in use.',
 }

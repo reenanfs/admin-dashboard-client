@@ -13,6 +13,7 @@ import Avatar from '@mui/material/Avatar';
 import MenuItem from '@mui/material/MenuItem';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { useAuth } from 'hooks/useAuth';
+import { useCurrentUser } from 'hooks/useCurrentUser';
 
 interface INavbarProps {
   navbarProps: {
@@ -23,7 +24,8 @@ interface INavbarProps {
 }
 
 const Navbar = ({ navbarProps }: INavbarProps) => {
-  const { logout } = useAuth();
+  const { handleLogout } = useAuth();
+  const { user } = useCurrentUser();
   const { sidebarOpen, handleSidebarOpen, handleSidebarClose } = navbarProps;
   const [avatarAnchorEl, setAvatarAnchorEl] = useState<null | HTMLElement>(
     null
@@ -41,7 +43,7 @@ const Navbar = ({ navbarProps }: INavbarProps) => {
     {
       text: 'Logout',
       onClick: () => {
-        logout();
+        handleLogout();
         handleCloseUserMenu();
       },
     },
@@ -62,6 +64,7 @@ const Navbar = ({ navbarProps }: INavbarProps) => {
         >
           <MenuIcon color="inherit" />
         </IconButton>
+
         <AssignmentIcon color="primary" sx={{ ml: 6, fontSize: 30 }} />
         <Typography
           color="primary"
@@ -90,7 +93,7 @@ const Navbar = ({ navbarProps }: INavbarProps) => {
 
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
             <Avatar id="avatar" alt="" src="">
-              R
+              {user?.name[0]}
             </Avatar>
           </IconButton>
           <Menu

@@ -6,72 +6,80 @@ import {
 } from 'constants/authConstants';
 import { NavigateFunction } from 'react-router-dom';
 import { routesPaths } from 'constants/routesConstants';
+import { GET_TOKENS } from 'graphql/authQueries';
+import { useLazyQuery } from '@apollo/client';
+import LoadingPage from 'pages/status/loading/Loading';
+
+interface getTokensResponse {
+  getTokens: {
+    access_token: string;
+    refresh_token: string;
+  };
+}
 
 interface IAuthProviderProps {
   children: ReactNode;
 }
 
 export interface AuthContextProps {
-  isAuthenticated: boolean;
   accessToken: string | null;
   refreshToken: string | null;
-  login: (
+  handleLogin: (
     newAccessToken: string,
     newRefreshToken: string,
     navigate: NavigateFunction
   ) => void;
-  logout: (navigate: NavigateFunction) => void;
+  handleLogout: (navigate: NavigateFunction) => void;
+  isAuthenticated: () => boolean;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
-  isAuthenticated: false,
   accessToken: null,
   refreshToken: null,
-  login: () => {},
-  logout: () => {},
+  handleLogin: () => {},
+  handleLogout: () => {},
+  isAuthenticated: () => false,
 });
 
-export const AuthProvider = ({ children }: IAuthProviderProps) => {
+export const AuthProvider = ({ children }: IAuthProviderProps): JSX.Element => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  // Check cookies for tokens on mount
+  // obtain tokens on mount
+  const [getTokens] = useLazyQuery<getTokensResponse>(GET_TOKENS, {
+    fetchPolicy: 'network-only',
+    onCompleted: data => {
+      if (data) {
+        const {
+          getTokens: { access_token, refresh_token },
+        } = data;
+        setAccessToken(access_token);
+        setRefreshToken(refresh_token);
+      }
+      setLoading(false);
+    },
+    onError: () => setLoading(false),
+  });
+
   useEffect(() => {
-    const setTokens = async () => {
-      const storedAccessToken = await Cookies.get(ACCESS_TOKEN_COOKIE);
-      const storedRefreshToken = Cookies.get(REFRESH_TOKEN_COOKIE);
-  
-      if (storedAccessToken) {
-        setAccessToken(storedAccessToken);
-        setIsAuthenticated(true);
-        setIsLoading(false);
-      }
-  
-      if (storedRefreshToken) {
-        setRefreshToken(storedRefreshToken);
-      }
-    }
-    setTokens();    
+    console.log('called');
+    getTokens();
   }, []);
 
   //update tokens
-  const login = (
+  const handleLogin = (
     newAccessToken: string,
     newRefreshToken: string,
     navigate: NavigateFunction
   ) => {
-    Cookies.set(ACCESS_TOKEN_COOKIE, newAccessToken);
-    Cookies.set(REFRESH_TOKEN_COOKIE, newRefreshToken);
-
     setAccessToken(newAccessToken);
     setRefreshToken(newRefreshToken);
 
     navigate(routesPaths.HOME);
   };
 
-  const logout = (navigate: NavigateFunction) => {
+  const handleLogout = (navigate: NavigateFunction) => {
     Cookies.remove(ACCESS_TOKEN_COOKIE);
     Cookies.remove(REFRESH_TOKEN_COOKIE);
 
@@ -81,7 +89,13 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     navigate(routesPaths.HOME);
   };
 
-  // if (0
+  const isAuthenticated = (): boolean => {
+    return !!accessToken;
+  };
+
+  if (loading) {
+    return <LoadingPage />;
+  }
 
   return (
     <AuthContext.Provider
@@ -89,8 +103,8 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
         isAuthenticated,
         accessToken,
         refreshToken,
-        login,
-        logout,
+        handleLogin,
+        handleLogout,
       }}
     >
       {children}

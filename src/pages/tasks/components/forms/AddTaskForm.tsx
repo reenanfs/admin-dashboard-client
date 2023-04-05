@@ -12,7 +12,7 @@ import { useQuery } from '@apollo/client';
 import { IPeopleData } from 'types/peopleTypes';
 import { GET_USERS } from 'graphql/peopleQueries';
 import { ADD_FORM_ID } from 'constants/componentConstants';
-import { ITaskCreationFields } from 'types/homeTypes.ts';
+import { ITaskCreationFields } from 'types/tasksTypes.ts';
 
 interface ITaskFormProps {
   onSubmit: SubmitHandler<ITaskCreationFields>;

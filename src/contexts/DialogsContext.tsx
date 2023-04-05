@@ -59,7 +59,9 @@ const initialValues: IDialogsContextProps<ValidAppEntities> = {
 export const DialogsContext =
   createContext<IDialogsContextProps<ValidAppEntities>>(initialValues);
 
-export const DialogsProvider = ({ children }: IDialogsProviderProps) => {
+export const DialogsProvider = ({
+  children,
+}: IDialogsProviderProps): JSX.Element => {
   const [isDeleteMultipleItemsOpen, setIsDeleteMultipleItemsOpen] = useState(
     initialValues.deleteMultipleItemsDialog.isOpen
   );

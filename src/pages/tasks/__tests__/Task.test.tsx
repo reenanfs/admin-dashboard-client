@@ -7,11 +7,11 @@ import {
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 
-import Home from '../Home';
-import { MAIN_TABLE_LABEL } from '../homeConstants';
-import { ITasksData } from 'types/homeTypes.ts';
+import Home from '../Tasks';
+import { MAIN_TABLE_LABEL } from '../tasksConstants';
+import { ITasksData } from 'types/tasksTypes.ts';
 import { IMockData } from 'types/testTypes';
-import { GET_TASKS } from '../homeQueries';
+import { GET_TASKS } from '../tasksQueries';
 import { tasksData } from 'tests/mockData';
 
 const mocks: IMockData<ITasksData>[] = [

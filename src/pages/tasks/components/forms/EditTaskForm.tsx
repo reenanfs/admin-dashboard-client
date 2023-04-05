@@ -18,7 +18,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 import { ValidationMessages } from 'constants/validationMessages';
 import { EDIT_FORM_ID } from 'constants/componentConstants';
-import { ITask, ITaskUpdateFields } from 'types/homeTypes.ts';
+import { ITask, ITaskUpdateFields } from 'types/tasksTypes.ts';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { IPeopleData } from 'types/peopleTypes';

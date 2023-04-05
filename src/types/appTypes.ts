@@ -3,7 +3,7 @@ import {
   ITasksData,
   ITask,
   ITaskRows,
-} from './homeTypes.ts';
+} from './tasksTypes.ts.js';
 import { IPeopleData, IPerson, IPersonCreationFields } from './peopleTypes';
 
 export type ValidAppEntities = IPerson | ITask;

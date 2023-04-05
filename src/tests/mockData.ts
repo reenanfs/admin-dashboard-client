@@ -1,4 +1,4 @@
-import { ITasksData } from 'types/homeTypes.ts';
+import { ITasksData } from 'types/tasksTypes.ts';
 import { IPeopleData } from 'types/peopleTypes';
 
 export const tasksData: ITasksData = {

@@ -8,7 +8,7 @@ interface IPrivateRouteProps {
 
 const PrivateRoute = ({ children }: IPrivateRouteProps) => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? (
+  return isAuthenticated() ? (
     <>{children}</>
   ) : (
     <Navigate to={routesPaths.LOGIN} replace />

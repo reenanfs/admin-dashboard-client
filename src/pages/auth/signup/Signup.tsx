@@ -41,6 +41,7 @@ const Signup = (): JSX.Element => {
     handleSubmit,
     formState: { errors },
   } = useForm<ISignupFields & { confirmPassword: string }>({
+    mode: 'onChange',
     resolver: yupResolver(signupValidationSchema),
     defaultValues: {
       name: '',
@@ -52,7 +53,7 @@ const Signup = (): JSX.Element => {
 
   const [authErrorMessage, setAuthErrorMessage] = useState<string>('');
 
-  const { login } = useAuth();
+  const { handleLogin } = useAuth();
 
   const [localSignup, { data, loading }] = useMutation<
     { localSignup: IAuthResponse },
@@ -65,9 +66,9 @@ const Signup = (): JSX.Element => {
         localSignup: { access_token, refresh_token },
       } = data;
 
-      login(access_token, refresh_token);
+      handleLogin(access_token, refresh_token);
     }
-  }, [loading, data, login]);
+  }, [loading, data, handleLogin]);
 
   const onSubmit: SubmitHandler<ISignupFields> = async data => {
     const { name, email, password } = data;
@@ -81,18 +82,17 @@ const Signup = (): JSX.Element => {
           },
         },
       });
-    } catch (serverError: unknown) {
-      if (serverError instanceof ApolloError) {
-        const { extensions } = serverError.graphQLErrors[0];
-        const statusCode = (extensions as { response: { statusCode: number } })
-          .response.statusCode;
-        if (statusCode === 401) {
-          setAuthErrorMessage(ValidationMessages.SERVER_INVALID_CREDENTIALS);
-        } else if (statusCode === 500) {
-          setAuthErrorMessage(ValidationMessages.SERVER_INTERNAL_ERROR);
-        }
+    } catch (error: unknown) {
+      if (error instanceof ApolloError) {
+        const { extensions } = error.graphQLErrors[0];
+
+        const serverErrorMessage = (
+          extensions as { response: { message: string } }
+        ).response.message;
+
+        setAuthErrorMessage(serverErrorMessage);
       } else {
-        console.log('Unknown error');
+        setAuthErrorMessage('Unknown error');
       }
     }
   };
@@ -124,12 +124,8 @@ const Signup = (): JSX.Element => {
                 fullWidth
                 margin="normal"
                 {...field}
-                helperText={
-                  !!errors.name && errors.name.message
-                    ? errors.name.message
-                    : authErrorMessage
-                }
-                error={!!errors.name || !!authErrorMessage}
+                helperText={!!errors.name && errors.name.message}
+                error={!!errors.name}
               />
             )}
           />
@@ -143,12 +139,8 @@ const Signup = (): JSX.Element => {
                 fullWidth
                 margin="normal"
                 {...field}
-                helperText={
-                  !!errors.email && errors.email.message
-                    ? errors.email.message
-                    : authErrorMessage
-                }
-                error={!!errors.email || !!authErrorMessage}
+                helperText={!!errors.email && errors.email.message}
+                error={!!errors.email}
               />
             )}
           />
@@ -163,12 +155,8 @@ const Signup = (): JSX.Element => {
                 fullWidth
                 margin="normal"
                 {...field}
-                helperText={
-                  !!errors.password && errors.password.message
-                    ? errors.password.message
-                    : authErrorMessage
-                }
-                error={!!errors.password || !!authErrorMessage}
+                helperText={!!errors.password && errors.password.message}
+                error={!!errors.password}
               />
             )}
           />
@@ -185,10 +173,8 @@ const Signup = (): JSX.Element => {
                 {...field}
                 helperText={
                   !!errors.confirmPassword && errors.confirmPassword.message
-                    ? errors.confirmPassword.message
-                    : authErrorMessage
                 }
-                error={!!errors.confirmPassword || !!authErrorMessage}
+                error={!!errors.confirmPassword}
               />
             )}
           />
@@ -200,6 +186,21 @@ const Signup = (): JSX.Element => {
           >
             Sign up
           </Button>
+          {!!authErrorMessage && (
+            <Paper
+              sx={{
+                backgroundColor: '#f8d7da',
+                color: '#721c24',
+                padding: '10px',
+                border: '1px solid #f5c6cb',
+                width: '100%',
+                mb: 2,
+                textAlign: 'center',
+              }}
+            >
+              {authErrorMessage}
+            </Paper>
+          )}
         </Box>
       </Paper>
     </Container>

@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import type {} from '@mui/lab/themeAugmentation';
 
 import Layout from 'components/layout/Layout';
@@ -12,76 +11,53 @@ import { routesPaths } from 'constants/routesConstants';
 import Login from 'pages/auth/login/Login';
 import PrivateRoute from 'auth/PrivateRoute';
 import Signup from 'pages/auth/signup/Signup';
+import Tasks from 'pages/tasks/Tasks';
+import Settings from 'pages/settings/Settings';
 
 const App = (): JSX.Element => {
-  const theme = createTheme({
-    components: {
-      MuiListItemIcon: {
-        styleOverrides: {
-          root: ({ theme }) => ({
-            color: theme.palette.primary.main,
-          }),
-        },
-      },
-      MuiIconButton: {
-        styleOverrides: {
-          root: ({ theme }) => ({
-            color: theme.palette.primary.main,
-          }),
-        },
-      },
-      MuiLink: {
-        defaultProps: {
-          color: 'inherit',
-          underline: 'none',
-        },
-      },
-      MuiInputBase: {
-        styleOverrides: {
-          input: {
-            '&.Mui-disabled': {
-              cursor: 'not-allowed',
-            },
-          },
-          root: {
-            '&.Mui-disabled': {
-              cursor: 'not-allowed !important',
-            },
-          },
-        },
-      },
-    },
-  });
-
   return (
-    <ThemeProvider theme={theme}>
+    <BrowserRouter>
       <CssBaseline />
-      <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route
-              path={routesPaths.HOME}
-              element={
-                <PrivateRoute>
-                  <Home />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path={routesPaths.PEOPLE}
-              element={
-                <PrivateRoute>
-                  <People />
-                </PrivateRoute>
-              }
-            />
-            <Route path={routesPaths.LOGIN} element={<Login />} />
-            <Route path={routesPaths.REGISTER} element={<Signup />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
-      </BrowserRouter>
-    </ThemeProvider>
+      <Layout>
+        <Routes>
+          <Route
+            path={routesPaths.HOME}
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={routesPaths.TASKS}
+            element={
+              <PrivateRoute>
+                <Tasks />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={routesPaths.PEOPLE}
+            element={
+              <PrivateRoute>
+                <People />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path={routesPaths.SETTINGS}
+            element={
+              <PrivateRoute>
+                <Settings />
+              </PrivateRoute>
+            }
+          />
+          <Route path={routesPaths.LOGIN} element={<Login />} />
+          <Route path={routesPaths.REGISTER} element={<Signup />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Layout>
+    </BrowserRouter>
   );
 };
 

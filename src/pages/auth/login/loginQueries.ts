@@ -5,6 +5,15 @@ export const LOCAL_SIGNIN = gql`
     localSignin(input: $input) {
       access_token
       refresh_token
+      credential {
+        email
+        user {
+          id
+          name
+          photoUrl
+          isAdmin
+        }
+      }
     }
   }
 `;
