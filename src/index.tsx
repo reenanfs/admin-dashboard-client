@@ -8,7 +8,10 @@ import { DialogsProvider } from 'contexts/DialogsContext';
 import { AuthProvider } from 'contexts/AuthContext';
 import { CurrentUserProvider } from 'contexts/CurrentUserContext';
 import { theme } from 'styles/theme';
-import { apolloClient } from 'graphql/apolloClient';
+import { createApolloClientFactory } from 'graphql/apolloClient';
+import { errorLink } from 'graphql/links/onErrorLink';
+
+const apolloClient = createApolloClientFactory([errorLink]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <ApolloProvider client={apolloClient}>
