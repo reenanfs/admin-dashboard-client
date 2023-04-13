@@ -90,13 +90,28 @@ const Signup = (): JSX.Element => {
       });
     } catch (error: unknown) {
       if (error instanceof ApolloError) {
-        const { extensions } = error.graphQLErrors[0];
+        let statusCode: number;
+        let serverErrorMessage: string = '';
 
-        const serverErrorMessage = (
-          extensions as { response: { message: string } }
-        ).response.message;
+        if (error.graphQLErrors.length) {
+          const { extensions } = error.graphQLErrors[0];
 
-        setAuthErrorMessage(serverErrorMessage);
+          statusCode = (extensions as { response: { statusCode: number } })
+            .response.statusCode;
+
+          serverErrorMessage = (extensions as { response: { message: string } })
+            .response.message;
+        } else {
+          statusCode = 400;
+        }
+
+        switch (statusCode) {
+          case 400:
+            setAuthErrorMessage(ValidationMessages.SERVER_BAD_REQUEST);
+            break;
+          default:
+            setAuthErrorMessage(serverErrorMessage);
+        }
       } else {
         setAuthErrorMessage('Unknown error');
       }

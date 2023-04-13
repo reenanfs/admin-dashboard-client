@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Avatar, Box, Button } from '@mui/material';
 import { useCurrentUser } from 'hooks/useCurrentUser';
 
 interface DragAndDropUploadAvatarProps {
-  onUpload: (file: File) => void;
+  onUpload: (file: File | null) => void;
 }
 
 const DragAndDropUploadAvatar = ({
@@ -34,8 +34,8 @@ const DragAndDropUploadAvatar = ({
   };
 
   const handleRemoveImage = () => {
-    console.log(imageUrl);
     setimageUrl(null);
+    onUpload(null);
   };
 
   const getImageUrl = (file: File): Promise<string> => {
@@ -49,6 +49,13 @@ const DragAndDropUploadAvatar = ({
   };
 
   const removeButtonHeight = 36;
+
+  useEffect(() => {
+    if (user?.photoUrl) {
+      console.log('aff');
+      setimageUrl(user?.photoUrl);
+    }
+  }, []);
 
   return (
     <Box
@@ -69,12 +76,11 @@ const DragAndDropUploadAvatar = ({
           width: 200,
           height: 200,
           mb: 2,
-          boxShadow: imageUrl ? 'none' : '0px 0px 0px 4px rgba(0,0,0,0.2)',
           ...(imageUrl && { border: '4px solid', borderColor: 'primary.main' }),
         }}
         src={imageUrl || undefined}
       >
-        {!imageUrl ? user?.name : null}
+        {user?.name}
       </Avatar>
 
       <Button variant="contained" component="label" sx={{ mb: 2 }}>

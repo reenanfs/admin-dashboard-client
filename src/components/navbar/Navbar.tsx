@@ -11,9 +11,7 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import Avatar from '@mui/material/Avatar';
 import MenuItem from '@mui/material/MenuItem';
-import AssignmentIcon from '@mui/icons-material/Assignment';
 import SourceIcon from '@mui/icons-material/Source';
-import FolderIcon from '@mui/icons-material/Folder';
 import { useAuth } from 'hooks/useAuth';
 import { useCurrentUser } from 'hooks/useCurrentUser';
 import { useNavigate } from 'react-router-dom';
@@ -104,7 +102,17 @@ const Navbar = ({ navbarProps }: INavbarProps) => {
           </IconButton>
 
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar id="avatar" alt="" src="">
+            <Avatar
+              id="avatar"
+              alt=""
+              src={user?.photoUrl}
+              sx={{
+                ...(user?.photoUrl && {
+                  border: 2,
+                  borderColor: 'primary.main',
+                }),
+              }}
+            >
               {user?.name[0]}
             </Avatar>
           </IconButton>
