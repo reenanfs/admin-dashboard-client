@@ -16,7 +16,6 @@ const refreshToken = async (): Promise<ApolloQueryResult<any>> => {
 export const errorLink = onError(({ graphQLErrors, operation, forward }) => {
   if (graphQLErrors) {
     for (const error of graphQLErrors) {
-      console.log(error.extensions?.code);
       if (error.extensions?.code === 'UNAUTHENTICATED') {
         // Access token has expired, refresh it and retry the failed operation
         return new Observable(observer => {

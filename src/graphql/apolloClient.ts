@@ -1,10 +1,10 @@
 import { ApolloClient, ApolloLink, InMemoryCache } from '@apollo/client';
 
-import { httpLink } from './links/httpLink';
+import { UploadAndHttpLink } from './links/UploadAndHttpLink';
 
 export const createApolloClientFactory = (apolloLinks: ApolloLink[] = []) => {
   return new ApolloClient({
-    link: ApolloLink.from([...apolloLinks, httpLink]),
+    link: ApolloLink.from([...apolloLinks, UploadAndHttpLink]),
     cache: new InMemoryCache({
       addTypename: false,
     }),

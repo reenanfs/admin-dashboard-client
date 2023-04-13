@@ -6,6 +6,9 @@ export interface ICredential {
     name: string;
     photoUrl: string;
     isAdmin: boolean;
+    currentProject: {
+      id: string;
+    };
   };
 }
 
@@ -18,6 +21,7 @@ export interface IAuthResponse {
 export interface ICurrentUser {
   id: string;
   credentialId: string;
+  currentProjectId: string | null;
   name: string;
   photoUrl: string;
   email: string;

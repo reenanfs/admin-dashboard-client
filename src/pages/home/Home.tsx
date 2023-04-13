@@ -1,66 +1,40 @@
+import { AccountCircle, Assignment, Group } from '@mui/icons-material';
+import { Grid, Paper, Typography } from '@mui/material';
+import { useLazyQuery } from '@apollo/client';
+import { useEffect } from 'react';
+
 import NoProjectBox from '../../components/box/NoProjectBox';
 import PageWrapperPaper from 'components/papers/PageWrapperPaper';
-
-import { AccountCircle, Assignment, Group } from '@mui/icons-material';
-import { Box, Grid, Paper, Typography } from '@mui/material';
-import GenericContainedAddButton from 'components/buttons/GenericContainedAddButton';
-import LoadingPage from 'pages/status/loading/Loading';
-import { GET_PROJECTS } from 'graphql/queries/projectsQueries';
-import { ProjectsData } from 'types/projectTypes';
-import { useQuery } from '@apollo/client';
-import Dashboard from './components/Dashboard';
-import { VictoryChart, VictoryLabel, VictoryPie } from 'victory';
+import { HOME_DATA } from './homeQueries';
+import { IHomeData } from './homeTypes';
 import { useCurrentUser } from 'hooks/useCurrentUser';
-
-interface Task {
-  name: string;
-  startDate: string;
-  dueDate: string;
-  completionDate: string;
-  completed: boolean;
-}
-
-interface User {
-  name: string;
-  email: string;
-}
-
-const tasks: Task[] = [
-  {
-    name: 'Complete project',
-    startDate: '2023-04-01 10:00:00',
-    dueDate: '2023-04-05 17:00:00',
-    completionDate: '',
-    completed: false,
-  },
-  {
-    name: 'Send email',
-    startDate: '2023-04-02 09:30:00',
-    dueDate: '2023-04-03 12:00:00',
-    completionDate: '',
-    completed: true,
-  },
-  {
-    name: 'Review code',
-    startDate: '2023-04-03 14:00:00',
-    dueDate: '2023-04-04 18:00:00',
-    completionDate: '',
-    completed: false,
-  },
-];
-
-const users: User[] = [
-  { name: 'John Doe', email: 'john.doe@example.com' },
-  { name: 'Jane Smith', email: 'jane.smith@example.com' },
-  { name: 'Bob Johnson', email: 'bob.johnson@example.com' },
-];
+import LoadingPage from 'pages/status/loading/Loading';
 
 const HomePage = (): JSX.Element => {
-  const totalUsersCurrentProject = users.length;
   const { user } = useCurrentUser();
-  const { data, loading } = useQuery<ProjectsData>(GET_PROJECTS);
-  console.log(data?.projects?.length);
-  const IsThereNoProjects = () => !data?.projects?.length;
+  const [getHomeData, { data: homeData, loading }] = useLazyQuery<IHomeData>(
+    HOME_DATA,
+    {
+      variables: {
+        input: {
+          id: user!.currentProjectId,
+        },
+      },
+    }
+  );
+
+  useEffect(() => {
+    if (user && user.currentProjectId) {
+      getHomeData();
+    }
+  }, [getHomeData, user]);
+
+  const hasNoProject = () => {
+    return !homeData?.project;
+  };
+
+  const totalUsers = homeData?.project?.projectMemberships?.length || 0;
+  const totalTasks = homeData?.project?.tasks?.length || 0;
 
   if (loading) {
     return <LoadingPage />;
@@ -68,7 +42,7 @@ const HomePage = (): JSX.Element => {
 
   return (
     <PageWrapperPaper>
-      {IsThereNoProjects() ? (
+      {hasNoProject() ? (
         <>
           <NoProjectBox />
         </>
@@ -83,7 +57,7 @@ const HomePage = (): JSX.Element => {
                   </Grid>
                   <Grid item xs={9}>
                     <Typography variant="h5" component="h2">
-                      {tasks.length}
+                      {totalTasks}
                     </Typography>
                     <Typography color="textSecondary">Tasks</Typography>
                   </Grid>
@@ -98,7 +72,7 @@ const HomePage = (): JSX.Element => {
                   </Grid>
                   <Grid item xs={9}>
                     <Typography variant="h5" component="h2">
-                      {totalUsersCurrentProject}
+                      {totalUsers}
                     </Typography>
                     <Typography color="textSecondary">Users</Typography>
                   </Grid>

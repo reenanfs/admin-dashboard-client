@@ -22,7 +22,7 @@ const NoProjectsBox = (): JSX.Element => {
       </Typography>
       <Button
         variant="contained"
-        onClick={() => navigate(routesPaths.SETTINGS)}
+        onClick={() => navigate(routesPaths.SETTINGS_PROJECT)}
       >
         Create Project
       </Button>

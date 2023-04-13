@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 import { ReactNode } from 'react';
 
 interface IPageWrapperPaperProps {
@@ -9,15 +9,16 @@ const PageWrapperPaper = ({
   children,
 }: IPageWrapperPaperProps): JSX.Element => {
   return (
-    <Paper
+    <Box
       sx={{
-        height: '80vh',
         width: '100%',
-        padding: 2,
+        height: '80vh',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
-      {children}
-    </Paper>
+      <Paper sx={{ flexGrow: 1 }}>{children}</Paper>
+    </Box>
   );
 };
 

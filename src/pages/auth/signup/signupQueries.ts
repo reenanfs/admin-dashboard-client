@@ -13,6 +13,9 @@ export const LOCAL_SIGNUP = gql`
           name
           photoUrl
           isAdmin
+          currentProject {
+            id
+          }
         }
       }
     }

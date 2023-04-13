@@ -4,7 +4,7 @@ import StatusCell from './components/tables/datagrid/cell/StatusCell';
 
 export const COLUMNS: GridColumns = [
   {
-    field: 'taskName',
+    field: 'name',
     type: 'string',
     headerName: 'Name',
     flex: 1,

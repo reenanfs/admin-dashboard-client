@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 import PeopleIcon from '@mui/icons-material/People';
-import TaskIcon from '@mui/icons-material/Task';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import HomeIcon from '@mui/icons-material/Home';
 
 import SidebarOptionsList from 'components/lists/SidebarOptionsList';
@@ -14,7 +14,7 @@ interface ISidebarProps {
 
 const sidebarOptions = [
   { title: 'Home', icon: <HomeIcon />, url: routesPaths.HOME },
-  { title: 'Tasks', icon: <TaskIcon />, url: routesPaths.TASKS },
+  { title: 'Tasks', icon: <AssignmentIcon />, url: routesPaths.TASKS },
   { title: 'People', icon: <PeopleIcon />, url: routesPaths.PEOPLE },
 ];
 

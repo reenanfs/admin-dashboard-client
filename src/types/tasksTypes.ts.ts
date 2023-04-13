@@ -6,7 +6,7 @@ interface ITaskPersonFields {
 
 export interface ITask {
   id: string;
-  taskName: string;
+  name: string;
   description?: string;
   user?: ITaskPersonFields;
   startDate?: Date | null;
@@ -16,7 +16,7 @@ export interface ITask {
 }
 
 export interface ITaskCreationFields {
-  taskName: string;
+  name: string;
   description?: string;
   userId?: string;
   startDate?: Date | null;
@@ -25,7 +25,7 @@ export interface ITaskCreationFields {
 }
 
 export interface ITaskUpdateFields {
-  taskName: string;
+  name: string;
   description?: string;
   userId?: string;
   startDate?: Date | null;
@@ -36,7 +36,7 @@ export interface ITaskUpdateFields {
 
 export interface ITaskRows {
   id: string;
-  taskName: string;
+  name: string;
   person?: string;
   dueDate?: Date | null;
 }

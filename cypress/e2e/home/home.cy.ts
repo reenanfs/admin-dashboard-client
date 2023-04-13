@@ -75,7 +75,7 @@ context('Tests', () => {
       it('should add task when input is correct', () => {
         cy.get('#datagrid-button-add').click();
         cy.get('#draggable-dialog-title').should('be.visible');
-        cy.get('[name="taskName"').type('Task12');
+        cy.get('[name="name"').type('Task12');
         cy.get('#person')
           .parent()
           .click()
@@ -85,7 +85,7 @@ context('Tests', () => {
         cy.wait('@gqlCreateTaskMutation')
           .its('request.body.variables.input')
           .should(input => {
-            expect(input.taskName).to.be.eql('Task12');
+            expect(input.name).to.be.eql('Task12');
             expect(input.description).to.be.eql('');
             expect(input.userId).not.to.be.undefined;
             expect(input.startDate).to.be.null;
@@ -110,7 +110,7 @@ context('Tests', () => {
         cy.get('[aria-label="Edit"]').first().click();
         cy.get('#draggable-dialog-title').should('be.visible');
 
-        cy.get('[name="taskName"').should('have.value', 'Task1');
+        cy.get('[name="name"').should('have.value', 'Task1');
         cy.get('[name="description"').should('have.value', '');
         cy.get('[name="userId"').invoke('val').should('not.be.empty');
         cy.get('#dueDate').invoke('val').should('not.be.empty');
@@ -120,7 +120,7 @@ context('Tests', () => {
         cy.get('[aria-label="Edit"]').first().click();
         cy.get('#draggable-dialog-title').should('be.visible');
 
-        cy.get('[name="taskName"').clear();
+        cy.get('[name="name"').clear();
 
         cy.get('[form="edit-form-id"]').click();
         cy.get('.MuiFormHelperText-root').should('have.length', 1);
@@ -140,7 +140,7 @@ context('Tests', () => {
         cy.get('[aria-label="Edit"]').first().click();
         cy.get('#draggable-dialog-title').should('be.visible');
 
-        cy.get('[name="taskName"]').clear().type('Task12');
+        cy.get('[name="name"]').clear().type('Task12');
         cy.get('[name="completed"][value="true"]').click();
 
         cy.get('[form="edit-form-id"]').click();
@@ -149,7 +149,7 @@ context('Tests', () => {
           .its('request.body.variables.input')
           .should(input => {
             expect(input.id).not.to.be.undefined;
-            expect(input.taskName).to.be.eql('Task12');
+            expect(input.name).to.be.eql('Task12');
             expect(input.completed).to.be.true;
           });
 

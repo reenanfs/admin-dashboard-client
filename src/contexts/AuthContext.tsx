@@ -59,6 +59,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps): JSX.Element => {
       ...user,
       email: credential.email,
       credentialId: credential.id,
+      currentProjectId: user.currentProject ? user.currentProject.id : null,
     };
 
     return currentUser;

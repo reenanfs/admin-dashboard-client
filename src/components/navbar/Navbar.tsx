@@ -12,6 +12,8 @@ import Menu from '@mui/material/Menu';
 import Avatar from '@mui/material/Avatar';
 import MenuItem from '@mui/material/MenuItem';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import SourceIcon from '@mui/icons-material/Source';
+import FolderIcon from '@mui/icons-material/Folder';
 import { useAuth } from 'hooks/useAuth';
 import { useCurrentUser } from 'hooks/useCurrentUser';
 import { useNavigate } from 'react-router-dom';
@@ -75,7 +77,7 @@ const Navbar = ({ navbarProps }: INavbarProps) => {
           <MenuIcon color="inherit" />
         </IconButton>
 
-        <AssignmentIcon color="primary" sx={{ ml: 6, fontSize: 30 }} />
+        <SourceIcon color="primary" sx={{ ml: 6, fontSize: 30 }} />
         <Typography
           color="primary"
           variant="h6"
@@ -83,7 +85,7 @@ const Navbar = ({ navbarProps }: INavbarProps) => {
           ml={1}
           sx={{ fontWeight: 'bold' }}
         >
-          Task
+          Project
         </Typography>
         <Typography color="default" variant="h6" component="span" ml={1}>
           Manager

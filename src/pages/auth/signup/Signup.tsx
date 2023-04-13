@@ -61,20 +61,20 @@ const Signup = (): JSX.Element => {
 
   const { handleLogin } = useAuth();
 
-  const [localSignup, { data, loading }] = useMutation<
+  const [localSignup, { data: localSignupData, loading }] = useMutation<
     { localSignup: IAuthResponse },
     { input: ISignupFields }
   >(LOCAL_SIGNUP);
 
   useEffect(() => {
-    if (data) {
+    if (localSignupData) {
       const {
         localSignup: { access_token, refresh_token, credential },
-      } = data;
+      } = localSignupData;
 
       handleLogin(access_token, refresh_token, credential);
     }
-  }, [loading, data, handleLogin]);
+  }, [loading, localSignupData, handleLogin]);
 
   const onSubmit: SubmitHandler<ISignupFields> = async data => {
     const { name, email, password } = data;

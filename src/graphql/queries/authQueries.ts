@@ -13,6 +13,9 @@ export const WHO_AM_I = gql`
           name
           photoUrl
           isAdmin
+          currentProject {
+            id
+          }
         }
       }
     }

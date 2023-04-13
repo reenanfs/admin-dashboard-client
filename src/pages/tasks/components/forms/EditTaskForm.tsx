@@ -30,7 +30,7 @@ interface ITaskFormProps {
 }
 
 const taskValidationSchema = yup.object({
-  taskName: yup.string().required(ValidationMessages.REQUIRED),
+  name: yup.string().required(ValidationMessages.REQUIRED),
   description: yup.string().nullable(),
   userId: yup.string().required(ValidationMessages.REQUIRED),
   startDate: yup.date().nullable().typeError(ValidationMessages.DATE),
@@ -43,7 +43,7 @@ const EditTaskForm = ({
   onSubmit,
   defaultValues: {
     id,
-    taskName,
+    name,
     description,
     user,
     startDate,
@@ -70,7 +70,7 @@ const EditTaskForm = ({
   } = useForm<ITaskUpdateFields>({
     resolver: yupResolver(taskValidationSchema),
     defaultValues: {
-      taskName,
+      name,
       description,
       userId: '',
       startDate,
@@ -168,7 +168,7 @@ const EditTaskForm = ({
       <Grid container rowSpacing={2} spacing={2} width={620}>
         <Grid item xs={6}>
           <Controller
-            name="taskName"
+            name="name"
             control={control}
             render={({ field }) => (
               <TextField
@@ -176,8 +176,8 @@ const EditTaskForm = ({
                 size="small"
                 fullWidth
                 {...field}
-                helperText={!!errors.taskName && errors.taskName.message}
-                error={!!errors.taskName}
+                helperText={!!errors.name && errors.name.message}
+                error={!!errors.name}
               />
             )}
           />
