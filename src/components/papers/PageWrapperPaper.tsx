@@ -12,7 +12,7 @@ const PageWrapperPaper = ({
     <Box
       sx={{
         width: '100%',
-        height: '80vh',
+        minHeight: '80vh',
         display: 'flex',
         flexDirection: 'column',
       }}

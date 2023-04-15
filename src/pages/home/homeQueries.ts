@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
-export const HOME_DATA = gql`
-  query HomeData($input: ProjectWhereUniqueInput!) {
+export const GET_HOME_DATA = gql`
+  query GetHomeData($input: ProjectWhereUniqueInput!) {
     project(input: $input) {
       tasks {
         id

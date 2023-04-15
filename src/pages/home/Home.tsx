@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 import NoProjectBox from '../../components/box/NoProjectBox';
 import PageWrapperPaper from 'components/papers/PageWrapperPaper';
-import { HOME_DATA } from './homeQueries';
+import { GET_HOME_DATA } from './homeQueries';
 import { IHomeData } from './homeTypes';
 import { useCurrentUser } from 'hooks/useCurrentUser';
 import LoadingPage from 'pages/status/loading/Loading';
@@ -13,7 +13,7 @@ import LoadingPage from 'pages/status/loading/Loading';
 const HomePage = (): JSX.Element => {
   const { user } = useCurrentUser();
   const [getHomeData, { data: homeData, loading }] = useLazyQuery<IHomeData>(
-    HOME_DATA,
+    GET_HOME_DATA,
     {
       variables: {
         input: {

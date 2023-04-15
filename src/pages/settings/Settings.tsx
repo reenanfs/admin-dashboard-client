@@ -1,14 +1,12 @@
 import { Box, Grid, Tab } from '@mui/material';
-import { useCurrentUser } from 'hooks/useCurrentUser';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import PageWrapperPaper from 'components/papers/PageWrapperPaper';
-import UserProfile from './components/userProfile';
+import UserProfile from './components/user-profile/userProfile';
+import ProjectManagement from './components/project-management/projectManagement';
 
 const Settings = (): JSX.Element => {
-  const { user } = useCurrentUser();
-
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -22,7 +20,7 @@ const Settings = (): JSX.Element => {
     <PageWrapperPaper>
       <TabContext value={currentTab}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={handleChange}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example">
             <Tab label="User Profile" value="1" />
             <Tab label="Project Management" value="2" />
           </TabList>
@@ -31,7 +29,9 @@ const Settings = (): JSX.Element => {
           <UserProfile />
         </TabPanel>
         <TabPanel value="2">
-          <Grid container>Item Two</Grid>
+          <Grid container>
+            <ProjectManagement />
+          </Grid>
         </TabPanel>
       </TabContext>
     </PageWrapperPaper>

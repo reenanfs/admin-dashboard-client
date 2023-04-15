@@ -8,26 +8,22 @@ import { useCurrentUser } from 'hooks/useCurrentUser';
 import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { USER_PROFILE_UPDATE_USER } from '../settingsQueries';
+
 import { ICurrentUser } from 'types/authTypes';
+import { USER_PROFILE_UPDATE_USER } from './userProfileQueries';
+import {
+  IUserProfileFields,
+  userProfileUpdateUserResponse,
+} from './userProfileTypes';
 
 const userProfileValidationSchema = yup.object({
   name: yup.string().required(ValidationMessages.REQUIRED),
 });
 
-interface IUserProfileFields {
-  name: string;
-}
-
-interface userProfileUpdateUserResponse {
-  name: string;
-  photoUrl: string;
-}
-
 const UserProfile = (): JSX.Element => {
   const { user, setUser } = useCurrentUser();
   const [file, setFile] = useState<File | null>();
-  const [authErrorMessage, setAuthErrorMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const {
     control,
@@ -93,13 +89,13 @@ const UserProfile = (): JSX.Element => {
 
         switch (statusCode) {
           case 400:
-            setAuthErrorMessage(ValidationMessages.SERVER_BAD_REQUEST);
+            setErrorMessage(ValidationMessages.SERVER_BAD_REQUEST);
             break;
           default:
-            setAuthErrorMessage(serverErrorMessage);
+            setErrorMessage(serverErrorMessage);
         }
       } else {
-        setAuthErrorMessage('Unknown error');
+        setErrorMessage('Unknown error');
       }
     }
   };
@@ -150,7 +146,7 @@ const UserProfile = (): JSX.Element => {
           <Button variant="contained" type="submit" sx={{ mb: 2 }}>
             Update
           </Button>
-          {!!authErrorMessage && (
+          {!!errorMessage && (
             <Paper
               sx={{
                 backgroundColor: '#f8d7da',
@@ -162,7 +158,7 @@ const UserProfile = (): JSX.Element => {
                 textAlign: 'center',
               }}
             >
-              {authErrorMessage}
+              {errorMessage}
             </Paper>
           )}
         </Grid>
