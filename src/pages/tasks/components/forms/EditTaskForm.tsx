@@ -18,11 +18,17 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 import { ValidationMessages } from 'constants/validationMessages';
 import { EDIT_FORM_ID } from 'constants/componentConstants';
-import { ITask, ITaskUpdateFields } from 'types/tasksTypes.ts';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { IPeopleData } from 'types/peopleTypes';
 import { GET_USERS } from 'graphql/queries/peopleQueries';
+import {
+  ITask,
+  ITaskUpdateInput,
+  ITasksPagePeople,
+} from 'pages/tasks/tasksTypes';
+import { GET_TASKS_PAGE_USERS } from 'pages/tasks/tasksQueries';
+import { useCurrentUser } from 'hooks/useCurrentUser';
 
 interface ITaskFormProps {
   onSubmit: SubmitHandler<ITask>;
@@ -52,6 +58,7 @@ const EditTaskForm = ({
     completed,
   },
 }: ITaskFormProps): JSX.Element => {
+  const { currentUser } = useCurrentUser();
   const [startDateCheckboxDisabled, setStartDateCheckboxDisabled] =
     useState(true);
   const [dueDateCheckboxDisabled, setDueDateCheckboxDisabled] = useState(true);
@@ -67,7 +74,7 @@ const EditTaskForm = ({
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<ITaskUpdateFields>({
+  } = useForm<ITaskUpdateInput>({
     resolver: yupResolver(taskValidationSchema),
     defaultValues: {
       name,
@@ -85,8 +92,13 @@ const EditTaskForm = ({
     control,
   });
 
-  const { loading, data } = useQuery<IPeopleData>(GET_USERS, {
+  const { loading, data } = useQuery<ITasksPagePeople>(GET_TASKS_PAGE_USERS, {
     fetchPolicy: 'cache-and-network',
+    variables: {
+      input: {
+        id: currentUser?.currentProjectId,
+      },
+    },
   });
 
   useEffect(() => {
@@ -124,7 +136,8 @@ const EditTaskForm = ({
 
   const renderSelectOptions = (): JSX.Element[] | JSX.Element => {
     if (!loading && data) {
-      return data.users.map(user => (
+      const { projectMemberships } = data.project;
+      return projectMemberships.map(({ user }) => (
         <MenuItem value={user.id} key={user.id}>
           {user.name}
         </MenuItem>

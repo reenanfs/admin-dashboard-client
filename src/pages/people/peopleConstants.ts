@@ -42,7 +42,7 @@ export const EDIT_DIALOG_TITLE = 'Edit Person';
 export const DELETE_DIALOG_TITLE = 'Delete Person';
 
 export const DELETE_DIALOG_CONTENT =
-  'Are you sure you want to delete this user?';
+  'Are you sure you want to delete this currentUser';
 
 export const DELETE_MULTIPLE_DIALOG_TITLE = 'Delete People';
 

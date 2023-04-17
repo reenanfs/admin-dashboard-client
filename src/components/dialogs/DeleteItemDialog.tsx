@@ -4,7 +4,10 @@ import { useEffect } from 'react';
 
 import StandardDialog from 'components/dialogs/StandardDialog';
 import { useDialogs } from 'hooks/useDialogs';
-import { ValidAppEntities, ValidAppEntitiesData } from 'types/appTypes';
+import {
+  ValidDataGridEntities,
+  ValidDataGridRefetchData,
+} from 'types/dataGridTypes';
 
 interface IDeletePersonDialogProps<S> {
   title: string;
@@ -14,8 +17,8 @@ interface IDeletePersonDialogProps<S> {
 }
 
 const DeleteItemDialog = <
-  T extends ValidAppEntities,
-  S extends ValidAppEntitiesData
+  T extends ValidDataGridEntities,
+  S extends ValidDataGridRefetchData
 >({
   title,
   content,

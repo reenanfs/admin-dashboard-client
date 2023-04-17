@@ -13,6 +13,7 @@ const NoProjectsBox = (): JSX.Element => {
         alignItems: 'center',
         height: '100%',
       }}
+      id="hehe"
     >
       <Typography variant="h4" align="center" gutterBottom>
         You have no projects

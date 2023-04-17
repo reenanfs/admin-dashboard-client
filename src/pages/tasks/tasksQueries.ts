@@ -1,20 +1,21 @@
 import { gql } from '@apollo/client';
 
-export const GET_TASKS = gql`
-  query GetTasks($input: GetTasksInput) {
-    tasks(input: $input) {
-      id
-      name
-      description
-      user {
+export const GET_TASKS_PAGE_DATA = gql`
+  query GetTasksPageData($input: ProjectWhereUniqueInput!) {
+    project(input: $input) {
+      tasks {
         id
         name
-        email
+        description
+        user {
+          id
+          name
+        }
+        startDate
+        dueDate
+        completionDate
+        completed
       }
-      startDate
-      dueDate
-      completionDate
-      completed
     }
   }
 `;
@@ -47,6 +48,19 @@ export const DELETE_TASKS = gql`
   mutation DeleteTasks($input: DeleteTasksInput) {
     deleteTasks(input: $input) {
       count
+    }
+  }
+`;
+
+export const GET_TASKS_PAGE_USERS = gql`
+  query GetTasksPageUsers($input: ProjectWhereUniqueInput!) {
+    project(input: $input) {
+      projectMemberships {
+        user {
+          id
+          name
+        }
+      }
     }
   }
 `;

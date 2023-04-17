@@ -10,7 +10,7 @@ const DragAndDropUploadAvatar = ({
   onUpload,
 }: DragAndDropUploadAvatarProps) => {
   const [imageUrl, setimageUrl] = useState<string | null>(null);
-  const { user } = useCurrentUser();
+  const { currentUser } = useCurrentUser();
 
   const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -51,9 +51,8 @@ const DragAndDropUploadAvatar = ({
   const removeButtonHeight = 36;
 
   useEffect(() => {
-    if (user?.photoUrl) {
-      console.log('aff');
-      setimageUrl(user?.photoUrl);
+    if (currentUser?.photoUrl) {
+      setimageUrl(currentUser.photoUrl);
     }
   }, []);
 
@@ -80,7 +79,7 @@ const DragAndDropUploadAvatar = ({
         }}
         src={imageUrl || undefined}
       >
-        {user?.name}
+        {currentUser?.name}
       </Avatar>
 
       <Button variant="contained" component="label" sx={{ mb: 2 }}>

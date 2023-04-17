@@ -9,13 +9,13 @@ export interface IPeopleData {
   users: IPerson[];
 }
 
-export interface IPersonCreationFields {
+export interface IPersonCreationInput {
   name: string;
   role: string;
   email: string;
 }
 
-export interface IPersonUpdateFields {
+export interface IPersonUpdateInput {
   name: string;
   role: string;
   email: string;

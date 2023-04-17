@@ -14,7 +14,6 @@ const PageWrapperPaper = ({
         width: '100%',
         minHeight: '80vh',
         display: 'flex',
-        flexDirection: 'column',
       }}
     >
       <Paper sx={{ flexGrow: 1 }}>{children}</Paper>

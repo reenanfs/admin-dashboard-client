@@ -5,10 +5,10 @@ import * as yup from 'yup';
 
 import { ValidationMessages } from 'constants/validationMessages';
 import { ADD_FORM_ID } from 'constants/componentConstants';
-import { IPersonCreationFields } from 'types/peopleTypes';
+import { IPersonCreationInput } from 'types/peopleTypes';
 
 interface IPersonFormProps {
-  onSubmit: SubmitHandler<IPersonCreationFields>;
+  onSubmit: SubmitHandler<IPersonCreationInput>;
 }
 
 const personValidationSchema = yup.object({
@@ -25,7 +25,7 @@ const AddPersonForm = ({ onSubmit }: IPersonFormProps): JSX.Element => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<IPersonCreationFields>({
+  } = useForm<IPersonCreationInput>({
     resolver: yupResolver(personValidationSchema),
     defaultValues: {
       name: '',

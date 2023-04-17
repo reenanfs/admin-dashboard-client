@@ -21,7 +21,7 @@ const userProfileValidationSchema = yup.object({
 });
 
 const UserProfile = (): JSX.Element => {
-  const { user, setUser } = useCurrentUser();
+  const { currentUser, setCurrentUser } = useCurrentUser();
   const [file, setFile] = useState<File | null>();
   const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -33,7 +33,7 @@ const UserProfile = (): JSX.Element => {
     mode: 'onChange',
     resolver: yupResolver(userProfileValidationSchema),
     defaultValues: {
-      name: user?.name,
+      name: currentUser?.name,
     },
   });
 
@@ -50,21 +50,21 @@ const UserProfile = (): JSX.Element => {
       } = userProfileUpdateUserData;
 
       const updatedUser: ICurrentUser = {
-        ...user!,
+        ...currentUser!,
         name,
         photoUrl,
       };
 
-      setUser(updatedUser);
+      setCurrentUser(updatedUser);
     }
-  }, [loading, userProfileUpdateUserData, setUser, user]);
+  }, [loading, userProfileUpdateUserData, setCurrentUser, currentUser]);
 
   const onSubmit: SubmitHandler<IUserProfileFields> = async data => {
     try {
       await userProfileUpdateUser({
         variables: {
           input: {
-            id: user!.id,
+            id: currentUser!.id,
             name: data.name,
             photoFile: file,
           },

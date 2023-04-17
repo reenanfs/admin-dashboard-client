@@ -4,12 +4,13 @@ import { SubmitHandler } from 'react-hook-form';
 
 import StandardDialog from 'components/dialogs/StandardDialog';
 import {
-  ValidAppEntitiesCreationFields,
-  ValidAppEntitiesData,
-} from 'types/appTypes';
+  ValidDataGridEntitiesCreationInput,
+  ValidDataGridRefetchData,
+} from 'types/dataGridTypes';
 import { useDialogs } from 'hooks/useDialogs';
 import { ADD_FORM_ID } from 'constants/componentConstants';
 import { FieldValues } from 'react-hook-form';
+import { useCurrentUser } from 'hooks/useCurrentUser';
 
 interface IFormProps<T extends FieldValues> {
   onSubmit: SubmitHandler<T>;
@@ -22,30 +23,32 @@ interface IAddITemDialogProps<T extends FieldValues, S> {
   refetchFunction: () => Promise<ApolloQueryResult<S>>;
 }
 
-const AddPersonDialog = <
-  T extends ValidAppEntitiesCreationFields,
-  S extends ValidAppEntitiesData
+const AddItemDialog = <
+  T extends ValidDataGridEntitiesCreationInput,
+  S extends ValidDataGridRefetchData
 >({
   title,
   Form,
   mutation,
   refetchFunction,
 }: IAddITemDialogProps<T, S>): JSX.Element => {
+  const { currentUser } = useCurrentUser();
   const {
     addItemDialog: { isOpen, handleClose },
   } = useDialogs();
 
   const [createItem, { loading, error }] = useMutation<
     { createItem: T },
-    { input: ValidAppEntitiesCreationFields }
+    { input: ValidDataGridEntitiesCreationInput }
   >(mutation);
 
-  const onSubmit: SubmitHandler<ValidAppEntitiesCreationFields> = async (
+  const onSubmit: SubmitHandler<ValidDataGridEntitiesCreationInput> = async (
     props
   ): Promise<void> => {
     await createItem({
       variables: {
         input: {
+          projectId: currentUser?.currentProjectId!,
           ...props,
         },
       },
@@ -72,4 +75,4 @@ const AddPersonDialog = <
   );
 };
 
-export default AddPersonDialog;
+export default AddItemDialog;

@@ -11,7 +11,7 @@ import {
   ADD_DIALOG_TITLE,
 } from './peopleConstants';
 import CustomDatagrid from 'components/tables/datagrid/DataGrid';
-import { IPeopleData, IPerson, IPersonCreationFields } from 'types/peopleTypes';
+import { IPeopleData, IPerson, IPersonCreationInput } from 'types/peopleTypes';
 import { GET_USERS } from 'graphql/queries/peopleQueries';
 import {
   CREATE_USER,
@@ -40,7 +40,7 @@ const People = (): JSX.Element => {
   }
 
   return (
-    <CustomDatagrid<IPerson, IPersonCreationFields, IPerson, IPeopleData>
+    <CustomDatagrid<IPerson, IPersonCreationInput, IPerson, IPeopleData>
       loading={loading}
       rows={rows}
       columns={COLUMNS}

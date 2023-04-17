@@ -12,24 +12,24 @@ interface ICurrentUserProviderProps {
 }
 
 interface ICurrentUserContext {
-  user: ICurrentUser | null;
-  setUser: Dispatch<SetStateAction<ICurrentUser | null>>;
-  updateUser: (prop: keyof ICurrentUser, value: any) => void;
+  currentUser: ICurrentUser | null;
+  setCurrentUser: Dispatch<SetStateAction<ICurrentUser | null>>;
+  updateCurrentUser: (prop: keyof ICurrentUser, value: any) => void;
 }
 
 export const CurrentUserContext = createContext<ICurrentUserContext>({
-  user: null,
-  setUser: () => {},
-  updateUser: () => {},
+  currentUser: null,
+  setCurrentUser: () => {},
+  updateCurrentUser: () => {},
 });
 
 export const CurrentUserProvider = ({
   children,
 }: ICurrentUserProviderProps): JSX.Element => {
-  const [user, setUser] = useState<ICurrentUser | null>(null);
+  const [currentUser, setCurrentUser] = useState<ICurrentUser | null>(null);
 
-  const updateUser = (prop: keyof ICurrentUser, value: any) => {
-    setUser(prevUser => {
+  const updateCurrentUser = (prop: keyof ICurrentUser, value: any) => {
+    setCurrentUser(prevUser => {
       if (prevUser) {
         return { ...prevUser, [prop]: value };
       }
@@ -38,7 +38,9 @@ export const CurrentUserProvider = ({
   };
 
   return (
-    <CurrentUserContext.Provider value={{ user, setUser, updateUser }}>
+    <CurrentUserContext.Provider
+      value={{ currentUser, setCurrentUser, updateCurrentUser }}
+    >
       {children}
     </CurrentUserContext.Provider>
   );

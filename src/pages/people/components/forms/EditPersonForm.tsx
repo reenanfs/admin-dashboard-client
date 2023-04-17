@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { ValidationMessages } from 'constants/validationMessages';
-import { IPerson, IPersonUpdateFields } from 'types/peopleTypes';
+import { IPerson, IPersonUpdateInput } from 'types/peopleTypes';
 import { EDIT_FORM_ID } from 'constants/componentConstants';
 
 interface IPersonFormProps {
@@ -29,7 +29,7 @@ const EditPersonForm = ({
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<IPersonUpdateFields>({
+  } = useForm<IPersonUpdateInput>({
     resolver: yupResolver(personValidationSchema),
     defaultValues: {
       name,

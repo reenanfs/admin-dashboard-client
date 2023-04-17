@@ -28,7 +28,7 @@ interface INavbarProps {
 const Navbar = ({ navbarProps }: INavbarProps) => {
   const { handleLogout } = useAuth();
   const navigate = useNavigate();
-  const { user } = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const { sidebarOpen, handleSidebarOpen, handleSidebarClose } = navbarProps;
   const [avatarAnchorEl, setAvatarAnchorEl] = useState<null | HTMLElement>(
     null
@@ -53,7 +53,7 @@ const Navbar = ({ navbarProps }: INavbarProps) => {
     {
       text: 'Logout',
       onClick: () => {
-        handleLogout(user?.credentialId!);
+        handleLogout(currentUser?.credentialId!);
         handleCloseUserMenu();
       },
     },
@@ -105,15 +105,15 @@ const Navbar = ({ navbarProps }: INavbarProps) => {
             <Avatar
               id="avatar"
               alt=""
-              src={user?.photoUrl}
+              src={currentUser?.photoUrl}
               sx={{
-                ...(user?.photoUrl && {
+                ...(currentUser?.photoUrl && {
                   border: 2,
                   borderColor: 'primary.main',
                 }),
               }}
             >
-              {user?.name[0]}
+              {currentUser?.name[0]}
             </Avatar>
           </IconButton>
           <Menu

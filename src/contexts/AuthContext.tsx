@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps): JSX.Element => {
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [whoAmIFetched, setwhoAmIFetched] = useState<boolean>(false);
 
-  const { setUser } = useCurrentUser();
+  const { setCurrentUser } = useCurrentUser();
 
   const credentialToUser = (credential: ICredential): ICurrentUser => {
     const user = credential.user;
@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps): JSX.Element => {
     setAccessToken(accessToken);
     setRefreshToken(refreshToken);
 
-    setUser(credentialToUser(credential));
+    setCurrentUser(credentialToUser(credential));
   };
 
   const handleLogin = (

@@ -28,14 +28,18 @@ import {
   CREATE_PROJECT_MANAGEMENT_DATA,
   DELETE_PROJECT_MANAGEMENT_DATA,
   GET_PROJECT_MANAGEMENT_DATA,
+  UPDATE_CURRENT_PROJECT_MANAGEMENT_DATA,
   UPDATE_PROJECT_MANAGEMENT_DATA,
 } from './projectManagementQueries';
 import {
   ICreateAndUpdateProjectFields,
   ICreateProjectInput,
   IDeleteProjectInput,
+  IDeleteProjectResponse,
   IPMProjectsOwned,
   IProjectManagementData,
+  IUpdateCurrentProjectInput,
+  IUpdateCurrentProjectResponse,
   IUpdateProjectInput,
   currentProjectListItem,
   projectsOwnedListItem,
@@ -46,6 +50,8 @@ import { ValidationMessages } from 'constants/validationMessages';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { areObjectsEqual } from 'utils/areObjectsEqual';
+import ErrorPaper from 'components/papers/ErrorPaper';
+import SuccessPaper from 'components/papers/SuccessPaper';
 
 const projectManagementValidationSchema = yup.object({
   name: yup.string().required(ValidationMessages.REQUIRED),
@@ -54,7 +60,7 @@ const projectManagementValidationSchema = yup.object({
 // Render the component
 const ProjectManager = () => {
   // Declare state variables
-  const { user } = useCurrentUser();
+  const { currentUser, updateCurrentUser } = useCurrentUser();
   const [currentProjectsList, setCurrentProjectsList] = useState<
     currentProjectListItem[]
   >([]);
@@ -64,7 +70,12 @@ const ProjectManager = () => {
   const [currentProjectId, setCurrentProjectId] = React.useState('');
   const [editing, setEditing] = useState(false);
   const [editId, setEditId] = useState('');
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [currentProjectErrorMessage, setCurrentProjectErrorMessage] =
+    useState<string>('');
+  const [currentProjectSuccessMessage, setCurrentProjectSuccessMessage] =
+    useState<string>('');
+  const [createEditProjectErrorMessage, setCreateEditProjectErrorMessage] =
+    useState<string>('');
   const [previousValues, setPreviousValues] =
     useState<ICreateAndUpdateProjectFields>({
       name: '',
@@ -90,7 +101,7 @@ const ProjectManager = () => {
     useQuery<IProjectManagementData>(GET_PROJECT_MANAGEMENT_DATA, {
       variables: {
         input: {
-          id: user?.id,
+          id: currentUser?.id,
         },
       },
     });
@@ -104,13 +115,13 @@ const ProjectManager = () => {
         query: GET_PROJECT_MANAGEMENT_DATA,
         variables: {
           input: {
-            id: user?.id,
+            id: currentUser?.id,
           },
         },
       },
     ],
     onError: error => {
-      handleMutationError(error);
+      handleMutationError(error, setCreateEditProjectErrorMessage);
     },
   });
 
@@ -123,18 +134,18 @@ const ProjectManager = () => {
         query: GET_PROJECT_MANAGEMENT_DATA,
         variables: {
           input: {
-            id: user?.id,
+            id: currentUser?.id,
           },
         },
       },
     ],
     onError: error => {
-      handleMutationError(error);
+      handleMutationError(error, setCreateEditProjectErrorMessage);
     },
   });
 
   const [deleteProject] = useMutation<
-    { id: string },
+    { deleteProject: IDeleteProjectResponse },
     { input: IDeleteProjectInput }
   >(DELETE_PROJECT_MANAGEMENT_DATA, {
     refetchQueries: [
@@ -142,17 +153,39 @@ const ProjectManager = () => {
         query: GET_PROJECT_MANAGEMENT_DATA,
         variables: {
           input: {
-            id: user?.id,
+            id: currentUser?.id,
           },
         },
       },
     ],
     onError: error => {
-      handleMutationError(error);
+      handleMutationError(error, setCreateEditProjectErrorMessage);
     },
   });
 
-  const handleMutationError = (error: ApolloError): void => {
+  const [updateCurrentProject] = useMutation<
+    { updateUser: IUpdateCurrentProjectResponse },
+    { input: IUpdateCurrentProjectInput }
+  >(UPDATE_CURRENT_PROJECT_MANAGEMENT_DATA, {
+    onCompleted: data => {
+      const {
+        updateUser: {
+          currentProject: { id: currentProjectId },
+        },
+      } = data;
+
+      updateCurrentUser('currentProjectId', currentProjectId);
+      setCurrentProjectSuccessMessage('Current project successfully updated.');
+    },
+    onError: error => {
+      handleMutationError(error, setCurrentProjectErrorMessage);
+    },
+  });
+
+  const handleMutationError = (
+    error: ApolloError,
+    setErrorMessageFn: (value: React.SetStateAction<string>) => void
+  ): void => {
     const { extensions } = error.graphQLErrors[0];
     let statusCode = (extensions as { response: { statusCode: number } })
       .response.statusCode;
@@ -162,13 +195,13 @@ const ProjectManager = () => {
 
     switch (statusCode) {
       case 401:
-        setErrorMessage(ValidationMessages.SERVER_INVALID_CREDENTIALS);
+        setErrorMessageFn(ValidationMessages.SERVER_INVALID_CREDENTIALS);
         break;
       case 400:
-        setErrorMessage(ValidationMessages.SERVER_BAD_REQUEST);
+        setErrorMessageFn(ValidationMessages.SERVER_BAD_REQUEST);
         break;
       default:
-        setErrorMessage(serverErrorMessage);
+        setErrorMessageFn(serverErrorMessage);
     }
   };
 
@@ -189,9 +222,9 @@ const ProjectManager = () => {
           name,
         })),
       ]);
-      setCurrentProjectId(user?.currentProjectId!);
+      setCurrentProjectId(currentUser?.currentProjectId!);
     }
-  }, [loading, projectManagementData, user]);
+  }, [loading, projectManagementData, currentUser]);
 
   // Handle the form submit event
   const onSubmit: SubmitHandler<ICreateAndUpdateProjectFields> = async data => {
@@ -215,7 +248,7 @@ const ProjectManager = () => {
     } else {
       createProject({
         variables: {
-          input: { name, description, ownerId: user?.id! },
+          input: { name, description, ownerId: currentUser?.id! },
         },
       });
     }
@@ -317,6 +350,23 @@ const ProjectManager = () => {
             })}
           </Select>
         </FormControl>
+        <Button
+          variant="contained"
+          sx={{ display: 'flex', marginLeft: 'auto', width: 200, mb: 2 }}
+          onClick={() =>
+            updateCurrentProject({
+              variables: { input: { id: currentUser?.id!, currentProjectId } },
+            })
+          }
+        >
+          Save
+        </Button>
+        {!!currentProjectErrorMessage && (
+          <ErrorPaper errorMessage={currentProjectErrorMessage} />
+        )}
+        {!!currentProjectSuccessMessage && (
+          <SuccessPaper successMessage={currentProjectSuccessMessage} />
+        )}
       </Paper>
 
       <Paper sx={{ p: 3, mb: 3 }}>
@@ -367,20 +417,8 @@ const ProjectManager = () => {
           >
             {editing ? 'Edit Project' : 'Create Project'}
           </Button>
-          {!!errorMessage && (
-            <Paper
-              sx={{
-                backgroundColor: '#f8d7da',
-                color: '#721c24',
-                padding: '10px',
-                border: '1px solid #f5c6cb',
-                width: '100%',
-                mb: 2,
-                textAlign: 'center',
-              }}
-            >
-              {errorMessage}
-            </Paper>
+          {!!createEditProjectErrorMessage && (
+            <ErrorPaper errorMessage={createEditProjectErrorMessage} />
           )}
         </Box>
         <Paper sx={{ p: 3, mb: 3 }} elevation={0}>

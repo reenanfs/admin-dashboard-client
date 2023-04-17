@@ -2,18 +2,13 @@ import { useQuery } from '@apollo/client';
 
 import CustomDatagrid from 'components/tables/datagrid/DataGrid';
 import EditTaskForm from './components/forms/EditTaskForm';
-import {
-  ITaskCreationFields,
-  ITasksData,
-  ITask,
-  ITaskRows,
-} from 'types/tasksTypes.ts';
+
 import AddTaskForm from './components/forms/AddTaskForm';
 import {
   CREATE_TASK,
   DELETE_TASK,
   DELETE_TASKS,
-  GET_TASKS,
+  GET_TASKS_PAGE_DATA,
   UPDATE_TASK,
 } from './tasksQueries';
 import {
@@ -27,28 +22,41 @@ import {
   MAIN_TABLE_LABEL,
 } from './tasksConstants';
 
+import { useCurrentUser } from 'hooks/useCurrentUser';
+import {
+  ITask,
+  ITaskCreationInput,
+  ITaskRows,
+  ITasksPageData,
+} from './tasksTypes';
+
 const Home = (): JSX.Element => {
-  const { loading, data, refetch } = useQuery<ITasksData>(GET_TASKS, {
-    variables: {
-      input: {
-        orderBy: {
-          updatedAt: 'desc',
+  const { currentUser } = useCurrentUser();
+
+  const { loading, data, refetch } = useQuery<ITasksPageData>(
+    GET_TASKS_PAGE_DATA,
+    {
+      variables: {
+        input: {
+          id: currentUser?.currentProjectId,
         },
       },
-    },
-    fetchPolicy: 'cache-and-network',
-  });
+      fetchPolicy: 'cache-and-network',
+    }
+  );
 
   let rows: ITaskRows[] = [];
   if (!loading && data) {
-    rows = data.tasks.map(task => ({
+    const tasks = data.project.tasks;
+
+    rows = tasks.map(task => ({
       ...task,
       person: task.user && task.user.name,
     }));
   }
 
   return (
-    <CustomDatagrid<ITask, ITaskCreationFields, ITaskRows, ITasksData>
+    <CustomDatagrid<ITask, ITaskCreationInput, ITaskRows, ITasksPageData>
       loading={loading}
       rows={rows}
       columns={COLUMNS}

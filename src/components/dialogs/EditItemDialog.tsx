@@ -5,7 +5,10 @@ import { SubmitHandler } from 'react-hook-form';
 import StandardDialog from 'components/dialogs/StandardDialog';
 import { EDIT_FORM_ID } from 'constants/componentConstants';
 import { useDialogs } from 'hooks/useDialogs';
-import { ValidAppEntities, ValidAppEntitiesData } from 'types/appTypes';
+import {
+  ValidDataGridEntities,
+  ValidDataGridRefetchData,
+} from 'types/dataGridTypes';
 import { FieldValues } from 'react-hook-form';
 
 interface IFormProps<T extends FieldValues> {
@@ -21,8 +24,8 @@ interface IEditItemDialogProps<T extends FieldValues, S> {
 }
 
 const EditItemDialog = <
-  T extends ValidAppEntities,
-  S extends ValidAppEntitiesData
+  T extends ValidDataGridEntities,
+  S extends ValidDataGridRefetchData
 >({
   title,
   Form,
@@ -37,7 +40,7 @@ const EditItemDialog = <
 
   const [updateItem, { loading, error }] = useMutation<
     { updateItem: T },
-    { input: ValidAppEntities }
+    { input: ValidDataGridEntities }
   >(mutation);
 
   const onSubmit: SubmitHandler<T> = async (props): Promise<void> => {

@@ -65,3 +65,13 @@ export const DELETE_PROJECT_MANAGEMENT_DATA = gql`
     }
   }
 `;
+
+export const UPDATE_CURRENT_PROJECT_MANAGEMENT_DATA = gql`
+  mutation UpdateUser($input: UpdateUserInput!) {
+    updateUser(input: $input) {
+      currentProject {
+        id
+      }
+    }
+  }
+`;

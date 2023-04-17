@@ -40,6 +40,21 @@ export interface IDeleteProjectInput {
   id: string;
 }
 
+export interface IDeleteProjectResponse {
+  id: string;
+}
+
+export interface IUpdateCurrentProjectInput {
+  id: string;
+  currentProjectId: string;
+}
+
+export interface IUpdateCurrentProjectResponse {
+  currentProject: {
+    id: string;
+  };
+}
+
 export interface currentProjectListItem {
   id: string;
   name: string;

@@ -11,23 +11,23 @@ import { useCurrentUser } from 'hooks/useCurrentUser';
 import LoadingPage from 'pages/status/loading/Loading';
 
 const HomePage = (): JSX.Element => {
-  const { user } = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const [getHomeData, { data: homeData, loading }] = useLazyQuery<IHomeData>(
     GET_HOME_DATA,
     {
       variables: {
         input: {
-          id: user!.currentProjectId,
+          id: currentUser!.currentProjectId,
         },
       },
     }
   );
 
   useEffect(() => {
-    if (user && user.currentProjectId) {
+    if (currentUser && currentUser.currentProjectId) {
       getHomeData();
     }
-  }, [getHomeData, user]);
+  }, [getHomeData, currentUser]);
 
   const hasNoProject = () => {
     return !homeData?.project;
@@ -87,7 +87,7 @@ const HomePage = (): JSX.Element => {
                   </Grid>
                   <Grid item xs={9}>
                     <Typography variant="h5" component="h2">
-                      {user?.name}
+                      {currentUser?.name}
                     </Typography>
                     <Typography color="textSecondary">Logged in as</Typography>
                   </Grid>

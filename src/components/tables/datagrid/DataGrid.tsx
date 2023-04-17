@@ -15,11 +15,11 @@ import { ApolloQueryResult, DocumentNode } from '@apollo/client';
 import EditItemDialog from 'components/dialogs/EditItemDialog';
 import { SubmitHandler, FieldValues } from 'react-hook-form';
 import {
-  ValidAppEntities,
-  ValidAppEntitiesCreationFields,
-  ValidAppEntitiesData,
-  ValidGridRows,
-} from 'types/appTypes';
+  ValidDataGridEntities,
+  ValidDataGridEntitiesCreationInput,
+  ValidDataGridRefetchData,
+  ValidDataGridRows,
+} from 'types/dataGridTypes';
 import AddItemDialog from 'components/dialogs/AddItemDialog';
 
 interface IBaseFormProps<S extends FieldValues> {
@@ -62,10 +62,10 @@ interface ICustomDatagridProps<
 }
 
 const CustomDatagrid = <
-  T extends ValidAppEntities,
-  S extends ValidAppEntitiesCreationFields,
-  U extends ValidGridRows,
-  V extends ValidAppEntitiesData
+  T extends ValidDataGridEntities,
+  S extends ValidDataGridEntitiesCreationInput,
+  U extends ValidDataGridRows,
+  V extends ValidDataGridRefetchData
 >({
   columns,
   rows,
