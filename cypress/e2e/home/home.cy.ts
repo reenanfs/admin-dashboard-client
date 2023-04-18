@@ -76,7 +76,7 @@ context('Tests', () => {
         cy.get('#datagrid-button-add').click();
         cy.get('#draggable-dialog-title').should('be.visible');
         cy.get('[name="name"').type('Task12');
-        cy.get('#person')
+        cy.get('#User')
           .parent()
           .click()
           .get('ul > li[data-value="9b11baa2-250c-4dbd-9b2a-7ae2545dc125"]')

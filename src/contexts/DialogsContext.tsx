@@ -1,6 +1,6 @@
 import { GridRowId } from '@mui/x-data-grid';
 import { createContext, ReactNode, useState } from 'react';
-import { ValidDataGridEntities } from 'types/dataGridTypes';
+import { ValidDataGridEntitiesUpdateInput } from 'types/dataGridTypes';
 
 interface IDialogsProviderProps {
   children: ReactNode;
@@ -17,20 +17,22 @@ interface IDeleteItemDialogParams extends IDialogParams {
   setId: (newValue: GridRowId) => void;
 }
 
-interface IEditItemDialogParams<T extends ValidDataGridEntities>
+interface IEditItemDialogParams<T extends ValidDataGridEntitiesUpdateInput>
   extends IDialogParams {
   defaultValues?: T;
   setDefaultValues: (newValue: T) => void;
 }
 
-export interface IDialogsContextProps<T extends ValidDataGridEntities> {
+export interface IDialogsContextProps<
+  T extends ValidDataGridEntitiesUpdateInput
+> {
   deleteMultipleItemsDialog: IDialogParams;
   addItemDialog: IDialogParams;
   deleteItemDialog: IDeleteItemDialogParams;
   editItemDialog: IEditItemDialogParams<T>;
 }
 
-const initialValues: IDialogsContextProps<ValidDataGridEntities> = {
+const initialValues: IDialogsContextProps<ValidDataGridEntitiesUpdateInput> = {
   deleteMultipleItemsDialog: {
     isOpen: false,
     handleOpen: () => {},
@@ -57,7 +59,9 @@ const initialValues: IDialogsContextProps<ValidDataGridEntities> = {
 };
 
 export const DialogsContext =
-  createContext<IDialogsContextProps<ValidDataGridEntities>>(initialValues);
+  createContext<IDialogsContextProps<ValidDataGridEntitiesUpdateInput>>(
+    initialValues
+  );
 
 export const DialogsProvider = ({
   children,
@@ -80,7 +84,8 @@ export const DialogsProvider = ({
 
   const [id, setId] = useState(initialValues.deleteItemDialog.id);
 
-  const [defaultValues, setDefaultValues] = useState<ValidDataGridEntities>();
+  const [defaultValues, setDefaultValues] =
+    useState<ValidDataGridEntitiesUpdateInput>();
 
   const handleDeleteMultipleItemsOpen = () => {
     setIsDeleteMultipleItemsOpen(true);

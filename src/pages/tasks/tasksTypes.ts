@@ -5,21 +5,34 @@ export interface ITasksPageData {
   };
 }
 
-export interface ITasksPagePeople {
-  project: {
-    projectMemberships: ITaskPageProjectMembership[];
-  };
-}
-
 export interface ITask {
   id: string;
   name: string;
   description?: string;
-  user?: ITaskPagePerson;
+  user?: ITaskPageUser;
   startDate?: Date | null;
   dueDate?: Date | null;
   completionDate?: Date | null;
   completed?: boolean;
+}
+
+export interface ITaskPageProjectMembership {
+  user: ITaskPageUser;
+}
+
+interface ITaskPageUser {
+  id: string;
+  name: string;
+}
+
+export interface ITasksPageUsers {
+  project: {
+    projectMemberships: ITaskPageProjectMembership[];
+    owner: {
+      id: string;
+      name: string;
+    };
+  };
 }
 
 export interface ITaskCreationInput {
@@ -33,6 +46,7 @@ export interface ITaskCreationInput {
 }
 
 export interface ITaskUpdateInput {
+  id: string;
   name: string;
   description?: string;
   userId?: string;
@@ -45,15 +59,11 @@ export interface ITaskUpdateInput {
 export interface ITaskRows {
   id: string;
   name: string;
-  person?: string;
+  description?: string;
+  user?: string;
+  userId?: string;
+  startDate?: Date | null;
   dueDate?: Date | null;
-}
-
-export interface ITaskPageProjectMembership {
-  user: ITaskPagePerson;
-}
-
-interface ITaskPagePerson {
-  id: string;
-  name: string;
+  completionDate?: Date | null;
+  completed?: boolean;
 }

@@ -14,21 +14,13 @@ import DeleteItemDialog from 'components/dialogs/DeleteItemDialog';
 import { ApolloQueryResult, DocumentNode } from '@apollo/client';
 import EditItemDialog from 'components/dialogs/EditItemDialog';
 import { SubmitHandler, FieldValues } from 'react-hook-form';
+import AddItemDialog from 'components/dialogs/AddItemDialog';
 import {
-  ValidDataGridEntities,
+  ValidDataGridEntitiesUpdateInput,
   ValidDataGridEntitiesCreationInput,
   ValidDataGridRefetchData,
   ValidDataGridRows,
 } from 'types/dataGridTypes';
-import AddItemDialog from 'components/dialogs/AddItemDialog';
-
-interface IBaseFormProps<S extends FieldValues> {
-  onSubmit: SubmitHandler<S>;
-}
-
-interface IEditFormProps<T extends FieldValues> extends IBaseFormProps<T> {
-  defaultValues: T;
-}
 
 interface IDialogProps {
   title: string;
@@ -36,12 +28,20 @@ interface IDialogProps {
   mutation: DocumentNode;
 }
 
+interface IBaseFormProps<S extends FieldValues> {
+  onSubmit: SubmitHandler<S>;
+}
+
 interface IAddDialogProps<S extends FieldValues> extends IDialogProps {
   AddItemForm: React.FC<IBaseFormProps<S>>;
 }
 
-interface IEditDialogProps<T extends FieldValues> extends IDialogProps {
-  EditItemForm: React.FC<IEditFormProps<T>>;
+interface IEditDialogProps<T extends FieldValues, U> extends IDialogProps {
+  EditItemForm: React.FC<IEditFormProps<T, U>>;
+}
+
+interface IEditFormProps<T extends FieldValues, U> extends IBaseFormProps<T> {
+  defaultValues: U;
 }
 
 interface ICustomDatagridProps<
@@ -56,13 +56,13 @@ interface ICustomDatagridProps<
   loading: boolean;
   deleteMultipleItemsDialogProps: IDialogProps;
   deleteItemDialogProps: IDialogProps;
-  editItemDialogProps: Omit<IEditDialogProps<T>, 'content'>;
+  editItemDialogProps: Omit<IEditDialogProps<T, U>, 'content'>;
   addItemDialogProps: Omit<IAddDialogProps<S>, 'content'>;
   refetchFunction: () => Promise<ApolloQueryResult<V>>;
 }
 
 const CustomDatagrid = <
-  T extends ValidDataGridEntities,
+  T extends ValidDataGridEntitiesUpdateInput,
   S extends ValidDataGridEntitiesCreationInput,
   U extends ValidDataGridRows,
   V extends ValidDataGridRefetchData

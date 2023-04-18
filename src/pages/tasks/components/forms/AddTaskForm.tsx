@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { ValidationMessages } from 'constants/validationMessages';
 import { useQuery } from '@apollo/client';
 import { ADD_FORM_ID } from 'constants/componentConstants';
-import { ITaskCreationInput, ITasksPagePeople } from 'pages/tasks/tasksTypes';
+import { ITaskCreationInput, ITasksPageUsers } from 'pages/tasks/tasksTypes';
 import { GET_TASKS_PAGE_USERS } from 'pages/tasks/tasksQueries';
 import { useCurrentUser } from 'hooks/useCurrentUser';
 import { getTomorrowDate } from 'utils/getTomorrowDate';
@@ -58,7 +58,7 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
     },
   });
 
-  const { loading, data } = useQuery<ITasksPagePeople>(GET_TASKS_PAGE_USERS, {
+  const { loading, data } = useQuery<ITasksPageUsers>(GET_TASKS_PAGE_USERS, {
     fetchPolicy: 'cache-and-network',
     variables: {
       input: {
@@ -70,13 +70,18 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
   const renderSelectOptions = (): JSX.Element[] | JSX.Element => {
     if (!loading && data) {
       const {
-        project: { projectMemberships },
+        project: { projectMemberships, owner },
       } = data;
-      return projectMemberships.map(({ user }) => (
-        <MenuItem value={user.id} key={user.id}>
-          {user.name}
-        </MenuItem>
-      ));
+      return [
+        <MenuItem value={owner.id} key={owner.id}>
+          {owner.name}
+        </MenuItem>,
+        ...projectMemberships.map(({ user }) => (
+          <MenuItem value={user.id} key={user.id}>
+            {user.name}
+          </MenuItem>
+        )),
+      ];
     }
 
     return <MenuItem value="" key=""></MenuItem>;
@@ -222,9 +227,9 @@ const AddTaskForm = ({ onSubmit }: ITaskFormProps): JSX.Element => {
             control={control}
             render={({ field }) => (
               <TextField
-                label="Person"
+                label="User"
                 size="small"
-                id="person"
+                id="User"
                 select
                 fullWidth
                 {...field}

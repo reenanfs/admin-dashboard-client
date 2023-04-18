@@ -5,11 +5,11 @@ import { useEffect } from 'react';
 import StandardDialog from 'components/dialogs/StandardDialog';
 import { useDialogs } from 'hooks/useDialogs';
 import {
-  ValidDataGridEntities,
+  ValidDataGridEntitiesUpdateInput,
   ValidDataGridRefetchData,
 } from 'types/dataGridTypes';
 
-interface IDeletePersonDialogProps<S> {
+interface IDeleteUserDialogProps<S> {
   title: string;
   content: string;
   mutation: DocumentNode;
@@ -17,14 +17,14 @@ interface IDeletePersonDialogProps<S> {
 }
 
 const DeleteItemDialog = <
-  T extends ValidDataGridEntities,
+  T extends ValidDataGridEntitiesUpdateInput,
   S extends ValidDataGridRefetchData
 >({
   title,
   content,
   mutation,
   refetchFunction,
-}: IDeletePersonDialogProps<S>): JSX.Element => {
+}: IDeleteUserDialogProps<S>): JSX.Element => {
   const {
     deleteItemDialog: { id, isOpen, handleClose },
   } = useDialogs();

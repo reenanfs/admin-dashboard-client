@@ -4,7 +4,7 @@ import type {} from '@mui/lab/themeAugmentation';
 
 import Layout from 'components/layout/Layout';
 import Home from 'pages/home/Home';
-import People from 'pages/people/People';
+import Users from 'pages/users/Users';
 import NotFound from 'pages/status/not-found/NotFound';
 import CssBaseline from '@mui/material/CssBaseline';
 import { routesPaths } from 'constants/routesConstants';
@@ -37,10 +37,10 @@ const App = (): JSX.Element => {
             }
           />
           <Route
-            path={routesPaths.PEOPLE}
+            path={routesPaths.USERS}
             element={
               <PrivateRoute>
-                <People />
+                <Users />
               </PrivateRoute>
             }
           />

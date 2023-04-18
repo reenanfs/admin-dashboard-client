@@ -11,9 +11,9 @@ export const COLUMNS: GridColumns = [
     editable: false,
   },
   {
-    field: 'person',
+    field: 'user',
     type: 'string',
-    headerName: 'Person',
+    headerName: 'User',
     flex: 1,
     editable: false,
   },

@@ -50,7 +50,7 @@ const HomePage = (): JSX.Element => {
         <>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6} md={4}>
-              <Paper sx={{ height: 120, p: 2 }}>
+              <Paper sx={{ height: 120, p: 2, m: 2 }}>
                 <Grid container alignItems="center">
                   <Grid item xs={3}>
                     <Assignment fontSize="large" />
@@ -59,13 +59,15 @@ const HomePage = (): JSX.Element => {
                     <Typography variant="h5" component="h2">
                       {totalTasks}
                     </Typography>
-                    <Typography color="textSecondary">Tasks</Typography>
+                    <Typography color="textSecondary">
+                      {totalTasks === 1 ? 'Task' : 'Tasks'}
+                    </Typography>
                   </Grid>
                 </Grid>
               </Paper>
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
-              <Paper sx={{ height: 120, p: 2 }}>
+              <Paper sx={{ height: 120, p: 2, m: 2 }}>
                 <Grid container alignItems="center">
                   <Grid item xs={3}>
                     <Group fontSize="large" />
@@ -74,13 +76,15 @@ const HomePage = (): JSX.Element => {
                     <Typography variant="h5" component="h2">
                       {totalUsers}
                     </Typography>
-                    <Typography color="textSecondary">Users</Typography>
+                    <Typography color="textSecondary">
+                      {totalUsers === 1 ? 'User' : 'Users'}
+                    </Typography>
                   </Grid>
                 </Grid>
               </Paper>
             </Grid>
             <Grid item xs={12} md={4}>
-              <Paper sx={{ height: 120, p: 2 }}>
+              <Paper sx={{ height: 120, p: 2, m: 2 }}>
                 <Grid container alignItems="center">
                   <Grid item xs={3}>
                     <AccountCircle fontSize="large" />
@@ -99,6 +103,7 @@ const HomePage = (): JSX.Element => {
                 sx={{
                   height: 400,
                   p: 2,
+                  m: 2,
                   display: 'flex',
                   flexDirection: 'column',
                   textAlign: 'center',

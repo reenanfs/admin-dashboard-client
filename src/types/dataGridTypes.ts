@@ -1,17 +1,25 @@
-import { IPeopleData, IPerson, IPersonCreationInput } from './peopleTypes.js';
 import {
-  ITask,
   ITaskCreationInput,
   ITaskRows,
+  ITaskUpdateInput,
   ITasksPageData,
 } from 'pages/tasks/tasksTypes.js';
 
-export type ValidDataGridEntities = IPerson | ITask;
+import {
+  IUserToProjectCreationInput,
+  IUsersPageData,
+  IUserToProjectUpdateInput,
+  IUserRows,
+} from 'pages/users/usersTypes.js';
+
+export type ValidDataGridEntitiesUpdateInput =
+  | IUserToProjectUpdateInput
+  | ITaskUpdateInput;
 
 export type ValidDataGridEntitiesCreationInput =
-  | IPersonCreationInput
+  | IUserToProjectCreationInput
   | ITaskCreationInput;
 
-export type ValidDataGridRows = ITaskRows | IPerson;
+export type ValidDataGridRows = ITaskRows | IUserRows;
 
-export type ValidDataGridRefetchData = IPeopleData | ITasksPageData;
+export type ValidDataGridRefetchData = IUsersPageData | ITasksPageData;

@@ -24,13 +24,13 @@ import {
 
 import { useCurrentUser } from 'hooks/useCurrentUser';
 import {
-  ITask,
   ITaskCreationInput,
   ITaskRows,
+  ITaskUpdateInput,
   ITasksPageData,
 } from './tasksTypes';
 
-const Home = (): JSX.Element => {
+const Task = (): JSX.Element => {
   const { currentUser } = useCurrentUser();
 
   const { loading, data, refetch } = useQuery<ITasksPageData>(
@@ -51,12 +51,18 @@ const Home = (): JSX.Element => {
 
     rows = tasks.map(task => ({
       ...task,
-      person: task.user && task.user.name,
+      user: task.user && task.user.name,
+      userId: task.user && task.user.id,
     }));
   }
 
   return (
-    <CustomDatagrid<ITask, ITaskCreationInput, ITaskRows, ITasksPageData>
+    <CustomDatagrid<
+      ITaskUpdateInput,
+      ITaskCreationInput,
+      ITaskRows,
+      ITasksPageData
+    >
       loading={loading}
       rows={rows}
       columns={COLUMNS}
@@ -86,4 +92,4 @@ const Home = (): JSX.Element => {
   );
 };
 
-export default Home;
+export default Task;

@@ -5,42 +5,45 @@ import { SubmitHandler } from 'react-hook-form';
 import StandardDialog from 'components/dialogs/StandardDialog';
 import { EDIT_FORM_ID } from 'constants/componentConstants';
 import { useDialogs } from 'hooks/useDialogs';
-import {
-  ValidDataGridEntities,
-  ValidDataGridRefetchData,
-} from 'types/dataGridTypes';
-import { FieldValues } from 'react-hook-form';
 
-interface IFormProps<T extends FieldValues> {
+import { FieldValues } from 'react-hook-form';
+import {
+  ValidDataGridEntitiesUpdateInput,
+  ValidDataGridRefetchData,
+  ValidDataGridRows,
+} from 'types/dataGridTypes';
+
+interface IFormProps<T extends FieldValues, U> {
   onSubmit: SubmitHandler<T>;
-  defaultValues: T;
+  defaultValues: U;
 }
 
-interface IEditItemDialogProps<T extends FieldValues, S> {
+interface IEditItemDialogProps<T extends FieldValues, S, U> {
   title: string;
-  Form: React.FC<IFormProps<T>>;
+  Form: React.FC<IFormProps<T, U>>;
   mutation: DocumentNode;
   refetchFunction: () => Promise<ApolloQueryResult<S>>;
 }
 
 const EditItemDialog = <
-  T extends ValidDataGridEntities,
-  S extends ValidDataGridRefetchData
+  T extends ValidDataGridEntitiesUpdateInput,
+  S extends ValidDataGridRefetchData,
+  U extends ValidDataGridRows
 >({
   title,
   Form,
   mutation,
   refetchFunction,
-}: IEditItemDialogProps<T, S>): JSX.Element => {
+}: IEditItemDialogProps<T, S, U>): JSX.Element => {
   const {
     editItemDialog: { defaultValues, isOpen, handleClose },
   } = useDialogs();
 
-  const values = defaultValues as T;
+  const values = defaultValues as U;
 
   const [updateItem, { loading, error }] = useMutation<
     { updateItem: T },
-    { input: ValidDataGridEntities }
+    { input: ValidDataGridEntitiesUpdateInput }
   >(mutation);
 
   const onSubmit: SubmitHandler<T> = async (props): Promise<void> => {

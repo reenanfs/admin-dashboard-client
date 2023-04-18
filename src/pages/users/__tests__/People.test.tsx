@@ -7,14 +7,14 @@ import {
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 
-import People from '../People';
-import { MAIN_TABLE_LABEL } from '../peopleConstants';
+import Users from '../Users';
+import { MAIN_TABLE_LABEL } from '../usersConstants';
 import { IMockData } from 'types/testTypes';
-import { peopleData } from 'tests/mockData';
-import { GET_USERS } from 'graphql/queries/peopleQueries';
-import { IPeopleData } from 'types/peopleTypes';
+import { usersData } from 'tests/mockData';
+import { GET_USERS } from 'graphql/queries/usersQueries';
+import { IUsersData } from 'types/usersTypes';
 
-const mocks: IMockData<IPeopleData>[] = [
+const mocks: IMockData<IUsersData>[] = [
   {
     request: {
       query: GET_USERS,
@@ -27,17 +27,17 @@ const mocks: IMockData<IPeopleData>[] = [
       },
     },
     result: {
-      data: peopleData,
+      data: usersData,
     },
   },
 ];
 
-describe('People', () => {
+describe('Users', () => {
   describe('Main Label', () => {
     it('renders main table label', () => {
       render(
         <MockedProvider mocks={mocks} addTypename={false}>
-          <People />
+          <Users />
         </MockedProvider>
       );
       const labelElement = screen.getByText(new RegExp(MAIN_TABLE_LABEL, 'i'));
@@ -49,7 +49,7 @@ describe('People', () => {
     it('filter rows when writing on search bar', async () => {
       render(
         <MockedProvider mocks={mocks} addTypename={false}>
-          <People />
+          <Users />
         </MockedProvider>
       );
 
@@ -70,7 +70,7 @@ describe('People', () => {
     it('renders mocked rows', async () => {
       render(
         <MockedProvider mocks={mocks} addTypename={false}>
-          <People />
+          <Users />
         </MockedProvider>
       );
 
@@ -82,7 +82,7 @@ describe('People', () => {
     it('renders delete many items button when clicking select all rows', async () => {
       render(
         <MockedProvider mocks={mocks} addTypename={false}>
-          <People />
+          <Users />
         </MockedProvider>
       );
 
@@ -100,7 +100,7 @@ describe('People', () => {
     it('renders delete many items button when clicking individual rows', async () => {
       render(
         <MockedProvider mocks={mocks} addTypename={false}>
-          <People />
+          <Users />
         </MockedProvider>
       );
 
@@ -122,7 +122,7 @@ describe('People', () => {
     it('successfully goes to second page clicking on next', async () => {
       render(
         <MockedProvider mocks={mocks} addTypename={false}>
-          <People />
+          <Users />
         </MockedProvider>
       );
 
@@ -140,7 +140,7 @@ describe('People', () => {
     it('successfully goes to second page clicking on page 2', async () => {
       render(
         <MockedProvider mocks={mocks} addTypename={false}>
-          <People />
+          <Users />
         </MockedProvider>
       );
 
@@ -158,7 +158,7 @@ describe('People', () => {
     it('successfully goes back to first page when clicking on previous', async () => {
       render(
         <MockedProvider mocks={mocks} addTypename={false}>
-          <People />
+          <Users />
         </MockedProvider>
       );
 
@@ -183,7 +183,7 @@ describe('People', () => {
     it('successfully goes back to first page when clicking on page 1', async () => {
       render(
         <MockedProvider mocks={mocks} addTypename={false}>
-          <People />
+          <Users />
         </MockedProvider>
       );
 
@@ -206,7 +206,7 @@ describe('People', () => {
     it('changes pagination total number (20)', async () => {
       render(
         <MockedProvider mocks={mocks} addTypename={false}>
-          <People />
+          <Users />
         </MockedProvider>
       );
 

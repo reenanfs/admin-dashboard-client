@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import StandardDialog from 'components/dialogs/StandardDialog';
 import { useDialogs } from 'hooks/useDialogs';
 import {
-  ValidDataGridEntities,
+  ValidDataGridEntitiesUpdateInput,
   ValidDataGridRefetchData,
 } from 'types/dataGridTypes';
 
@@ -18,7 +18,7 @@ interface IDeleteMultipleItemsDialogProps<S> {
 }
 
 const DeleteMultipleItemsDialog = <
-  T extends ValidDataGridEntities,
+  T extends ValidDataGridEntitiesUpdateInput,
   S extends ValidDataGridRefetchData
 >({
   ids,

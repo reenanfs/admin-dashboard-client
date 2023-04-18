@@ -14,6 +14,7 @@ const refreshToken = async (): Promise<ApolloQueryResult<any>> => {
 };
 
 export const errorLink = onError(({ graphQLErrors, operation, forward }) => {
+  console.log('oi');
   if (graphQLErrors) {
     for (const error of graphQLErrors) {
       if (error.extensions?.code === 'UNAUTHENTICATED') {

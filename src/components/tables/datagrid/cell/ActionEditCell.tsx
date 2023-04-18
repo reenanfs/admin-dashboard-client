@@ -1,13 +1,13 @@
 import { GridActionsCellItem } from '@mui/x-data-grid';
 import { Edit } from '@mui/icons-material';
 import { useDialogs } from 'hooks/useDialogs';
-import { ValidDataGridEntities } from 'types/dataGridTypes';
+import { ValidDataGridEntitiesUpdateInput } from 'types/dataGridTypes';
 
 interface IActionCellEditProps<T> {
   defaultValues: T;
 }
 
-const ActionEditCell = <T extends ValidDataGridEntities>({
+const ActionEditCell = <T extends ValidDataGridEntitiesUpdateInput>({
   defaultValues,
 }: IActionCellEditProps<T>): JSX.Element => {
   const {

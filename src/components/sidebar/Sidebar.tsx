@@ -15,7 +15,7 @@ interface ISidebarProps {
 const sidebarOptions = [
   { title: 'Home', icon: <HomeIcon />, url: routesPaths.HOME },
   { title: 'Tasks', icon: <AssignmentIcon />, url: routesPaths.TASKS },
-  { title: 'People', icon: <PeopleIcon />, url: routesPaths.PEOPLE },
+  { title: 'Users', icon: <PeopleIcon />, url: routesPaths.USERS },
 ];
 
 const Sidebar = ({ sidebarProps }: ISidebarProps) => {

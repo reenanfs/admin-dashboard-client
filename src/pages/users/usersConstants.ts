@@ -33,20 +33,20 @@ export const COLUMNS: GridColumns = [
   },
 ];
 
-export const MAIN_TABLE_LABEL = 'Manage People';
+export const MAIN_TABLE_LABEL = 'Manage Users';
 
-export const ADD_DIALOG_TITLE = 'Add New Person';
+export const ADD_DIALOG_TITLE = 'Add New User';
 
-export const EDIT_DIALOG_TITLE = 'Edit Person';
+export const EDIT_DIALOG_TITLE = 'Edit User';
 
-export const DELETE_DIALOG_TITLE = 'Delete Person';
+export const DELETE_DIALOG_TITLE = 'Delete ser';
 
 export const DELETE_DIALOG_CONTENT =
-  'Are you sure you want to delete this currentUser';
+  'Are you sure you want to delete this user';
 
-export const DELETE_MULTIPLE_DIALOG_TITLE = 'Delete People';
+export const DELETE_MULTIPLE_DIALOG_TITLE = 'Delete Users';
 
 export const DELETE_MULTIPLE_DIALOG_CONTENT =
   'Are you sure you want to delete the selected users?';
 
-export const PEOPLE_FORM_ID = 'people-form-id';
+export const users_FORM_ID = 'users-form-id';

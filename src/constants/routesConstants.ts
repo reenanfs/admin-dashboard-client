@@ -3,7 +3,7 @@ export enum routesPaths {
   REGISTER = '/register',
   HOME = '/',
   TASKS = '/tasks',
-  PEOPLE = '/people',
+  USERS = '/users',
   SETTINGS = '/settings',
   SETTINGS_USER = '/settings?tab=1',
   SETTINGS_PROJECT = '/settings?tab=2',

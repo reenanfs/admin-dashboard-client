@@ -20,19 +20,18 @@ import { ValidationMessages } from 'constants/validationMessages';
 import { EDIT_FORM_ID } from 'constants/componentConstants';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { IPeopleData } from 'types/peopleTypes';
-import { GET_USERS } from 'graphql/queries/peopleQueries';
+
 import {
-  ITask,
+  ITaskRows,
   ITaskUpdateInput,
-  ITasksPagePeople,
+  ITasksPageUsers,
 } from 'pages/tasks/tasksTypes';
 import { GET_TASKS_PAGE_USERS } from 'pages/tasks/tasksQueries';
 import { useCurrentUser } from 'hooks/useCurrentUser';
 
 interface ITaskFormProps {
-  onSubmit: SubmitHandler<ITask>;
-  defaultValues: ITask;
+  onSubmit: SubmitHandler<ITaskUpdateInput>;
+  defaultValues: ITaskRows;
 }
 
 const taskValidationSchema = yup.object({
@@ -51,7 +50,7 @@ const EditTaskForm = ({
     id,
     name,
     description,
-    user,
+    userId,
     startDate,
     dueDate,
     completionDate,
@@ -74,7 +73,7 @@ const EditTaskForm = ({
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<ITaskUpdateInput>({
+  } = useForm<Omit<ITaskUpdateInput, 'id'>>({
     resolver: yupResolver(taskValidationSchema),
     defaultValues: {
       name,
@@ -92,7 +91,7 @@ const EditTaskForm = ({
     control,
   });
 
-  const { loading, data } = useQuery<ITasksPagePeople>(GET_TASKS_PAGE_USERS, {
+  const { loading, data } = useQuery<ITasksPageUsers>(GET_TASKS_PAGE_USERS, {
     fetchPolicy: 'cache-and-network',
     variables: {
       input: {
@@ -102,10 +101,10 @@ const EditTaskForm = ({
   });
 
   useEffect(() => {
-    if (!loading && user) {
-      setValue('userId', user.id);
+    if (!loading && userId) {
+      setValue('userId', userId);
     }
-  }, [user, loading, setValue]);
+  }, [userId, loading, setValue]);
 
   useEffect(() => {
     if (startDate) {
@@ -136,12 +135,19 @@ const EditTaskForm = ({
 
   const renderSelectOptions = (): JSX.Element[] | JSX.Element => {
     if (!loading && data) {
-      const { projectMemberships } = data.project;
-      return projectMemberships.map(({ user }) => (
-        <MenuItem value={user.id} key={user.id}>
-          {user.name}
-        </MenuItem>
-      ));
+      const {
+        project: { projectMemberships, owner },
+      } = data;
+      return [
+        <MenuItem value={owner.id} key={owner.id}>
+          {owner.name}
+        </MenuItem>,
+        ...projectMemberships.map(({ user }) => (
+          <MenuItem value={user.id} key={user.id}>
+            {user.name}
+          </MenuItem>
+        )),
+      ];
     }
 
     return <MenuItem value="" key=""></MenuItem>;
@@ -293,7 +299,7 @@ const EditTaskForm = ({
             control={control}
             render={({ field }) => (
               <TextField
-                label="Person"
+                label="User"
                 size="small"
                 select
                 fullWidth

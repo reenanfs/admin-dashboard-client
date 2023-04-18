@@ -37,12 +37,12 @@ context('Tests', () => {
       }
     });
 
-    cy.visit('/people');
+    cy.visit('/users');
   });
 
-  describe('People Page', () => {
+  describe('Users Page', () => {
     it('successfully loads', () => {
-      cy.get('#datagrid-label-main').should('have.text', 'Manage People');
+      cy.get('#datagrid-label-main').should('have.text', 'Manage Users');
     });
 
     describe('Add Dialog', () => {
@@ -52,13 +52,13 @@ context('Tests', () => {
         cy.get('.MuiButton-textError').contains('Cancel').click();
         cy.get('#draggable-dialog-title').should('not.exist');
       });
-      it('should not add person with missing fields', () => {
+      it('should not add User with missing fields', () => {
         cy.get('#datagrid-button-add').click();
         cy.get('#draggable-dialog-title').should('be.visible');
         cy.get('[form="add-form-id"]').click();
         cy.get('.MuiFormHelperText-root').should('have.length', 3);
       });
-      it('should not add person when email is in incorrect format', () => {
+      it('should not add User when email is in incorrect format', () => {
         cy.get('#datagrid-button-add').click();
         cy.get('#draggable-dialog-title').should('be.visible');
         cy.get('[name="name"]').type('User12');
@@ -67,7 +67,7 @@ context('Tests', () => {
         cy.get('[form="add-form-id"]').click();
         cy.get('.MuiFormHelperText-root').should('have.length', 1);
       });
-      it('should add person when input is correct', () => {
+      it('should add User when input is correct', () => {
         cy.get('#datagrid-button-add').click();
         cy.get('#draggable-dialog-title').should('be.visible');
         cy.get('[name="name"]').type('User12');
@@ -105,7 +105,7 @@ context('Tests', () => {
         cy.get('[name="email"]').should('have.value', 'email1@email.com');
       });
 
-      it('should not edit person if you leave missing fields', () => {
+      it('should not edit User if you leave missing fields', () => {
         cy.get('[aria-label="Edit"]').first().click();
         cy.get('#draggable-dialog-title').should('be.visible');
 
@@ -117,7 +117,7 @@ context('Tests', () => {
         cy.get('.MuiFormHelperText-root').should('have.length', 3);
       });
 
-      it('should not edit person if you input wrong email', () => {
+      it('should not edit User if you input wrong email', () => {
         cy.get('[aria-label="Edit"]').first().click();
         cy.get('#draggable-dialog-title').should('be.visible');
 
@@ -127,7 +127,7 @@ context('Tests', () => {
         cy.get('.MuiFormHelperText-root').should('have.length', 1);
       });
 
-      it('should edit person when input is correct', () => {
+      it('should edit User when input is correct', () => {
         cy.get('[aria-label="Edit"]').first().click();
         cy.get('#draggable-dialog-title').should('be.visible');
 
@@ -158,7 +158,7 @@ context('Tests', () => {
         cy.get('#draggable-dialog-title').should('not.exist');
       });
 
-      it('should delete person when clicking on Confirm', () => {
+      it('should delete User when clicking on Confirm', () => {
         cy.get('[aria-label="Delete"]').first().click();
         cy.get('#draggable-dialog-title').should('be.visible');
 
@@ -187,7 +187,7 @@ context('Tests', () => {
         cy.get('#draggable-dialog-title').should('not.exist');
       });
 
-      it('should delete several people when clicking on Confirm', () => {
+      it('should delete several users when clicking on Confirm', () => {
         cy.get('[aria-label="Delete"]').first().should('be.visible');
         cy.get('[aria-label="Select all rows"]').click();
         cy.get('#datagrid-button-delete').click();

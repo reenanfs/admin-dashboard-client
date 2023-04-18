@@ -20,6 +20,23 @@ export const GET_TASKS_PAGE_DATA = gql`
   }
 `;
 
+export const GET_TASKS_PAGE_USERS = gql`
+  query GetTasksPageUsers($input: ProjectWhereUniqueInput!) {
+    project(input: $input) {
+      projectMemberships {
+        user {
+          id
+          name
+        }
+      }
+      owner {
+        name
+        id
+      }
+    }
+  }
+`;
+
 export const CREATE_TASK = gql`
   mutation CreateTask($input: CreateTaskInput!) {
     createTask(input: $input) {
@@ -48,19 +65,6 @@ export const DELETE_TASKS = gql`
   mutation DeleteTasks($input: DeleteTasksInput) {
     deleteTasks(input: $input) {
       count
-    }
-  }
-`;
-
-export const GET_TASKS_PAGE_USERS = gql`
-  query GetTasksPageUsers($input: ProjectWhereUniqueInput!) {
-    project(input: $input) {
-      projectMemberships {
-        user {
-          id
-          name
-        }
-      }
     }
   }
 `;

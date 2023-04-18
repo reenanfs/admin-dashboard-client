@@ -49,9 +49,9 @@ context('Tests', () => {
     it('successfully change pages', () => {
       cy.get('#datagrid-label-main').should('have.text', 'Manage Tasks');
 
-      cy.visit('/people');
+      cy.visit('/users');
 
-      cy.get('#datagrid-label-main').should('have.text', 'Manage People');
+      cy.get('#datagrid-label-main').should('have.text', 'Manage Users');
 
       cy.visit('/');
 
@@ -60,19 +60,17 @@ context('Tests', () => {
 
     it('expands and contracts sidebar when clicking on menu button', () => {
       cy.get('.MuiTypography-body1').contains('Home').should('be.visible');
-      cy.get('.MuiTypography-body1').contains('People').should('be.visible');
+      cy.get('.MuiTypography-body1').contains('Users').should('be.visible');
 
       cy.get('#menuButton').click();
 
       cy.get('.MuiTypography-body1').contains('Home').should('not.be.visible');
-      cy.get('.MuiTypography-body1')
-        .contains('People')
-        .should('not.be.visible');
+      cy.get('.MuiTypography-body1').contains('Users').should('not.be.visible');
 
       cy.get('#menuButton').click();
 
       cy.get('.MuiTypography-body1').contains('Home').should('be.visible');
-      cy.get('.MuiTypography-body1').contains('People').should('be.visible');
+      cy.get('.MuiTypography-body1').contains('Users').should('be.visible');
     });
 
     it('should show menu when clicking avatar', () => {
