@@ -1,5 +1,4 @@
 import { Box, CircularProgress, Typography } from '@mui/material';
-import PageWrapperPaper from 'components/papers/PageWrapperPaper';
 
 interface LoadingPageProps {
   message?: string;

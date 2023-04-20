@@ -15,7 +15,6 @@ import { LOCAL_SIGNIN } from './loginQueries';
 import { ApolloError, useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'hooks/useAuth';
-import { useCurrentUser } from 'hooks/useCurrentUser';
 import { IAuthResponse } from 'types/authTypes';
 
 export interface ILoginFields {

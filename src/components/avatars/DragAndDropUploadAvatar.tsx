@@ -54,7 +54,7 @@ const DragAndDropUploadAvatar = ({
     if (currentUser?.photoUrl) {
       setimageUrl(currentUser.photoUrl);
     }
-  }, []);
+  }, [currentUser]);
 
   return (
     <Box
